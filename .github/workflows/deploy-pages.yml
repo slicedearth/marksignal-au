@@ -3,6 +3,8 @@ name: Deploy site
 on:
   push:
     branches: [main]
+  repository_dispatch:
+    types: [verified-dataset-published]
   workflow_dispatch:
 
 permissions:

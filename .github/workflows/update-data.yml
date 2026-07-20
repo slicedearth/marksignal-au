@@ -259,3 +259,12 @@ jobs:
             -m "Record verified dataset update" \
             -m "Publish non-identifying retrieval and dataset counts for the latest verified state revision. Trigger a fresh static deployment without committing selected filings, observations, or evidence to public version control."
           git -C .public-publisher push
+
+      - name: Request production deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPOSITORY: ${{ github.repository }}
+        run: >-
+          gh api --method POST
+          "repos/$GH_REPOSITORY/dispatches"
+          --field event_type=verified-dataset-published
