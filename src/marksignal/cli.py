@@ -8,7 +8,12 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from marksignal.fixtures import read_fixture
-from marksignal.ip_rapid import IP_RAPID_DATASET_URL, IP_RAPID_DOWNLOAD_URL, read_ip_rapid
+from marksignal.ip_rapid import (
+    IP_RAPID_DATASET_URL,
+    IP_RAPID_DOWNLOAD_URL,
+    read_ip_rapid,
+    validation_failure_summary,
+)
 from marksignal.pipeline import process_snapshot, publish_status, rebuild_site
 from marksignal.privacy import audit_trademarks
 from marksignal.resolver import ApplicantResolver, load_watchlists
@@ -106,7 +111,15 @@ def main(argv: list[str] | None = None) -> int:
             retrieved_at=retrieved_at,
         )
         audit_result = audit_trademarks(snapshot.trademarks)
-        print(json.dumps(audit_result.public_summary(), sort_keys=True))
+        print(
+            json.dumps(
+                {
+                    **audit_result.public_summary(),
+                    **validation_failure_summary(snapshot.validation_failures),
+                },
+                sort_keys=True,
+            )
+        )
         return 0
     if args.command == "ingest-fixture":
         snapshot, retrieved_at = read_fixture(args.path, resolver=resolver)

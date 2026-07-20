@@ -20,6 +20,7 @@ from marksignal.ip_rapid import (
     SOURCE_LICENSE,
     SOURCE_PUBLISHER,
     IngestedSnapshot,
+    validation_failure_summary,
 )
 from marksignal.models import (
     FilingSignal,
@@ -524,9 +525,11 @@ def process_snapshot(
         )
     incoming = list(privacy_audit.accepted)
     if len(snapshot.validation_failures) > MAX_VALIDATION_FAILURES:
+        summary = validation_failure_summary(snapshot.validation_failures)
         raise DataQualityError(
             f"source has {len(snapshot.validation_failures)} validation failures; maximum is "
-            f"{MAX_VALIDATION_FAILURES}"
+            f"{MAX_VALIDATION_FAILURES}; codes={summary['validation_failure_codes']}; "
+            f"tables={summary['validation_failure_tables']}"
         )
     durable_root = data_root or root
     state_path = durable_root / "data/state/trademarks.json"

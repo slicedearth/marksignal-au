@@ -40,6 +40,8 @@ def test_source_scalar_parsers_are_explicit() -> None:
     assert parse_bool("TRUE") is True
     assert parse_bool("0") is False
     assert parse_date("20/07/2026").isoformat() == "2026-07-20"  # type: ignore[union-attr]
+    assert parse_date("2026-07-20T00:00:00.0000").isoformat() == "2026-07-20"  # type: ignore[union-attr]
+    assert parse_date("2026-07-20T00:00:00.000Z").isoformat() == "2026-07-20"  # type: ignore[union-attr]
     with pytest.raises(ValueError, match="unrecognised"):
         parse_bool("perhaps")
     with pytest.raises(ValueError, match="unrecognised"):

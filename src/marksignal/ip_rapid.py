@@ -7,7 +7,7 @@ import hashlib
 import io
 import re
 import zipfile
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Iterator
 from dataclasses import dataclass
 from datetime import date, datetime
@@ -120,6 +120,20 @@ class IngestedSnapshot:
 class _ResolvedParty:
     applicant: Applicant
     observed_name: str
+
+
+def validation_failure_summary(failures: list[str]) -> dict[str, object]:
+    """Aggregate sanitized validation entries without source values."""
+
+    return {
+        "retained_validation_failure_count": len(failures),
+        "validation_failure_codes": dict(
+            sorted(Counter(item.rsplit(": ", 1)[-1] for item in failures).items())
+        ),
+        "validation_failure_tables": dict(
+            sorted(Counter(item.split(" row ", 1)[0] for item in failures).items())
+        ),
+    }
 
 
 def _file_sha256(path: Path) -> str:
@@ -262,8 +276,11 @@ def read_ip_rapid(
                     continue
                 try:
                     resolved = resolver.resolve(str(raw.get("party_name", "")))
-                    if resolved is None:
-                        continue
+                except ValueError:
+                    continue
+                if resolved is None:
+                    continue
+                try:
                     selected_party_rows += 1
                     if selected_party_rows > MAX_SELECTED_PARTY_ROWS:
                         raise SourceArchiveError(

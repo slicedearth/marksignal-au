@@ -8,7 +8,12 @@ from pathlib import Path
 
 import pytest
 
-from marksignal.ip_rapid import EXPECTED_MEMBERS, SourceArchiveError, read_ip_rapid
+from marksignal.ip_rapid import (
+    EXPECTED_MEMBERS,
+    SourceArchiveError,
+    read_ip_rapid,
+    validation_failure_summary,
+)
 from marksignal.resolver import ApplicantResolver, load_watchlists
 
 HEADERS = {
@@ -82,6 +87,7 @@ def build_archive(
                 "TRUE",
             ],
             ["trade_mark", "7654321", "applicant", "Individual", "Private Person", "TRUE"],
+            ["trade_mark", "7654323", "applicant", "Organisation", "---", "TRUE"],
             ["trade_mark", "7654322", "agent", "Organisation", "Unrelated Agent", "INVALID"],
         ],
         "application.csv": [
@@ -225,10 +231,15 @@ def test_validation_failure_does_not_retain_rejected_source_value(tmp_path: Path
         retrieved_at=datetime(2026, 7, 20, tzinfo=UTC),
     )
     assert snapshot.validation_failures == [
-        "party_activity.csv row 5: selected_row_invalid"
+        "party_activity.csv row 6: selected_row_invalid"
     ]
     assert "Northstar" not in " ".join(snapshot.validation_failures)
     assert "INVALID" not in " ".join(snapshot.validation_failures)
+    assert validation_failure_summary(snapshot.validation_failures) == {
+        "retained_validation_failure_count": 1,
+        "validation_failure_codes": {"selected_row_invalid": 1},
+        "validation_failure_tables": {"party_activity.csv": 1},
+    }
 
 
 def test_joined_record_failure_does_not_log_rejected_source_value(tmp_path: Path) -> None:

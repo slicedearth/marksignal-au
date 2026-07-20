@@ -21,6 +21,10 @@ matching records and stops the complete update when matches exceed both three re
 percent of selected records. Error and privacy records retain bounded codes, identifiers, field
 names, marker types, and source hashes without copying rejected source values.
 
+Source dates are accepted in the documented date forms and the current ISO timestamp form with a
+`T` separator and fractional seconds. Other date forms fail validation instead of being guessed.
+Audit output groups validation failures by table and error code without exposing rejected values.
+
 ## Normalisation and identity
 
 Applicant names are Unicode-normalised, uppercased, stripped of punctuation differences,

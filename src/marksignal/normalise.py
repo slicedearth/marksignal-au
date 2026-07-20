@@ -111,7 +111,13 @@ def parse_date(value: Any) -> date | None:
     if value is None or not str(value).strip():
         return None
     text = str(value).strip()
-    for format_string in ("%Y-%m-%d", "%d/%m/%Y", "%Y-%m-%d %H:%M:%S"):
+    for format_string in (
+        "%Y-%m-%d",
+        "%d/%m/%Y",
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%dT%H:%M:%S.%f",
+        "%Y-%m-%dT%H:%M:%S.%fZ",
+    ):
         try:
             return datetime.strptime(text, format_string).date()
         except ValueError:
