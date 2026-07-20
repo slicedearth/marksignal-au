@@ -45,6 +45,10 @@ A later public-repository push rebuilds from restricted state when the read-only
 available. If the secret is not configured, Pages deliberately falls back to the fictional
 demonstration dataset.
 
+An empty state store is also treated as uninitialized. Pages continues to publish the fictional
+demonstration dataset until the first verified data update creates a manifest. Once a manifest
+exists, missing or corrupt state fails the deployment instead of silently falling back.
+
 ## Public boundary
 
 The deployed production site remains public. Its filing pages and downloads can be copied by

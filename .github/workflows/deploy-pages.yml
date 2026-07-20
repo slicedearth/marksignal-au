@@ -60,6 +60,14 @@ jobs:
           ssh-key: ${{ secrets.RESTRICTED_STATE_READ_KEY }}
           persist-credentials: false
 
+      - name: Confirm restricted state is initialized
+        if: env.HAS_RESTRICTED_STATE == 'true'
+        run: |
+          if [ ! -f .restricted-state/data/manifests/source-manifest.json ]; then
+            echo "HAS_RESTRICTED_STATE=false" >> "$GITHUB_ENV"
+            echo "Restricted state is not initialized; deploying the fictional demonstration dataset."
+          fi
+
       - name: Generate production site from restricted state
         if: env.HAS_RESTRICTED_STATE == 'true'
         run: marksignal --data-root .restricted-state rebuild-site
