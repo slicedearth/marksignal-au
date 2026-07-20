@@ -162,6 +162,7 @@ jobs:
           BUILD_ROOT: ${{ runner.temp }}/marksignal-production
         working-directory: ${{ runner.temp }}/marksignal-production/site
         run: |
+          npm test
           npm run check
           npm audit --audit-level=high
           npm run build

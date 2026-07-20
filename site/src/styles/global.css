@@ -26,6 +26,10 @@ html {
   scroll-padding-top: 5rem;
 }
 
+html.is-instant-scroll {
+  scroll-behavior: auto;
+}
+
 body {
   margin: 0;
   background: var(--paper);
@@ -736,6 +740,15 @@ select {
   background: var(--ink);
   color: var(--mint);
   font-weight: 850;
+}
+
+.signal-pagination__pages li > span[aria-current="page"]:focus {
+  outline: 3px solid var(--sky);
+  outline-offset: 3px;
+}
+
+[data-signal-feed][aria-busy="true"] .signal-pagination a {
+  cursor: progress;
 }
 
 .signal-pagination__ellipsis {

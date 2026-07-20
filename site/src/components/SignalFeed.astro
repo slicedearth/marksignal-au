@@ -21,7 +21,12 @@ const reasonTypes = [...new Set(
 )].sort();
 ---
 
-<section class="content-section signals-section" id="signals" data-current-page={currentPage}>
+<section
+  class="content-section signals-section"
+  id="signals"
+  data-signal-feed
+  data-current-page={currentPage}
+>
   <div class="section-heading">
     <div>
       <p class="eyebrow"><span></span> Signal feed</p>
@@ -83,6 +88,5 @@ const reasonTypes = [...new Set(
   </div>
 
   <SignalPagination currentPage={currentPage} totalPages={totalPages} position="bottom" />
+  <p class="visually-hidden" data-pagination-status aria-live="polite" aria-atomic="true"></p>
 </section>
-
-<script is:inline type="module" src={`${base}scripts/home.js`}></script>

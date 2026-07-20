@@ -21,11 +21,17 @@ const label = position === "top"
 <nav
   id={position === "top" ? "signal-results" : undefined}
   class:list={["signal-pagination", `signal-pagination--${position}`]}
+  data-pagination-position={position}
   aria-label={label}
 >
   {currentPage > 1
     ? (
-      <a class="signal-pagination__step" href={pageHref(currentPage - 1)} rel="prev">
+      <a
+        class="signal-pagination__step"
+        href={pageHref(currentPage - 1)}
+        data-signal-page={currentPage - 1}
+        rel="prev"
+      >
         <span aria-hidden="true">←</span>
         <span class="signal-pagination__step-label">Previous</span>
       </a>
@@ -44,14 +50,23 @@ const label = position === "top"
         <li class:list={{ "is-current": page === currentPage }}>
           {page === currentPage
             ? <span aria-current="page"><span class="visually-hidden">Page </span>{page}</span>
-            : <a href={pageHref(page)} aria-label={`Go to page ${page}`}>{page}</a>}
+            : (
+              <a href={pageHref(page)} data-signal-page={page} aria-label={`Go to page ${page}`}>
+                {page}
+              </a>
+            )}
         </li>
       ))}
   </ol>
 
   {currentPage < totalPages
     ? (
-      <a class="signal-pagination__step" href={pageHref(currentPage + 1)} rel="next">
+      <a
+        class="signal-pagination__step"
+        href={pageHref(currentPage + 1)}
+        data-signal-page={currentPage + 1}
+        rel="next"
+      >
         <span class="signal-pagination__step-label">Next</span>
         <span aria-hidden="true">→</span>
       </a>

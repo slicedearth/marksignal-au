@@ -59,9 +59,12 @@ GitHub Actions and GitHub Pages
 ```
 
 The signal feed is divided into 50-item static pages with controls above and below the results.
-Filters and filtered CSV downloads operate on the current page, while complete generated
-downloads remain available for dataset-wide analysis. This keeps every signal browsable without
-allowing one HTML page or browser document to grow with the full history.
+Pagination replaces the generated main region in place, keeps the selected control visually
+anchored, and updates browser history without a document reload. The static links remain usable
+when scripting or a same-origin page request is unavailable. Filters and filtered CSV downloads
+operate on the current page, while complete generated downloads remain available for
+dataset-wide analysis. This keeps every signal browsable without allowing one HTML page or
+browser document to grow with the full history.
 
 The archive adapter rejects unexpected members, unsafe paths, missing documented columns,
 oversized downloads, expanded archives, tables, cells, selected sets, per-record descriptions,
@@ -115,7 +118,7 @@ Run the checks:
 .venv/bin/mypy src
 .venv/bin/pytest --cov=marksignal --cov-report=term-missing
 .venv/bin/pip-audit
-cd site && npm run check && npm run build && npm audit
+cd site && npm test && npm run check && npm run build && npm run check:security && npm audit
 ```
 
 Process a downloaded official archive:

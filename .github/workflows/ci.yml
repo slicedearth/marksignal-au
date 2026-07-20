@@ -57,6 +57,7 @@ jobs:
         working-directory: site
         run: |
           npm ci
+          npm test
           npm run check
           npm audit --audit-level=high
           npm run build

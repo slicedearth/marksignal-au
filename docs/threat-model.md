@@ -45,6 +45,7 @@ downloads are intentionally readable without authentication.
 | Public Git persistence | Real durable state stays in restricted storage; public Git retains fictional data and aggregate status only |
 | Dependency or workflow compromise | Lockfile, pinned workflow actions, weekly updates, Python and npm audits, dependencies installed before state access, narrow job permissions, isolated public publisher job |
 | Resource exhaustion | HTTPS-only bounded downloads, pre-hash archive checks, streaming CSV reads, archive, table, global selection, child-row, durable JSON, publication, field, description, and event bounds, job timeout, serialized updates |
+| Client navigation injection or resource exhaustion | Exact same-origin pagination routes, redirect rejection, HTML content checks, two-megabyte response cap, page-number validation, script removal, and normal-link fallback |
 | Referrer leakage | External links use `noreferrer`; the document applies a referrer policy |
 
 ## Residual risks

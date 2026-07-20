@@ -26,9 +26,21 @@ const failures = [];
 for (const file of htmlFiles) {
   const html = await readFile(file, "utf8");
   const label = relative(root, file);
+  const contentPolicyTag = html.match(
+    /<meta\b[^>]*http-equiv=(["'])Content-Security-Policy\1[^>]*>/i,
+  )?.[0];
+  const contentPolicy = contentPolicyTag?.match(/\bcontent=(["'])(.*?)\1/i)?.[2];
 
-  if (!html.includes('http-equiv="Content-Security-Policy"')) {
+  if (!contentPolicy) {
     failures.push(`${label}: content policy is missing`);
+  } else {
+    const connectDirective = contentPolicy
+      .split(";")
+      .map((directive) => directive.trim())
+      .find((directive) => directive.startsWith("connect-src"));
+    if (connectDirective !== "connect-src 'self'") {
+      failures.push(`${label}: browser connections are not restricted to same-origin files`);
+    }
   }
   if (html.includes("'unsafe-inline'")) {
     failures.push(`${label}: unsafe inline content is permitted`);
