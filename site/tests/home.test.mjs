@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  getPaginationFetchOptions,
   getSignalPageNumber,
   readBoundedResponseText,
 } from "../public/scripts/home.js";
@@ -61,4 +62,15 @@ test("bounded page reads accept small HTML and reject oversized bodies", async (
 
   const streamedOversize = new Response("x".repeat(101));
   await assert.rejects(readBoundedResponseText(streamedOversize, 100), /size limit/);
+});
+
+test("pagination requests bypass stale browser documents", () => {
+  const controller = new AbortController();
+  const options = getPaginationFetchOptions(controller.signal);
+
+  assert.equal(options.cache, "no-store");
+  assert.equal(options.credentials, "same-origin");
+  assert.equal(options.redirect, "error");
+  assert.deepEqual(options.headers, { Accept: "text/html" });
+  assert.equal(options.signal, controller.signal);
 });

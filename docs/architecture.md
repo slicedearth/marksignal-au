@@ -54,7 +54,9 @@ generates evidence files, downloads, and site data atomically in the build root.
 the result to static HTML. The signal feed uses 50-item static pages with sticky navigation,
 page-local filters, and page-specific CSV export. A same-origin browser enhancement fetches one
 bounded static page, validates its route and page metadata, and atomically replaces the main
-region. It preserves the selected pagination control's viewport position and browser history.
+region. Numbered-page requests bypass stored browser documents, while a four-page in-memory cache
+supports repeat navigation within the current session. The enhancement preserves the selected
+pagination control's viewport position and browser history.
 Complete generated downloads remain available for dataset-wide work. The pipeline verifies
 manifest hashes before it trusts durable state for a rebuild, update, or public status record.
 

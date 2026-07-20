@@ -29,7 +29,8 @@ particularly useful.
 - Enhanced pagination accepts only the site root and numeric signal-page paths on the current
   origin. It rejects redirects, non-HTML responses, mismatched page metadata, and responses over
   two megabytes. Scripts are removed from the parsed replacement before the main region is
-  imported. The previous page remains visible until a complete replacement has been validated.
+  imported. Requests bypass stored browser responses so pages from different deployments cannot
+  be combined. The previous page remains visible until a complete replacement has been validated.
 - The content policy permits browser connections only to the same origin for enhanced pagination.
   There are no third-party browser requests, analytics requests, credentials, or request-time
   data APIs.

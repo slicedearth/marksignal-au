@@ -76,6 +76,14 @@ export const readBoundedResponseText = async (response, maximumBytes = MAX_PAGE_
   return text + decoder.decode();
 };
 
+export const getPaginationFetchOptions = (signal) => ({
+  cache: "no-store",
+  credentials: "same-origin",
+  headers: { Accept: "text/html" },
+  redirect: "error",
+  signal,
+});
+
 const setupSignalFeed = (root = document) => {
   const feed = root.matches?.("[data-signal-feed]")
     ? root
@@ -201,13 +209,7 @@ const fetchDestinationPage = async (destination, expectedPage, signal) => {
   const cached = pageCache.get(cacheKey);
   if (cached !== undefined) return parseDestinationPage(cached, expectedPage);
 
-  const response = await fetch(requestUrl, {
-    cache: "force-cache",
-    credentials: "same-origin",
-    headers: { Accept: "text/html" },
-    redirect: "error",
-    signal,
-  });
+  const response = await fetch(requestUrl, getPaginationFetchOptions(signal));
   if (!response.ok || !response.headers.get("Content-Type")?.toLowerCase().includes("text/html")) {
     throw new Error("pagination response is not an available HTML page");
   }
