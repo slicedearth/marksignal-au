@@ -28,6 +28,9 @@ particularly useful.
   `unsafe-inline` content-policy exception.
 - Static signal pages contain at most 50 result cards. Page-local filtering and export avoid an
   unbounded browser document while complete downloads remain separately available.
+- Every generated official-record URL is validated against one exact HTTPS host and path pattern.
+  A weekly availability sample is capped at three sequential `HEAD` requests, does not follow
+  redirects, and never reads response bodies. Only confirmed missing responses block publication.
 - Scheduled audit and data-processing jobs use read-only public-repository permissions. A
   separate publisher job receives public write permission only after verification.
 - The project deliberately excludes private-person applicants and unnecessary contact data.

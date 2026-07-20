@@ -70,6 +70,11 @@ official Australian Trade Mark Search record when one can be constructed. Downlo
 evidence includes the normalised filing, reasons, observed changes, retrieval timestamps,
 and source hashes.
 
+All generated official-record URLs must match the exact approved host and numeric record path.
+Each weekly update checks only three deterministic destinations using sequential `HEAD` requests.
+The check confirms missing links without treating access controls, redirects, or temporary source
+failures as evidence that a record has disappeared.
+
 Incorrect matches and calculation problems can be reported through GitHub issues. Accepted
 corrections should update the watchlist or deterministic rule and include regression tests.
 

@@ -82,6 +82,12 @@ matches exceed both three records and one percent of selected records. Validatio
 reports store bounded codes and marker types without rejected source values. Tests use local
 fixtures and never contact a live service.
 
+Generated official-record URLs are allowlisted offline before any request. The weekly update
+then checks low, middle, and high record numbers with sequential `HEAD` requests, no redirects,
+and no response body. A `404` or `410` confirms a broken destination and stops publication.
+Access controls, redirects, rate limits, network errors, and server errors remain indeterminate
+so an external outage cannot erase or block otherwise verified state.
+
 ## Deployment boundary
 
 CI validates Python and Astro independently. The update workflow fetches and processes the

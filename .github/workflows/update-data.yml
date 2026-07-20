@@ -167,6 +167,15 @@ jobs:
           npm run build
           npm run check:security
 
+      - name: Check bounded official-record sample
+        env:
+          BUILD_ROOT: ${{ runner.temp }}/marksignal-production
+        run: >-
+          marksignal
+          --root "$BUILD_ROOT"
+          --watchlists "$GITHUB_WORKSPACE/watchlists"
+          check-source-links
+
       - name: Prepare verified restricted-state patch
         id: state_patch
         env:

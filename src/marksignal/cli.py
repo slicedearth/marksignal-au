@@ -17,6 +17,7 @@ from marksignal.ip_rapid import (
 from marksignal.pipeline import process_snapshot, publish_status, rebuild_site
 from marksignal.privacy import audit_trademarks
 from marksignal.resolver import ApplicantResolver, load_watchlists
+from marksignal.source_links import SourceLinkError, check_dashboard_source_links
 
 
 def _path(value: str) -> Path:
@@ -72,6 +73,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     subparsers.add_parser("validate-watchlists", help="validate all YAML watchlists")
     subparsers.add_parser("rebuild-site", help="rebuild site assets from local state")
+    subparsers.add_parser(
+        "check-source-links",
+        help="validate official-record URLs and check a three-record availability sample",
+    )
     status = subparsers.add_parser(
         "publish-status",
         help="write a non-identifying public status record from durable state",
@@ -94,6 +99,14 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "rebuild-site":
         dashboard = rebuild_site(root, resolver=resolver, data_root=data_root)
         print(json.dumps(dashboard["stats"], sort_keys=True))
+        return 0
+    if args.command == "check-source-links":
+        report = check_dashboard_source_links(root / "site/src/data/dashboard.json")
+        if report.broken:
+            raise SourceLinkError(
+                f"official-record sample contains {report.broken} confirmed missing link(s)"
+            )
+        print(json.dumps(report.public_summary(), sort_keys=True))
         return 0
     if args.command == "publish-status":
         status = publish_status(

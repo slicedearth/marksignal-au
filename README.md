@@ -67,6 +67,10 @@ The archive adapter rejects unexpected members, unsafe paths, missing documented
 oversized downloads, expanded archives, tables, cells, selected sets, per-record descriptions,
 per-record events, and excessive validation failures. It reads rows as streams and retains only
 matched organisation records. Durable state hashes are verified before rebuilding or publishing.
+Every generated official-record URL must match the exact Australian Trade Mark Search host and
+path. The weekly update checks only three deterministic record numbers with sequential `HEAD` requests,
+does not follow redirects, and does not download record pages. Confirmed `404` or `410` responses
+stop publication, while access controls and transient failures are reported as indeterminate.
 Addresses, personal contact details, agent records, and
 private-person applicants are not published. A high-confidence privacy scan checks every
 retained source text field and change value for contact, business-identifier, phone-number, and
@@ -120,7 +124,7 @@ Process a downloaded official archive:
 .venv/bin/marksignal audit-iprapid /path/to/iprapid.zip
 
 .venv/bin/marksignal \
-  --data-root ../marksignal-state \
+  --data-root /path/to/restricted-state \
   ingest-iprapid /path/to/iprapid.zip --privacy-mode strict
 ```
 
