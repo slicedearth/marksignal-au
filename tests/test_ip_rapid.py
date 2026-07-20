@@ -68,6 +68,7 @@ def build_archive(
     *,
     include_all: bool = True,
     include_invalid_watched_row: bool = False,
+    selected_application_number: str = "1234567",
 ) -> None:
     rows = {
         "party_activity.csv": [
@@ -127,6 +128,11 @@ def build_archive(
                 "INVALID",
             ]
         )
+    if selected_application_number != "1234567":
+        for table_rows in rows.values():
+            for row in table_rows:
+                if len(row) > 1 and row[1] == "1234567":
+                    row[1] = selected_application_number
     names = EXPECTED_MEMBERS if include_all else EXPECTED_MEMBERS - {"application_links.csv"}
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as archive:
         for name in sorted(names):
@@ -181,3 +187,76 @@ def test_validation_failure_does_not_retain_rejected_source_value(tmp_path: Path
     ]
     assert "Northstar" not in " ".join(snapshot.validation_failures)
     assert "INVALID" not in " ".join(snapshot.validation_failures)
+
+
+def test_joined_record_failure_does_not_log_rejected_source_value(tmp_path: Path) -> None:
+    path = tmp_path / "iprapid.zip"
+    build_archive(path, selected_application_number="bad/value")
+    resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
+    snapshot = read_ip_rapid(
+        path,
+        resolver=resolver,
+        retrieved_at=datetime(2026, 7, 20, tzinfo=UTC),
+    )
+    assert snapshot.trademarks == []
+    assert snapshot.validation_failures == [
+        "joined_record row 0: selected_record_invalid"
+    ]
+    assert "bad/value" not in " ".join(snapshot.validation_failures)
+
+
+def test_source_table_row_limit_fails_closed(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    path = tmp_path / "iprapid.zip"
+    build_archive(path)
+    monkeypatch.setattr("marksignal.ip_rapid.MAX_ROWS_PER_MEMBER", 1)
+    resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
+    with pytest.raises(SourceArchiveError, match="row safety limit"):
+        read_ip_rapid(
+            path,
+            resolver=resolver,
+            retrieved_at=datetime(2026, 7, 20, tzinfo=UTC),
+        )
+
+
+def test_selected_application_limit_fails_closed(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    path = tmp_path / "iprapid.zip"
+    build_archive(path)
+    monkeypatch.setattr("marksignal.ip_rapid.MAX_SELECTED_APPLICATIONS", 0)
+    resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
+    with pytest.raises(SourceArchiveError, match="application safety limit"):
+        read_ip_rapid(
+            path,
+            resolver=resolver,
+            retrieved_at=datetime(2026, 7, 20, tzinfo=UTC),
+        )
+
+
+@pytest.mark.parametrize(
+    ("constant_name", "message"),
+    [
+        ("MAX_DESCRIPTIONS_PER_APPLICATION", "description safety limit"),
+        ("MAX_EVENTS_PER_APPLICATION", "event safety limit"),
+    ],
+)
+def test_selected_child_row_limits_fail_closed(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    constant_name: str,
+    message: str,
+) -> None:
+    path = tmp_path / "iprapid.zip"
+    build_archive(path)
+    monkeypatch.setattr(f"marksignal.ip_rapid.{constant_name}", 1)
+    resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
+    with pytest.raises(SourceArchiveError, match=message):
+        read_ip_rapid(
+            path,
+            resolver=resolver,
+            retrieved_at=datetime(2026, 7, 20, tzinfo=UTC),
+        )

@@ -51,7 +51,8 @@ version.
 
 `src/marksignal/pipeline.py` writes durable state to a separately configured data root and
 generates evidence files, downloads, and site data atomically in the build root. Astro renders
-the result to static HTML.
+the result to static HTML. The pipeline verifies manifest hashes before it trusts durable state
+for a rebuild, update, or public status record.
 
 ## Data boundaries
 
@@ -68,11 +69,12 @@ from those validated models inside the deployment runner and do not enter public
 
 ## Failure behaviour
 
-Publication stops when the archive has unsafe paths, duplicate or unexpected members,
-missing required columns, excessive size, oversized cells, ambiguous applicant matches, or
-too many selected-row validation errors. The privacy scan supports a non-writing audit, a
-strict stop on any match, and scheduled bounded quarantine. Quarantine removes affected
-records from both incoming and previously retained state. The complete update stops when
+Publication stops when the archive has unsafe paths, duplicate or unexpected members, missing
+required columns, excessive download or expanded size, excessive table rows, oversized cells,
+an excessive selected set, too many descriptions or events for one application, ambiguous
+applicant matches, or too many selected-row validation errors. The privacy scan supports a
+non-writing audit, a strict stop on any match, and scheduled bounded quarantine. Quarantine
+removes affected records from both incoming and previously retained state. The complete update stops when
 matches exceed both three records and one percent of selected records. Validation and privacy
 reports store bounded codes and marker types without rejected source values. Tests use local
 fixtures and never contact a live service.
@@ -81,8 +83,7 @@ fixtures and never contact a live service.
 
 CI validates Python and Astro independently. The update workflow fetches and processes the
 weekly archive, runs the full verification suite, commits durable data to restricted state, and writes
-only a non-identifying status record publicly. The Pages workflow reads restricted state through
-separate repository-scoped read and write deploy keys and creates the public artifact. The Pages
-generator receives read-only state access, while the write key is introduced only after a data
-update passes verification. The built site contains no credential and cannot mutate repository
-state.
+only a non-identifying status record publicly. The Pages workflow receives only read-only state
+access and creates the public artifact. The update workflow introduces the separate write key
+only after a data update passes verification. The built site contains no credential and cannot
+mutate repository state.

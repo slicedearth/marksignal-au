@@ -245,6 +245,31 @@ def test_rebuild_stops_when_retained_change_history_contains_contact_data(
     changes = json.loads(changes_path.read_text())
     changes[0]["new_value"] = "Contact owner@example.com"
     changes_path.write_text(json.dumps(changes), encoding="utf-8")
+    manifest_path = tmp_path / "data/manifests/source-manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["changes_sha256"] = hashlib.sha256(changes_path.read_bytes()).hexdigest()
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
 
     with pytest.raises(DataQualityError, match="change_new_value"):
+        rebuild_site(tmp_path, resolver=resolver)
+
+
+def test_rebuild_rejects_durable_state_hash_mismatch(tmp_path: Path) -> None:
+    resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
+    snapshot, retrieved_at = read_fixture(
+        Path("tests/fixtures/synthetic-trademarks.json"),
+        resolver=resolver,
+    )
+    process_snapshot(
+        snapshot,
+        resolver=resolver,
+        root=tmp_path,
+        retrieved_at=retrieved_at,
+        source_url=IP_RAPID_DATASET_URL,
+        is_demo=True,
+    )
+    state_path = tmp_path / "data/state/trademarks.json"
+    state_path.write_text("[]\n", encoding="utf-8")
+
+    with pytest.raises(DataQualityError, match=r"trademarks\.json"):
         rebuild_site(tmp_path, resolver=resolver)

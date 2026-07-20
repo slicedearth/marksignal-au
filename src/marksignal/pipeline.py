@@ -131,6 +131,20 @@ def _sha256(content: bytes) -> str:
     return hashlib.sha256(content).hexdigest()
 
 
+def _verify_durable_state(root: Path, manifest: SourceManifest) -> None:
+    expected_hashes = {
+        root / "data/state/trademarks.json": manifest.state_sha256,
+        root / "data/events/signals.json": manifest.signals_sha256,
+        root / "data/events/changes.json": manifest.changes_sha256,
+    }
+    for path, expected_hash in expected_hashes.items():
+        if not path.is_file():
+            raise DataQualityError(f"durable state file is missing: {path.name}")
+        actual_hash = _sha256(path.read_bytes())
+        if actual_hash != expected_hash:
+            raise DataQualityError(f"durable state hash mismatch: {path.name}")
+
+
 def _load_trademarks(path: Path) -> list[Trademark]:
     return [Trademark.model_validate(item) for item in _load_json(path, [])]
 
@@ -484,6 +498,11 @@ def process_snapshot(
     state_path = durable_root / "data/state/trademarks.json"
     changes_path = durable_root / "data/events/changes.json"
     manifest_path = durable_root / "data/manifests/source-manifest.json"
+    previous_manifest = _load_json(manifest_path, {})
+    previous_manifest_model: SourceManifest | None = None
+    if previous_manifest:
+        previous_manifest_model = SourceManifest.model_validate(previous_manifest)
+        _verify_durable_state(durable_root, previous_manifest_model)
     previous = _load_trademarks(state_path)
     quarantined_numbers = {item.trademark_number for item in privacy_audit.quarantined}
     previous = [
@@ -492,7 +511,6 @@ def process_snapshot(
         if trademark.trademark_number not in quarantined_numbers
     ]
     _audit_privacy(previous)
-    previous_manifest = _load_json(manifest_path, {})
     existing_changes = _load_changes(changes_path)
     previous_numbers = {item.trademark_number for item in previous}
     filtered_existing_changes = [
@@ -514,7 +532,9 @@ def process_snapshot(
             FilingSignal.model_validate(item)
             for item in _load_json(durable_root / "data/events/signals.json", [])
         ]
-        existing_manifest = SourceManifest.model_validate(previous_manifest)
+        if previous_manifest_model is None:
+            raise DataQualityError("durable state manifest is missing")
+        existing_manifest = previous_manifest_model
         build_site_data(
             previous,
             existing_signals,
@@ -649,15 +669,16 @@ def rebuild_site(
     """Rebuild site assets from validated local state."""
 
     durable_root = data_root or root
+    manifest = SourceManifest.model_validate(
+        _load_json(durable_root / "data/manifests/source-manifest.json", {})
+    )
+    _verify_durable_state(durable_root, manifest)
     trademarks = _load_trademarks(durable_root / "data/state/trademarks.json")
     signals = [
         FilingSignal.model_validate(item)
         for item in _load_json(durable_root / "data/events/signals.json", [])
     ]
     changes = _load_changes(durable_root / "data/events/changes.json")
-    manifest = SourceManifest.model_validate(
-        _load_json(durable_root / "data/manifests/source-manifest.json", {})
-    )
     return build_site_data(
         trademarks,
         signals,
@@ -676,6 +697,7 @@ def publish_status(root: Path, *, data_root: Path, data_revision: str) -> Public
     manifest = SourceManifest.model_validate(
         _load_json(data_root / "data/manifests/source-manifest.json", {})
     )
+    _verify_durable_state(data_root, manifest)
     status = PublicUpdateStatus(
         data_revision=data_revision,
         retrieved_at=manifest.retrieved_at,

@@ -59,8 +59,10 @@ GitHub Actions and GitHub Pages
 ```
 
 The archive adapter rejects unexpected members, unsafe paths, missing documented columns,
-oversized cells, and excessive validation failures. It reads rows as streams and retains only
-matched organisation records. Addresses, personal contact details, agent records, and
+oversized downloads, expanded archives, tables, cells, selected sets, per-record descriptions,
+per-record events, and excessive validation failures. It reads rows as streams and retains only
+matched organisation records. Durable state hashes are verified before rebuilding or publishing.
+Addresses, personal contact details, agent records, and
 private-person applicants are not published. A high-confidence privacy scan checks every
 retained source text field and change value for contact, business-identifier, phone-number, and
 street-address markers. Manual runs

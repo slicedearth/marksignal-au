@@ -19,8 +19,9 @@ particularly useful.
 
 - The public site is static and has no accounts, cookies, database, or request-time API.
 - Source archives, CSV cells, watchlists, URLs, and displayed strings are untrusted input.
-- Archive processing is bounded and rejects unsafe paths, unexpected members, excessive
-  expanded size, oversized cells, missing required columns, and excessive validation errors.
+- Archive processing is bounded and rejects unsafe paths, unexpected members, excessive download
+  or expanded size, oversized tables, cells, selected sets, per-record descriptions, per-record
+  events, missing required columns, and excessive validation errors.
 - Site templates escape source text. CSV output prefixes formula-triggering values.
 - Scheduled audit and data-processing jobs use read-only public-repository permissions. A
   separate publisher job receives public write permission only after verification.
@@ -33,6 +34,8 @@ particularly useful.
   and marker types. They do not copy the matched source text.
 - Durable production state and manifests stay in restricted versioned storage. Public Git
   history retains only fictional records and non-identifying update counts.
+- Manifest hashes for state, signals, and changes are verified before rebuilds or status
+  publication.
 
 The application is an informational research tool. It does not provide legal advice and
 does not determine infringement, ownership, commercial intent, or misconduct.

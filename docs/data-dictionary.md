@@ -56,6 +56,9 @@ download hash, source schema fingerprint, rows scanned by table, selected record
 signal count, appended change count, privacy-quarantine count and marker counts, validation
 failures, and output hashes.
 
+The state, signal, and change hashes are checked before the restricted data can be used for a
+site rebuild, subsequent update, or public status record.
+
 Validation failures are stored as table name, row number, and a bounded error code. Rejected
 source values are not retained in the manifest.
 

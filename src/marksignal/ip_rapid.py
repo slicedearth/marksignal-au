@@ -93,6 +93,10 @@ MAX_ARCHIVE_BYTES = 2_500_000_000
 MAX_UNCOMPRESSED_BYTES = 20_000_000_000
 MAX_CELL_CHARACTERS = 20_000
 MAX_VALIDATION_FAILURES = 200
+MAX_ROWS_PER_MEMBER = 100_000_000
+MAX_SELECTED_APPLICATIONS = 250_000
+MAX_DESCRIPTIONS_PER_APPLICATION = 500
+MAX_EVENTS_PER_APPLICATION = 2_000
 _CLASS_RE = re.compile(r"^0*([1-9]|[1-3][0-9]|4[0-5])$")
 
 
@@ -165,8 +169,16 @@ def _reader(
     return reader, stream
 
 
-def _bounded_rows(reader: csv.DictReader[str]) -> Iterator[dict[str, str]]:
-    for row in reader:
+def _bounded_rows(
+    reader: csv.DictReader[str],
+    *,
+    member: str,
+) -> Iterator[dict[str, str]]:
+    for row_number, row in enumerate(reader, start=1):
+        if row_number > MAX_ROWS_PER_MEMBER:
+            raise SourceArchiveError(
+                f"{member} exceeds the {MAX_ROWS_PER_MEMBER:,} row safety limit"
+            )
         if any(len(str(value or "")) > MAX_CELL_CHARACTERS for value in row.values()):
             raise SourceArchiveError("source row contains a cell over 20,000 characters")
         yield row
@@ -229,7 +241,9 @@ def read_ip_rapid(
 
         reader, stream = _reader(archive, "party_activity.csv")
         try:
-            for row_number, raw in enumerate(_bounded_rows(reader), start=2):
+            for row_number, raw in enumerate(
+                _bounded_rows(reader, member="party_activity.csv"), start=2
+            ):
                 rows_read["party_activity"] += 1
                 if (
                     str(raw.get("ip_right_type", "")).casefold() != "trade_mark"
@@ -267,12 +281,19 @@ def read_ip_rapid(
             )
             resolved_by_number.pop(ambiguous_number)
         selected_numbers = set(resolved_by_number)
+        if len(selected_numbers) > MAX_SELECTED_APPLICATIONS:
+            raise SourceArchiveError(
+                "watchlist selection exceeds the "
+                f"{MAX_SELECTED_APPLICATIONS:,} application safety limit"
+            )
 
         applications: dict[str, SourceApplication] = {}
         duplicate_applications: set[str] = set()
         reader, stream = _reader(archive, "application.csv")
         try:
-            for row_number, raw in enumerate(_bounded_rows(reader), start=2):
+            for row_number, raw in enumerate(
+                _bounded_rows(reader, member="application.csv"), start=2
+            ):
                 rows_read["application"] += 1
                 application_number = raw.get("application_number")
                 if (
@@ -299,20 +320,31 @@ def read_ip_rapid(
         finally:
             stream.close()
 
-        descriptions: dict[str, list[SourceDescription]] = defaultdict(list)
+        descriptions: dict[str, dict[str, SourceDescription]] = defaultdict(dict)
         reader, stream = _reader(archive, "application_description.csv")
         try:
-            for row_number, raw in enumerate(_bounded_rows(reader), start=2):
+            for row_number, raw in enumerate(
+                _bounded_rows(reader, member="application_description.csv"), start=2
+            ):
                 rows_read["application_description"] += 1
                 if raw.get("application_number") not in applications:
                     continue
                 try:
                     description_row = SourceDescription.model_validate(raw)
-                    if (
-                        description_row.ip_right_type == "trade_mark"
-                        and description_row not in descriptions[description_row.application_number]
-                    ):
-                        descriptions[description_row.application_number].append(description_row)
+                    if description_row.ip_right_type == "trade_mark":
+                        description_key = stable_hash(description_row.model_dump(mode="json"))
+                        application_descriptions = descriptions[
+                            description_row.application_number
+                        ]
+                        if description_key not in application_descriptions:
+                            if (
+                                len(application_descriptions)
+                                >= MAX_DESCRIPTIONS_PER_APPLICATION
+                            ):
+                                raise SourceArchiveError(
+                                    "selected application exceeds the description safety limit"
+                                )
+                            application_descriptions[description_key] = description_row
                 except (ValidationError, ValueError):
                     _failure(
                         failures,
@@ -326,7 +358,9 @@ def read_ip_rapid(
         classes: dict[str, set[int]] = defaultdict(set)
         reader, stream = _reader(archive, "application_classification.csv")
         try:
-            for row_number, raw in enumerate(_bounded_rows(reader), start=2):
+            for row_number, raw in enumerate(
+                _bounded_rows(reader, member="application_classification.csv"), start=2
+            ):
                 rows_read["application_classification"] += 1
                 if raw.get("application_number") not in applications:
                     continue
@@ -350,10 +384,12 @@ def read_ip_rapid(
         finally:
             stream.close()
 
-        events: dict[str, list[TrademarkEvent]] = defaultdict(list)
+        events: dict[str, dict[str, TrademarkEvent]] = defaultdict(dict)
         reader, stream = _reader(archive, "application_events.csv")
         try:
-            for row_number, raw in enumerate(_bounded_rows(reader), start=2):
+            for row_number, raw in enumerate(
+                _bounded_rows(reader, member="application_events.csv"), start=2
+            ):
                 rows_read["application_events"] += 1
                 if raw.get("application_number") not in applications:
                     continue
@@ -361,8 +397,13 @@ def read_ip_rapid(
                     event_row = SourceEvent.model_validate(raw)
                     if event_row.ip_right_type == "trade_mark":
                         event = _source_event(event_row)
-                        if event not in events[event_row.application_number]:
-                            events[event_row.application_number].append(event)
+                        application_events = events[event_row.application_number]
+                        if event.event_id not in application_events:
+                            if len(application_events) >= MAX_EVENTS_PER_APPLICATION:
+                                raise SourceArchiveError(
+                                    "selected application exceeds the event safety limit"
+                                )
+                            application_events[event.event_id] = event
                 except (ValidationError, ValueError):
                     _failure(
                         failures,
@@ -377,7 +418,10 @@ def read_ip_rapid(
         for number, application in sorted(applications.items()):
             parties = resolved_by_number[number]
             party = sorted(parties, key=lambda item: item.observed_name)[0]
-            source_descriptions = descriptions[number]
+            source_descriptions = sorted(
+                descriptions[number].values(),
+                key=lambda item: (item.description_type, item.description_value),
+            )
             phrases = sorted(
                 {
                     item.description_value
@@ -406,7 +450,7 @@ def read_ip_rapid(
                 for class_number in sorted(classes[number])
             ]
             trademark_events = sorted(
-                events[number],
+                events[number].values(),
                 key=lambda item: (
                     item.declared_date
                     or item.effective_date
@@ -423,8 +467,8 @@ def read_ip_rapid(
                 "classes": sorted(classes[number]),
                 "events": [item.model_dump(mode="json") for item in trademark_events],
             }
-            trademarks.append(
-                Trademark(
+            try:
+                trademark = Trademark(
                     trademark_number=number,
                     applicant_id=party.applicant.applicant_id,
                     applicant_name=party.applicant.display_name,
@@ -444,7 +488,10 @@ def read_ip_rapid(
                     first_seen_at=retrieved_at,
                     last_seen_at=retrieved_at,
                 )
-            )
+            except (ValidationError, ValueError):
+                _failure(failures, "joined_record", 0, "selected_record_invalid")
+                continue
+            trademarks.append(trademark)
     finally:
         archive.close()
 

@@ -60,8 +60,9 @@ jobs:
           ARCHIVE_PATH: ${{ runner.temp }}/iprapid.zip
         run: >-
           curl --fail --location
+          --proto '=https' --proto-redir '=https'
           --retry 5 --retry-all-errors --retry-delay 10
-          --connect-timeout 30 --max-time 3600
+          --connect-timeout 30 --max-time 3600 --max-filesize 2500000000
           --output "$ARCHIVE_PATH"
           https://data.gov.au/data/dataset/423000b8-5735-4447-bcb9-792644bcd7ea/resource/c79b3af6-3720-44ac-9e39-6a68f5635924/download/iprapid.zip
 
@@ -122,8 +123,9 @@ jobs:
           ARCHIVE_PATH: ${{ runner.temp }}/iprapid.zip
         run: >-
           curl --fail --location
+          --proto '=https' --proto-redir '=https'
           --retry 5 --retry-all-errors --retry-delay 10
-          --connect-timeout 30 --max-time 3600
+          --connect-timeout 30 --max-time 3600 --max-filesize 2500000000
           --output "$ARCHIVE_PATH"
           https://data.gov.au/data/dataset/423000b8-5735-4447-bcb9-792644bcd7ea/resource/c79b3af6-3720-44ac-9e39-6a68f5635924/download/iprapid.zip
 
