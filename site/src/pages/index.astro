@@ -1,14 +1,16 @@
 ---
-import SignalCard from "../components/SignalCard.astro";
+import SignalFeed from "../components/SignalFeed.astro";
 import rawDashboard from "../data/dashboard.json";
 import { formatDate, label } from "../lib/format";
+import { getSignalPage, getSignalPageCount } from "../lib/pagination";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import type { Dashboard } from "../types";
 
 const dashboard = rawDashboard as unknown as Dashboard;
 const base = import.meta.env.BASE_URL;
 const topSignal = dashboard.signals[0];
-const reasonTypes = [...new Set(dashboard.signals.flatMap((signal) => signal.reasons.map((reason) => reason.type)))].sort();
+const totalSignalPages = getSignalPageCount(dashboard.signals.length);
+const firstPageSignals = getSignalPage(dashboard.signals, 1);
 const maxClassCount = Math.max(...dashboard.class_counts.map((item) => item.filings), 1);
 ---
 
@@ -77,58 +79,12 @@ const maxClassCount = Math.max(...dashboard.class_counts.map((item) => item.fili
     <div class="metric-source"><span class="live-dot"></span><span>Updated {formatDate(dashboard.generated_at)}</span></div>
   </section>
 
-  <section class="content-section signals-section" id="signals">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow"><span></span> Signal feed</p>
-        <h2>Why was this surfaced?</h2>
-        <p>Each point is tied to a visible calculation and a downloadable evidence record.</p>
-      </div>
-      <a class="download-link" href={`${base}data/signals.csv`} download>Download all CSV ↓</a>
-    </div>
-
-    <form class="filters" data-filters aria-label="Filter filing signals">
-      <label class="search-field">
-        <span>Search</span>
-        <div><span aria-hidden="true">⌕</span><input type="search" name="query" placeholder="Mark, applicant, number" autocomplete="off" /></div>
-      </label>
-      <label>
-        <span>Applicant</span>
-        <select name="applicant">
-          <option value="">All applicants</option>
-          {dashboard.applicants.map((applicant) => <option value={applicant.applicant_id}>{applicant.display_name}</option>)}
-        </select>
-      </label>
-      <label>
-        <span>Reason</span>
-        <select name="reason">
-          <option value="">All reasons</option>
-          {reasonTypes.map((reason) => <option value={reason}>{label(reason)}</option>)}
-        </select>
-      </label>
-      <label>
-        <span>Minimum score</span>
-        <select name="score">
-          <option value="0">Any score</option>
-          <option value="40">40+</option>
-          <option value="60">60+</option>
-          <option value="80">80+</option>
-        </select>
-      </label>
-      <button class="reset-button" type="reset">Clear</button>
-    </form>
-
-    <div class="result-line">
-      <p aria-live="polite"><strong data-result-count>{dashboard.signals.length}</strong> explained filing signals</p>
-      <button class="text-button" type="button" data-download-filtered>Download filtered CSV</button>
-    </div>
-    <div class="signal-list" data-signal-list>
-      {dashboard.signals.map((signal) => <SignalCard signal={signal} />)}
-    </div>
-    <div class="empty-state" data-empty hidden>
-      <span aria-hidden="true">○</span><h3>No signals match those filters</h3><p>Try a broader search or clear the filters.</p>
-    </div>
-  </section>
+  <SignalFeed
+    signals={firstPageSignals}
+    totalSignals={dashboard.signals.length}
+    currentPage={1}
+    totalPages={totalSignalPages}
+  />
 
   <section class="pattern-section" id="applicants">
     <div class="section-heading section-heading--dark">
@@ -175,6 +131,4 @@ const maxClassCount = Math.max(...dashboard.class_counts.map((item) => item.fili
     <div><p class="eyebrow"><span></span> Read filings responsibly</p><h2>A signal is a lead.<br />It is not a launch.</h2></div>
     <div><p>{dashboard.disclaimer}</p><a href={`${base}methodology/`}>Read the methodology and limitations →</a></div>
   </section>
-
-  <script is:inline type="module" src={`${base}scripts/home.js`}></script>
 </BaseLayout>

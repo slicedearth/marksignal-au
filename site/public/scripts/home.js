@@ -1,8 +1,9 @@
-const form = document.querySelector("[data-filters]");
-const cards = Array.from(document.querySelectorAll("[data-signal]"));
-const count = document.querySelector("[data-result-count]");
-const empty = document.querySelector("[data-empty]");
-const download = document.querySelector("[data-download-filtered]");
+const feed = document.querySelector("[data-current-page]");
+const form = feed?.querySelector("[data-filters]");
+const cards = Array.from(feed?.querySelectorAll("[data-signal]") ?? []);
+const count = feed?.querySelector("[data-result-count]");
+const empty = feed?.querySelector("[data-empty]");
+const download = feed?.querySelector("[data-download-filtered]");
 
 const applyFilters = () => {
   if (!(form instanceof HTMLFormElement)) return;
@@ -46,7 +47,7 @@ download?.addEventListener("click", () => {
   const url = URL.createObjectURL(new Blob([`${csv}\n`], { type: "text/csv;charset=utf-8" }));
   const anchor = document.createElement("a");
   anchor.href = url;
-  anchor.download = "marksignal-filtered-signals.csv";
+  anchor.download = `marksignal-signals-page-${feed?.dataset.currentPage ?? "1"}.csv`;
   anchor.click();
   URL.revokeObjectURL(url);
 });

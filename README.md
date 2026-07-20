@@ -58,6 +58,11 @@ generate temporary JSON, CSV, Parquet, RSS, applicant, and filing pages
 GitHub Actions and GitHub Pages
 ```
 
+The signal feed is divided into 50-item static pages with controls above and below the results.
+Filters and filtered CSV downloads operate on the current page, while complete generated
+downloads remain available for dataset-wide analysis. This keeps every signal browsable without
+allowing one HTML page or browser document to grow with the full history.
+
 The archive adapter rejects unexpected members, unsafe paths, missing documented columns,
 oversized downloads, expanded archives, tables, cells, selected sets, per-record descriptions,
 per-record events, and excessive validation failures. It reads rows as streams and retains only

@@ -51,8 +51,10 @@ version.
 
 `src/marksignal/pipeline.py` writes durable state to a separately configured data root and
 generates evidence files, downloads, and site data atomically in the build root. Astro renders
-the result to static HTML. The pipeline verifies manifest hashes before it trusts durable state
-for a rebuild, update, or public status record.
+the result to static HTML. The signal feed uses 50-item static pages with sticky navigation,
+page-local filters, and page-specific CSV export. Complete generated downloads remain available
+for dataset-wide work. The pipeline verifies manifest hashes before it trusts durable state for a
+rebuild, update, or public status record.
 
 ## Data boundaries
 

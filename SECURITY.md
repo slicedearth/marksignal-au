@@ -26,6 +26,8 @@ particularly useful.
 - Site templates escape source text. CSV output prefixes formula-triggering values. Browser code
   and styles are same-origin files, and the build rejects inline script, inline style, or an
   `unsafe-inline` content-policy exception.
+- Static signal pages contain at most 50 result cards. Page-local filtering and export avoid an
+  unbounded browser document while complete downloads remain separately available.
 - Scheduled audit and data-processing jobs use read-only public-repository permissions. A
   separate publisher job receives public write permission only after verification.
 - The project deliberately excludes private-person applicants and unnecessary contact data.
