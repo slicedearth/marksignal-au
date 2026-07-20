@@ -975,15 +975,25 @@ select {
   font-size: 0.62rem;
 }
 
-.class-distribution i,
-.mini-bars i {
+.class-distribution progress,
+.mini-bars progress {
+  appearance: none;
   height: 0.55rem;
+  width: 100%;
+  background: var(--line-dark);
+  border: 0;
+  overflow: hidden;
+}
+
+.class-distribution progress::-webkit-progress-bar,
+.mini-bars progress::-webkit-progress-bar {
   background: var(--line-dark);
 }
 
-.class-distribution i b,
-.mini-bars i b {
-  display: block;
+.class-distribution progress::-webkit-progress-value,
+.mini-bars progress::-webkit-progress-value,
+.class-distribution progress::-moz-progress-bar,
+.mini-bars progress::-moz-progress-bar {
   height: 100%;
   background: var(--mint);
 }
@@ -1236,11 +1246,16 @@ select {
   grid-template-columns: 4rem 1fr 1.5rem;
 }
 
-.mini-bars i {
+.mini-bars progress {
   background: var(--line);
 }
 
-.mini-bars i b {
+.mini-bars progress::-webkit-progress-bar {
+  background: var(--line);
+}
+
+.mini-bars progress::-webkit-progress-value,
+.mini-bars progress::-moz-progress-bar {
   background: var(--orange);
 }
 

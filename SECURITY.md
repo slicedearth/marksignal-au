@@ -22,7 +22,9 @@ particularly useful.
 - Archive processing is bounded and rejects unsafe paths, unexpected members, excessive download
   or expanded size, oversized tables, cells, selected sets, per-record descriptions, per-record
   events, missing required columns, and excessive validation errors.
-- Site templates escape source text. CSV output prefixes formula-triggering values.
+- Site templates escape source text. CSV output prefixes formula-triggering values. Browser code
+  and styles are same-origin files, and the build rejects inline script, inline style, or an
+  `unsafe-inline` content-policy exception.
 - Scheduled audit and data-processing jobs use read-only public-repository permissions. A
   separate publisher job receives public write permission only after verification.
 - The project deliberately excludes private-person applicants and unnecessary contact data.

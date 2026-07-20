@@ -12,7 +12,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "check:security": "node check-built-security.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.9",

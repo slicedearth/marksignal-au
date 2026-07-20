@@ -60,3 +60,4 @@ jobs:
           npm run check
           npm audit --audit-level=high
           npm run build
+          npm run check:security

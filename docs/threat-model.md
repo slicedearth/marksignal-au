@@ -33,7 +33,7 @@ downloads are intentionally readable without authentication.
 | --- | --- |
 | ZIP path traversal or archive bomb | No extraction, exact member allowlist, safe-path checks, compressed and expanded size limits, bounded cells |
 | Required source schema drift | Required-column checks, archive member checks, strict selected models, schema fingerprint for additive-column review, fail-closed publication |
-| Script or markup injection | Astro text escaping, no raw HTML rendering, restrictive static content policy |
+| Script or markup injection | Astro text escaping, no raw HTML rendering, same-origin browser assets, restrictive static content policy, post-build inline-content check |
 | Output path traversal | Bounded application-number pattern without path separators, stable generated directories |
 | Spreadsheet formula execution | Formula-triggering CSV cells receive a leading apostrophe |
 | Unnecessary personal-data publication | Organisation-only exact aliases, field minimisation, complete retained-text and change-value privacy scans, fictional public fixtures |

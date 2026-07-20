@@ -87,7 +87,7 @@ const maxClassCount = Math.max(...applicant.classes.map((item) => item.filings),
         <h2>Observed Nice classes</h2>
         <ol class="mini-bars">
           {applicant.classes.map((item) => (
-            <li><span>Class {item.class_number}</span><i><b style={`width:${item.filings / maxClassCount * 100}%`}></b></i><strong>{item.filings}</strong></li>
+            <li><span>Class {item.class_number}</span><progress value={item.filings} max={maxClassCount} aria-label={`${item.filings} filings`}></progress><strong>{item.filings}</strong></li>
           ))}
         </ol>
       </section>

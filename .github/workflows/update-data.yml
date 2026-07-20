@@ -165,6 +165,7 @@ jobs:
           npm run check
           npm audit --audit-level=high
           npm run build
+          npm run check:security
 
       - name: Prepare verified restricted-state patch
         id: state_patch
