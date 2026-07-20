@@ -32,7 +32,7 @@ downloads are intentionally readable without authentication.
 | Threat | Controls |
 | --- | --- |
 | ZIP path traversal or archive bomb | No extraction, exact member allowlist, safe-path checks, compressed and expanded size limits, bounded cells |
-| Required source schema drift | Required-column checks, archive member checks, strict selected models, schema fingerprint for additive-column review, fail-closed publication |
+| Required source schema drift | Required and unique-column checks, archive member checks, strict selected models, schema fingerprint for additive-column review, fail-closed publication |
 | Script or markup injection | Astro text escaping, no raw HTML rendering, same-origin browser assets, restrictive static content policy, post-build inline-content check |
 | Output path traversal | Bounded application-number pattern without path separators, stable generated directories |
 | Spreadsheet formula execution | Formula-triggering CSV cells receive a leading apostrophe |
@@ -44,7 +44,7 @@ downloads are intentionally readable without authentication.
 | Credential exposure | State identifier and repository-scoped keys in Actions secrets, separate read and write keys, credential-free checkouts by default, write credentials introduced only after verification, no pull-request trigger on state workflows |
 | Public Git persistence | Real durable state stays in restricted storage; public Git retains fictional data and aggregate status only |
 | Dependency or workflow compromise | Lockfile, pinned workflow actions, weekly updates, Python and npm audits, dependencies installed before state access, narrow job permissions, isolated public publisher job |
-| Resource exhaustion | HTTPS-only bounded downloads, streaming CSV reads, archive, table, selection, field, description, and event bounds, job timeout, serialized updates |
+| Resource exhaustion | HTTPS-only bounded downloads, pre-hash archive checks, streaming CSV reads, archive, table, global selection, child-row, durable JSON, publication, field, description, and event bounds, job timeout, serialized updates |
 | Referrer leakage | External links use `noreferrer`; the document applies a referrer policy |
 
 ## Residual risks

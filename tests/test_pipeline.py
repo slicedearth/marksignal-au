@@ -273,3 +273,49 @@ def test_rebuild_rejects_durable_state_hash_mismatch(tmp_path: Path) -> None:
 
     with pytest.raises(DataQualityError, match=r"trademarks\.json"):
         rebuild_site(tmp_path, resolver=resolver)
+
+
+def test_rebuild_rejects_oversized_json(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
+    snapshot, retrieved_at = read_fixture(
+        Path("tests/fixtures/synthetic-trademarks.json"),
+        resolver=resolver,
+    )
+    process_snapshot(
+        snapshot,
+        resolver=resolver,
+        root=tmp_path,
+        retrieved_at=retrieved_at,
+        source_url=IP_RAPID_DATASET_URL,
+        is_demo=True,
+    )
+    monkeypatch.setattr("marksignal.pipeline.MAX_JSON_BYTES", 1)
+
+    with pytest.raises(DataQualityError, match="byte safety limit"):
+        rebuild_site(tmp_path, resolver=resolver)
+
+
+def test_publication_volume_limit_fails_before_state_write(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
+    snapshot, retrieved_at = read_fixture(
+        Path("tests/fixtures/synthetic-trademarks.json"),
+        resolver=resolver,
+    )
+    monkeypatch.setattr("marksignal.pipeline.MAX_PUBLISHED_TRADEMARKS", 1)
+
+    with pytest.raises(DataQualityError, match="too many trade marks"):
+        process_snapshot(
+            snapshot,
+            resolver=resolver,
+            root=tmp_path,
+            retrieved_at=retrieved_at,
+            source_url=IP_RAPID_DATASET_URL,
+            is_demo=True,
+        )
+    assert not (tmp_path / "data/state/trademarks.json").exists()

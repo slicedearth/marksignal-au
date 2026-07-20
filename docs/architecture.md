@@ -69,10 +69,11 @@ from those validated models inside the deployment runner and do not enter public
 
 ## Failure behaviour
 
-Publication stops when the archive has unsafe paths, duplicate or unexpected members, missing
-required columns, excessive download or expanded size, excessive table rows, oversized cells,
-an excessive selected set, too many descriptions or events for one application, ambiguous
-applicant matches, or too many selected-row validation errors. The privacy scan supports a
+Publication stops when the archive has unsafe paths, duplicate or unexpected members, missing or
+duplicate columns, excessive download or expanded size, excessive table rows, oversized cells,
+an excessive selected set, excessive global or per-record descriptions and events, ambiguous
+applicant matches, or too many selected-row validation errors. Durable JSON and generated
+publication volumes are bounded separately. The privacy scan supports a
 non-writing audit, a strict stop on any match, and scheduled bounded quarantine. Quarantine
 removes affected records from both incoming and previously retained state. The complete update stops when
 matches exceed both three records and one percent of selected records. Validation and privacy

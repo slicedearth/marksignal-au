@@ -69,6 +69,7 @@ def build_archive(
     include_all: bool = True,
     include_invalid_watched_row: bool = False,
     selected_application_number: str = "1234567",
+    duplicate_header_member: str | None = None,
 ) -> None:
     rows = {
         "party_activity.csv": [
@@ -136,7 +137,12 @@ def build_archive(
     names = EXPECTED_MEMBERS if include_all else EXPECTED_MEMBERS - {"application_links.csv"}
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as archive:
         for name in sorted(names):
-            archive.writestr(name, _csv_bytes(name, rows[name]))
+            content = _csv_bytes(name, rows[name])
+            if name == duplicate_header_member:
+                text = content.decode()
+                first_line, remainder = text.split("\r\n", 1)
+                content = f"{first_line},{HEADERS[name][-1]}\r\n{remainder}".encode()
+            archive.writestr(name, content)
 
 
 def test_streaming_adapter_selects_minimal_watched_records(tmp_path: Path) -> None:
@@ -166,6 +172,42 @@ def test_archive_member_drift_fails_closed(tmp_path: Path) -> None:
     build_archive(path, include_all=False)
     resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
     with pytest.raises(SourceArchiveError, match="member mismatch"):
+        read_ip_rapid(
+            path,
+            resolver=resolver,
+            retrieved_at=datetime(2026, 7, 20, tzinfo=UTC),
+        )
+
+
+def test_duplicate_source_columns_fail_closed(tmp_path: Path) -> None:
+    path = tmp_path / "iprapid.zip"
+    build_archive(path, duplicate_header_member="application.csv")
+    resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
+    with pytest.raises(SourceArchiveError, match="duplicate columns"):
+        read_ip_rapid(
+            path,
+            resolver=resolver,
+            retrieved_at=datetime(2026, 7, 20, tzinfo=UTC),
+        )
+
+
+def test_archive_validation_precedes_full_file_hash(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    path = tmp_path / "iprapid.zip"
+    path.write_bytes(b"invalid")
+
+    def reject_archive(_: Path) -> zipfile.ZipFile:
+        raise SourceArchiveError("unsafe archive")
+
+    def unexpected_hash(_: Path) -> str:
+        pytest.fail("unsafe archive was hashed before validation")
+
+    monkeypatch.setattr("marksignal.ip_rapid._safe_archive", reject_archive)
+    monkeypatch.setattr("marksignal.ip_rapid._file_sha256", unexpected_hash)
+    resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
+    with pytest.raises(SourceArchiveError, match="unsafe archive"):
         read_ip_rapid(
             path,
             resolver=resolver,
@@ -230,6 +272,31 @@ def test_selected_application_limit_fails_closed(
     monkeypatch.setattr("marksignal.ip_rapid.MAX_SELECTED_APPLICATIONS", 0)
     resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
     with pytest.raises(SourceArchiveError, match="application safety limit"):
+        read_ip_rapid(
+            path,
+            resolver=resolver,
+            retrieved_at=datetime(2026, 7, 20, tzinfo=UTC),
+        )
+
+
+@pytest.mark.parametrize(
+    "constant_name",
+    [
+        "MAX_SELECTED_PARTY_ROWS",
+        "MAX_SELECTED_DESCRIPTION_ROWS",
+        "MAX_SELECTED_EVENT_ROWS",
+    ],
+)
+def test_selected_global_child_row_limits_fail_closed(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    constant_name: str,
+) -> None:
+    path = tmp_path / "iprapid.zip"
+    build_archive(path)
+    monkeypatch.setattr(f"marksignal.ip_rapid.{constant_name}", 0)
+    resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
+    with pytest.raises(SourceArchiveError, match="global safety limit"):
         read_ip_rapid(
             path,
             resolver=resolver,

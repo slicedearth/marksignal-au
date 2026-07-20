@@ -21,7 +21,8 @@ particularly useful.
 - Source archives, CSV cells, watchlists, URLs, and displayed strings are untrusted input.
 - Archive processing is bounded and rejects unsafe paths, unexpected members, excessive download
   or expanded size, oversized tables, cells, selected sets, per-record descriptions, per-record
-  events, missing required columns, and excessive validation errors.
+  events, aggregate selected child rows, duplicate columns, missing required columns, and
+  excessive validation errors. Archive structure is checked before the full source file is hashed.
 - Site templates escape source text. CSV output prefixes formula-triggering values. Browser code
   and styles are same-origin files, and the build rejects inline script, inline style, or an
   `unsafe-inline` content-policy exception.
@@ -37,7 +38,7 @@ particularly useful.
 - Durable production state and manifests stay in restricted versioned storage. Public Git
   history retains only fictional records and non-identifying update counts.
 - Manifest hashes for state, signals, and changes are verified before rebuilds or status
-  publication.
+  publication. Durable JSON and generated-publication volumes also have explicit size limits.
 
 The application is an informational research tool. It does not provide legal advice and
 does not determine infringement, ownership, commercial intent, or misconduct.

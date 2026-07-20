@@ -95,6 +95,9 @@ MAX_CELL_CHARACTERS = 20_000
 MAX_VALIDATION_FAILURES = 200
 MAX_ROWS_PER_MEMBER = 100_000_000
 MAX_SELECTED_APPLICATIONS = 250_000
+MAX_SELECTED_PARTY_ROWS = 100_000
+MAX_SELECTED_DESCRIPTION_ROWS = 100_000
+MAX_SELECTED_EVENT_ROWS = 250_000
 MAX_DESCRIPTIONS_PER_APPLICATION = 500
 MAX_EVENTS_PER_APPLICATION = 2_000
 _CLASS_RE = re.compile(r"^0*([1-9]|[1-3][0-9]|4[0-5])$")
@@ -162,6 +165,11 @@ def _reader(
     stream = io.TextIOWrapper(archive.open(member), encoding="utf-8-sig", newline="")
     reader = csv.DictReader(stream)
     fieldnames = reader.fieldnames or []
+    if any(not fieldname.strip() for fieldname in fieldnames) or len(fieldnames) != len(
+        set(fieldnames)
+    ):
+        stream.close()
+        raise SourceArchiveError(f"{member} contains blank or duplicate columns")
     missing = REQUIRED_COLUMNS[member] - set(fieldnames)
     if missing:
         stream.close()
@@ -231,13 +239,14 @@ def read_ip_rapid(
 ) -> IngestedSnapshot:
     """Stream the official relational export and retain watched organisations only."""
 
-    source_sha256 = _file_sha256(path)
     archive = _safe_archive(path)
-    failures: list[str] = []
-    rows_read = {member.removesuffix(".csv"): 0 for member in EXPECTED_MEMBERS}
     try:
+        source_sha256 = _file_sha256(path)
+        failures: list[str] = []
+        rows_read = {member.removesuffix(".csv"): 0 for member in EXPECTED_MEMBERS}
         schema_fingerprint = _schema_fingerprint(archive)
         resolved_by_number: dict[str, list[_ResolvedParty]] = defaultdict(list)
+        selected_party_rows = 0
 
         reader, stream = _reader(archive, "party_activity.csv")
         try:
@@ -255,6 +264,11 @@ def read_ip_rapid(
                     resolved = resolver.resolve(str(raw.get("party_name", "")))
                     if resolved is None:
                         continue
+                    selected_party_rows += 1
+                    if selected_party_rows > MAX_SELECTED_PARTY_ROWS:
+                        raise SourceArchiveError(
+                            "selected applicant rows exceed the global safety limit"
+                        )
                     party_row = SourcePartyActivity.model_validate(raw)
                     if not party_row.is_current:
                         continue
@@ -321,6 +335,7 @@ def read_ip_rapid(
             stream.close()
 
         descriptions: dict[str, dict[str, SourceDescription]] = defaultdict(dict)
+        selected_description_rows = 0
         reader, stream = _reader(archive, "application_description.csv")
         try:
             for row_number, raw in enumerate(
@@ -329,6 +344,11 @@ def read_ip_rapid(
                 rows_read["application_description"] += 1
                 if raw.get("application_number") not in applications:
                     continue
+                selected_description_rows += 1
+                if selected_description_rows > MAX_SELECTED_DESCRIPTION_ROWS:
+                    raise SourceArchiveError(
+                        "selected description rows exceed the global safety limit"
+                    )
                 try:
                     description_row = SourceDescription.model_validate(raw)
                     if description_row.ip_right_type == "trade_mark":
@@ -385,6 +405,7 @@ def read_ip_rapid(
             stream.close()
 
         events: dict[str, dict[str, TrademarkEvent]] = defaultdict(dict)
+        selected_event_rows = 0
         reader, stream = _reader(archive, "application_events.csv")
         try:
             for row_number, raw in enumerate(
@@ -393,6 +414,11 @@ def read_ip_rapid(
                 rows_read["application_events"] += 1
                 if raw.get("application_number") not in applications:
                     continue
+                selected_event_rows += 1
+                if selected_event_rows > MAX_SELECTED_EVENT_ROWS:
+                    raise SourceArchiveError(
+                        "selected event rows exceed the global safety limit"
+                    )
                 try:
                     event_row = SourceEvent.model_validate(raw)
                     if event_row.ip_right_type == "trade_mark":

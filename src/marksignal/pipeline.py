@@ -50,6 +50,10 @@ ADAPTATION_NOTICE = (
     "Selected, minimised, normalised, and analysed by MarkSignal AU from IP RAPID data."
 )
 MAX_VALIDATION_FAILURES = 50
+MAX_JSON_BYTES = 100_000_000
+MAX_PUBLISHED_TRADEMARKS = 25_000
+MAX_PUBLISHED_SIGNALS = 25_000
+MAX_PUBLISHED_CHANGES = 250_000
 
 
 class DataQualityError(RuntimeError):
@@ -124,11 +128,21 @@ def _write_json(path: Path, value: Any) -> bytes:
 def _load_json(path: Path, default: Any) -> Any:
     if not path.exists():
         return default
+    if path.stat().st_size > MAX_JSON_BYTES:
+        raise DataQualityError(f"JSON input exceeds the {MAX_JSON_BYTES:,} byte safety limit")
     return json.loads(path.read_text(encoding="utf-8"))
 
 
 def _sha256(content: bytes) -> str:
     return hashlib.sha256(content).hexdigest()
+
+
+def _file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        while chunk := source.read(1024 * 1024):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _verify_durable_state(root: Path, manifest: SourceManifest) -> None:
@@ -140,7 +154,9 @@ def _verify_durable_state(root: Path, manifest: SourceManifest) -> None:
     for path, expected_hash in expected_hashes.items():
         if not path.is_file():
             raise DataQualityError(f"durable state file is missing: {path.name}")
-        actual_hash = _sha256(path.read_bytes())
+        if path.stat().st_size > MAX_JSON_BYTES:
+            raise DataQualityError(f"durable state file exceeds the safety limit: {path.name}")
+        actual_hash = _file_sha256(path)
         if actual_hash != expected_hash:
             raise DataQualityError(f"durable state hash mismatch: {path.name}")
 
@@ -228,6 +244,23 @@ def _signal_for_site(signal: FilingSignal, trademark: Trademark) -> dict[str, An
     return payload
 
 
+def _validate_publication_bounds(
+    trademarks: list[Trademark],
+    signals: list[FilingSignal],
+    changes: list[ObservedChange],
+) -> None:
+    limits = {
+        "trade marks": (len(trademarks), MAX_PUBLISHED_TRADEMARKS),
+        "signals": (len(signals), MAX_PUBLISHED_SIGNALS),
+        "changes": (len(changes), MAX_PUBLISHED_CHANGES),
+    }
+    for label, (count, limit) in limits.items():
+        if count > limit:
+            raise DataQualityError(
+                f"publication contains too many {label}: {count:,} exceeds {limit:,}"
+            )
+
+
 def _change_summary(change: ObservedChange) -> str:
     labels = {
         "first_observed": "First observed in the selected public dataset.",
@@ -269,6 +302,7 @@ def build_site_data(
 ) -> dict[str, Any]:
     """Generate compact site data, evidence files, feeds, and tabular downloads."""
 
+    _validate_publication_bounds(trademarks, signals, changes)
     _audit_privacy(trademarks)
 
     trademark_lookup = {item.trademark_number: item for item in trademarks}
@@ -573,6 +607,7 @@ def process_snapshot(
     )
     _audit_change_privacy(changes)
     signals = detect_signals(trademarks)
+    _validate_publication_bounds(trademarks, signals, changes)
 
     state_payload = [item.model_dump(mode="json") for item in trademarks]
     signal_payload = [item.model_dump(mode="json") for item in signals]
