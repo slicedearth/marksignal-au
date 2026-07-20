@@ -22,7 +22,8 @@ particularly useful.
 - Archive processing is bounded and rejects unsafe paths, unexpected members, excessive
   expanded size, oversized cells, missing required columns, and excessive validation errors.
 - Site templates escape source text. CSV output prefixes formula-triggering values.
-- Scheduled workflows use only the permissions required by their jobs.
+- Scheduled audit and data-processing jobs use read-only public-repository permissions. A
+  separate publisher job receives public write permission only after verification.
 - The project deliberately excludes private-person applicants and unnecessary contact data.
 - A high-confidence privacy scan checks every retained source text field and change value for
   email, business-identifier, Australian phone-number, or street-address markers. Strict runs
@@ -36,10 +37,12 @@ particularly useful.
 The application is an informational research tool. It does not provide legal advice and
 does not determine infringement, ownership, commercial intent, or misconduct.
 
-The restricted-state deploy key must be unique to this project, stored only as the
-`RESTRICTED_STATE_DEPLOY_KEY` Actions secret, and granted access only to the restricted state
-store. Its identifier is stored as `RESTRICTED_STATE_REPOSITORY`, not in public files. The key
-must not be reused as a personal key or broader account credential. Public
+Restricted-state deploy keys must be unique to this project and granted access only to the
+restricted state store. `RESTRICTED_STATE_READ_KEY` is read-only and is used for data processing
+and Pages generation. `RESTRICTED_STATE_DEPLOY_KEY` has write access and is introduced only after
+the generated state passes verification. The state identifier is stored as
+`RESTRICTED_STATE_REPOSITORY`, not in public files. Neither key may be reused as a personal key
+or broader account credential. Public
 site artifacts contain source-derived findings by design, so the storage split limits Git
 history rather than making deployed findings confidential.
 

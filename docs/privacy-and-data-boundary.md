@@ -71,7 +71,8 @@ controls. They are not substitutes for restricted storage or an access-controlle
 
 ## Operational checks
 
-- Use one repository-scoped deploy key and rotate it if exposure is suspected.
+- Use separate repository-scoped read and write deploy keys. Rotate either key if exposure is
+  suspected.
 - Enable private vulnerability reporting before production publication.
 - Review watchlist aliases as public research scope, not private analyst configuration.
 - Run the first production archive in audit mode, inspect only aggregate counts, then use a

@@ -18,8 +18,10 @@ CI uses `npm ci` plus a high-severity audit.
 
 Actions are pinned to immutable commit hashes. Dependabot checks those pins weekly. Workflow
 permissions are declared per workflow and the data update serialises concurrent refreshes.
-One repository-scoped deploy key gives the workflows access only to the restricted state
-store. Its identifier is supplied through a masked Actions secret.
+Separate repository-scoped deploy keys give workflows read-only or write access to the
+restricted state store. Dependencies are installed before state checkout. The write key is
+introduced only after verification, and public publication runs in a separate narrow job. The
+state identifier is supplied through a masked Actions secret.
 
 ## Review expectations
 

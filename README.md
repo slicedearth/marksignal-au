@@ -165,9 +165,9 @@ The project uses standard GitHub-hosted Actions and GitHub Pages. It has no prod
 server, database, account system, paid data service, or request-time processing. Expected
 recurring hosting cost is **$0** for a public repository using the included configuration.
 
-Production history requires a restricted versioned state store and one repository-scoped
-deploy key. Its identifier is held in Actions secrets rather than public files. Without that
-configuration, Pages safely deploys the fictional dataset. See
+Production history requires a restricted versioned state store plus separate repository-scoped
+read and write deploy keys. Their state-store identifier is held in Actions secrets rather than
+public files. Without that configuration, Pages safely deploys the fictional dataset. See
 [restricted state setup](docs/restricted-state-setup.md).
 
 ## Primary sources and attribution

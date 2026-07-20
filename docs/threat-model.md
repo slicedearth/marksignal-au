@@ -8,7 +8,7 @@ filtering public evidence.
 
 Protected assets are:
 
-- the restricted state deploy key
+- the restricted state read and write deploy keys
 - integrity and provenance of selected filing state
 - confidentiality of durable production history and manifests
 - absence of unnecessary personal or contact data from publication
@@ -23,7 +23,7 @@ downloads are intentionally readable without authentication.
 - IP RAPID archives and every contained CSV value are untrusted.
 - Watchlists are reviewed repository input and can change publication scope.
 - The restricted state store is durable operational state, not an authoritative source.
-- GitHub Actions can read the scoped deploy key during approved workflows.
+- GitHub Actions can read a scoped state key during approved workflow steps.
 - Astro templates receive validated generated data and publish a static artifact.
 - External source links leave the project origin and lead to independently operated systems.
 
@@ -41,9 +41,9 @@ downloads are intentionally readable without authentication.
 | Incorrect applicant merge | Exact normalised aliases only, alias collision failure, ambiguous source match skipped, similarity used only for review |
 | Forged or unexplained signal | Deterministic versioned rules, complete reason records, source and output hashes, regression tests |
 | Corrupt update replacing history | Atomic writes, immutable change IDs, duplicate suppression, missing records do not delete prior state |
-| Credential exposure | State identifier and repository-scoped key in Actions secrets, no pull-request trigger on state workflows, no credential in builds, logs, or public status |
+| Credential exposure | State identifier and repository-scoped keys in Actions secrets, separate read and write keys, credential-free checkouts by default, write credentials introduced only after verification, no pull-request trigger on state workflows |
 | Public Git persistence | Real durable state stays in restricted storage; public Git retains fictional data and aggregate status only |
-| Dependency or workflow compromise | Lockfile, pinned workflow actions, weekly updates, Python and npm audits, narrow job permissions |
+| Dependency or workflow compromise | Lockfile, pinned workflow actions, weekly updates, Python and npm audits, dependencies installed before state access, narrow job permissions, isolated public publisher job |
 | Resource exhaustion | Streaming CSV reads, selected-record retention, archive and field bounds, job timeout, serialized updates |
 | Referrer leakage | External links use `noreferrer`; the document applies a referrer policy |
 
@@ -56,13 +56,13 @@ downloads are intentionally readable without authentication.
 - IP Australia can correct records after publication, so primary-source verification remains
   necessary.
 - Compromise of the public default branch or a repository administrator could alter workflows
-  that receive the deploy key.
+  that receive a scoped state key.
 - GitHub Pages does not let the project set all desired security response headers.
 - Availability depends on GitHub and the official dataset host.
 
 ## Operational response
 
-Rotate the deploy key after suspected exposure. Pause the scheduled workflow when source
+Rotate the affected deploy key after suspected exposure. Pause the scheduled workflow when source
 licensing, schema, or publisher identity changes. Remove an unnecessary filing from the next
 artifact and document the correction. Use private vulnerability reporting for sensitive
 reports rather than placing details in a public issue.

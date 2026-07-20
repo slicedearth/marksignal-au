@@ -82,5 +82,7 @@ fixtures and never contact a live service.
 CI validates Python and Astro independently. The update workflow fetches and processes the
 weekly archive, runs the full verification suite, commits durable data to restricted state, and writes
 only a non-identifying status record publicly. The Pages workflow reads restricted state through
-one repository-scoped deploy key and creates the public artifact. The built site contains no
-credential and cannot mutate repository state.
+separate repository-scoped read and write deploy keys and creates the public artifact. The Pages
+generator receives read-only state access, while the write key is introduced only after a data
+update passes verification. The built site contains no credential and cannot mutate repository
+state.

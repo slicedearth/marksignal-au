@@ -16,7 +16,7 @@ on:
           - quarantine
 
 permissions:
-  contents: write
+  contents: read
 
 env:
   ASTRO_TELEMETRY_DISABLED: "1"
@@ -27,20 +27,17 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  update:
+  audit:
+    if: github.event_name == 'workflow_dispatch' && inputs.privacy_mode == 'audit'
     runs-on: ubuntu-latest
     timeout-minutes: 180
+    permissions:
+      contents: read
     steps:
-      - name: Check out public repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      - name: Check out restricted trade mark state
-        if: env.PRIVACY_MODE != 'audit'
+      - name: Check out public repository without credentials
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          repository: ${{ secrets.RESTRICTED_STATE_REPOSITORY }}
-          path: .restricted-state
-          ssh-key: ${{ secrets.RESTRICTED_STATE_DEPLOY_KEY }}
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
@@ -48,17 +45,15 @@ jobs:
           python-version: "3.12"
           cache: pip
 
-      - name: Install pipeline
+      - name: Install and verify pipeline
         run: |
           python -m pip install --upgrade pip==26.1.2
           python -m pip install -e '.[dev]'
-
-      - name: Prepare isolated production build root
-        env:
-          BUILD_ROOT: ${{ runner.temp }}/marksignal-production
-        run: |
-          mkdir -p "$BUILD_ROOT"
-          cp -R site "$BUILD_ROOT/site"
+          ruff check .
+          mypy src
+          pytest --cov=marksignal --cov-report=term-missing --cov-fail-under=80
+          pip-audit --skip-editable
+          marksignal validate-watchlists
 
       - name: Download current IP RAPID archive
         env:
@@ -70,14 +65,77 @@ jobs:
           --output "$ARCHIVE_PATH"
           https://data.gov.au/data/dataset/423000b8-5735-4447-bcb9-792644bcd7ea/resource/c79b3af6-3720-44ac-9e39-6a68f5635924/download/iprapid.zip
 
-      - name: Audit selected filing privacy
-        if: env.PRIVACY_MODE == 'audit'
+      - name: Audit selected filing privacy without state access
         env:
           ARCHIVE_PATH: ${{ runner.temp }}/iprapid.zip
         run: marksignal audit-iprapid "$ARCHIVE_PATH"
 
+  update:
+    if: github.event_name == 'schedule' || inputs.privacy_mode != 'audit'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    permissions:
+      contents: read
+    outputs:
+      data_revision: ${{ steps.commit_state.outputs.data_revision }}
+    steps:
+      - name: Check out public repository without credentials
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install pipeline before state access
+        run: |
+          python -m pip install --upgrade pip==26.1.2
+          python -m pip install -e '.[dev]'
+
+      - name: Prepare isolated production build root
+        env:
+          BUILD_ROOT: ${{ runner.temp }}/marksignal-production
+        run: |
+          mkdir -p "$BUILD_ROOT"
+          cp -R site "$BUILD_ROOT/site"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install site dependencies before state access
+        env:
+          BUILD_ROOT: ${{ runner.temp }}/marksignal-production
+        working-directory: ${{ runner.temp }}/marksignal-production/site
+        run: |
+          npm install --global npm@12.0.1
+          npm ci
+
+      - name: Download current IP RAPID archive
+        env:
+          ARCHIVE_PATH: ${{ runner.temp }}/iprapid.zip
+        run: >-
+          curl --fail --location
+          --retry 5 --retry-all-errors --retry-delay 10
+          --connect-timeout 30 --max-time 3600
+          --output "$ARCHIVE_PATH"
+          https://data.gov.au/data/dataset/423000b8-5735-4447-bcb9-792644bcd7ea/resource/c79b3af6-3720-44ac-9e39-6a68f5635924/download/iprapid.zip
+
+      - name: Check out restricted state with read-only access
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          repository: ${{ secrets.RESTRICTED_STATE_REPOSITORY }}
+          path: .restricted-state
+          ssh-key: ${{ secrets.RESTRICTED_STATE_READ_KEY }}
+          persist-credentials: false
+
       - name: Select watched filings into restricted state
-        if: env.PRIVACY_MODE != 'audit'
         env:
           ARCHIVE_PATH: ${{ runner.temp }}/iprapid.zip
           BUILD_ROOT: ${{ runner.temp }}/marksignal-production
@@ -97,60 +155,104 @@ jobs:
           pip-audit --skip-editable
           marksignal validate-watchlists
 
-      - name: Set up Node.js
-        if: env.PRIVACY_MODE != 'audit'
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: "24"
-          cache: npm
-          cache-dependency-path: site/package-lock.json
-
-      - name: Set up npm
-        if: env.PRIVACY_MODE != 'audit'
-        run: npm install --global npm@12.0.1
-
       - name: Verify isolated production site
-        if: env.PRIVACY_MODE != 'audit'
         env:
           BUILD_ROOT: ${{ runner.temp }}/marksignal-production
         working-directory: ${{ runner.temp }}/marksignal-production/site
         run: |
-          npm ci
           npm run check
           npm audit --audit-level=high
           npm run build
 
-      - name: Commit restricted state when changed
-        if: env.PRIVACY_MODE != 'audit'
+      - name: Prepare verified restricted-state patch
+        id: state_patch
+        env:
+          PATCH_PATH: ${{ runner.temp }}/restricted-state.patch
         run: |
           git -C .restricted-state add data
           if git -C .restricted-state diff --cached --quiet; then
-            echo "Selected trade mark state is unchanged."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           else
-            git -C .restricted-state config user.name "marksignal-bot"
-            git -C .restricted-state config user.email "marksignal-bot@users.noreply.github.com"
-            git -C .restricted-state commit \
-              -m "Refresh selected trade mark state" \
-              -m "Process the current IP RAPID archive for watched organisation aliases. Preserve source provenance, immutable observations, deterministic signal reasons, and privacy-minimised durable state after the verified build."
-            git -C .restricted-state push
+            git -C .restricted-state diff --cached --binary > "$PATCH_PATH"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Publish non-identifying update status
-        if: env.PRIVACY_MODE != 'audit'
+      - name: Check out restricted state with write access
+        if: steps.state_patch.outputs.changed == 'true'
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          repository: ${{ secrets.RESTRICTED_STATE_REPOSITORY }}
+          path: .restricted-publisher
+          ssh-key: ${{ secrets.RESTRICTED_STATE_DEPLOY_KEY }}
+
+      - name: Commit verified restricted state when changed
+        id: commit_state
+        env:
+          PATCH_PATH: ${{ runner.temp }}/restricted-state.patch
+          STATE_CHANGED: ${{ steps.state_patch.outputs.changed }}
         run: |
-          DATA_REVISION=$(git -C .restricted-state rev-parse HEAD)
-          marksignal \
-            --data-root .restricted-state \
-            publish-status \
-            --data-revision "$DATA_REVISION"
-          git config user.name "marksignal-bot"
-          git config user.email "marksignal-bot@users.noreply.github.com"
-          git add site/src/data/update-status.json
-          if git diff --cached --quiet; then
+          if [ "$STATE_CHANGED" = "true" ]; then
+            git -C .restricted-publisher apply "$PATCH_PATH"
+            git -C .restricted-publisher add data
+            git -C .restricted-publisher config user.name "marksignal-bot"
+            git -C .restricted-publisher config user.email "marksignal-bot@users.noreply.github.com"
+            git -C .restricted-publisher -c core.hooksPath=/dev/null commit \
+              -m "Refresh selected trade mark state" \
+              -m "Process the current IP RAPID archive for watched organisation aliases. Preserve source provenance, immutable observations, deterministic signal reasons, and privacy-minimised durable state after the verified build."
+            git -C .restricted-publisher push
+            DATA_REVISION=$(git -C .restricted-publisher rev-parse HEAD)
+          else
+            DATA_REVISION=$(git -C .restricted-state rev-parse HEAD)
+          fi
+          echo "data_revision=$DATA_REVISION" >> "$GITHUB_OUTPUT"
+
+      - name: Generate non-identifying public update status
+        env:
+          DATA_REVISION: ${{ steps.commit_state.outputs.data_revision }}
+        run: >-
+          marksignal
+          --data-root .restricted-state
+          publish-status
+          --data-revision "$DATA_REVISION"
+
+      - name: Transfer public update status
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: public-update-status
+          path: site/src/data/update-status.json
+          if-no-files-found: error
+          retention-days: 1
+
+  publish-status:
+    needs: update
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download verified public update status
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: public-update-status
+          path: ${{ runner.temp }}/public-update-status
+
+      - name: Check out clean public publisher
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          path: .public-publisher
+
+      - name: Publish non-identifying update status when changed
+        env:
+          STATUS_PATH: ${{ runner.temp }}/public-update-status/update-status.json
+        run: |
+          cp "$STATUS_PATH" .public-publisher/site/src/data/update-status.json
+          git -C .public-publisher add site/src/data/update-status.json
+          if git -C .public-publisher diff --cached --quiet; then
             echo "Public update status is unchanged."
             exit 0
           fi
-          git commit \
+          git -C .public-publisher config user.name "marksignal-bot"
+          git -C .public-publisher config user.email "marksignal-bot@users.noreply.github.com"
+          git -C .public-publisher -c core.hooksPath=/dev/null commit \
             -m "Record verified dataset update" \
             -m "Publish non-identifying retrieval and dataset counts for the latest verified state revision. Trigger a fresh static deployment without committing selected filings, observations, or evidence to public version control."
-          git push
+          git -C .public-publisher push

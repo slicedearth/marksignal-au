@@ -9,42 +9,47 @@ immutable observations, manifests, and evidence do not accumulate in public Git 
 Create a restricted Git repository with a default branch and a small README. The scheduled
 workflow creates and maintains its `data/` directory. Keep its identifier out of public files.
 
-## Repository-scoped deploy key
+## Repository-scoped deploy keys
 
-1. Generate a dedicated SSH key pair for MarkSignal AU.
-2. Add the public key to the restricted state repository as a deploy key with write access.
-3. Add the private key to the public repository Actions secrets as
-   `RESTRICTED_STATE_DEPLOY_KEY`.
-4. Add the state repository's `owner/name` identifier as the masked Actions secret
+Use two dedicated SSH key pairs that are valid only for the restricted state store:
+
+1. Add the first public key as a read-only deploy key.
+2. Store its private key in the public repository secret `RESTRICTED_STATE_READ_KEY`.
+3. Add the second public key as a deploy key with write access.
+4. Store its private key in the public repository secret `RESTRICTED_STATE_DEPLOY_KEY`.
+5. Store the state repository's `owner/name` identifier as the masked secret
    `RESTRICTED_STATE_REPOSITORY`.
-5. Do not reuse a personal SSH key or a key with access to another repository.
+6. Do not reuse either key as a personal key or a credential for another repository.
 
-The public Pages workflow uses the same scoped key for read-only checkout during a build.
-GitHub holds the secret; it is never added to site files or workflow output.
+Data-processing and Pages-generation jobs use the read-only key with persisted Git credentials
+disabled. Dependencies are installed before state checkout. The update job introduces the write
+key only after the selected state, privacy boundary, tests, dependency audits, and isolated site
+build have passed. Public status publication happens in a separate job that cannot read the
+restricted state or its keys.
 
 ## First production run
 
 Run the `Update trade mark data` workflow manually with `audit`. It downloads the official
-archive into runner temporary storage, reports aggregate privacy-match coverage, and writes no
-state. Review that count, then run the workflow with `strict`. Strict mode stops on any match;
-a successful run writes durable selected state to restricted storage, verifies an isolated
-production build, and commits only non-identifying counts and a state revision pointer to the
-public repository.
+archive into runner temporary storage, reports aggregate privacy-match coverage, receives no
+state credential, and has read-only public-repository permissions. Review that count, then run
+the workflow with `strict`. Strict mode stops on any match; a successful run writes durable
+selected state to restricted storage, verifies an isolated production build, and commits only
+non-identifying counts and a state revision pointer to the public repository.
 
 Scheduled runs use `quarantine`. Matching records are withheld from the current public build
 and restricted selected state. The complete update stops if matches exceed both three records
 and one percent of selected records. The restricted privacy report contains application numbers,
 source hashes, affected fields, and marker types, but never the matched source text.
 
-A later public-repository push rebuilds from restricted state when the secrets are available. If
-the secret is not configured, Pages deliberately falls back to the fictional demonstration
-dataset.
+A later public-repository push rebuilds from restricted state when the read-only secret is
+available. If the secret is not configured, Pages deliberately falls back to the fictional
+demonstration dataset.
 
 ## Public boundary
 
 The deployed production site remains public. Its filing pages and downloads can be copied by
-visitors and search engines. Restricted storage reduces unnecessary Git-history
-persistence and protects operational manifests; it does not make published findings private.
+visitors and search engines. Restricted storage reduces unnecessary Git-history persistence and
+protects operational manifests; it does not make published findings private.
 
-If the deployed findings must also be restricted, do not use GitHub Pages. Use an access
-layer or keep the project in demonstration-only mode.
+If the deployed findings must also be restricted, do not use GitHub Pages. Use an access layer
+or keep the project in demonstration-only mode.
