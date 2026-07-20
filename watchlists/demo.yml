@@ -1,0 +1,19 @@
+schema_version: 1
+category: demonstration
+organisations:
+  - id: northstar-labs
+    display_name: Northstar Labs Pty Ltd
+    aliases:
+      - Northstar Labs Pty Ltd
+      - Northstar Labs Pty. Limited
+  - id: civic-horizon
+    display_name: Civic Horizon Limited
+    aliases:
+      - Civic Horizon Limited
+      - Civic Horizon Ltd
+  - id: paper-kite-group
+    display_name: Paper Kite Group Pty Ltd
+    aliases:
+      - Paper Kite Group Pty Ltd
+      - Paper Kite Group Pty. Limited
+

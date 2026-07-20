@@ -1,0 +1,24 @@
+schema_version: 1
+category: technology
+organisations:
+  - id: atlassian
+    display_name: Atlassian Pty Ltd
+    aliases:
+      - Atlassian Pty Ltd
+      - Atlassian Pty. Limited
+  - id: canva
+    display_name: Canva Pty Ltd
+    aliases:
+      - Canva Pty Ltd
+      - Canva Pty. Ltd.
+  - id: wisetech-global
+    display_name: WiseTech Global Limited
+    aliases:
+      - WiseTech Global Limited
+      - WiseTech Global Ltd
+  - id: xero
+    display_name: Xero Limited
+    aliases:
+      - Xero Limited
+      - Xero Ltd
+

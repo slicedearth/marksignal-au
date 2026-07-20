@@ -1,0 +1,144 @@
+{
+  "fixture_type": "synthetic_demo",
+  "retrieved_at": "2026-07-20T00:00:00Z",
+  "trademarks": [
+    {
+      "trademark_number": "9000001",
+      "applicant_id": "northstar-labs",
+      "observed_applicant_name": "Northstar Labs Pty. Limited",
+      "mark_text": "NORTHSTAR NEBULA",
+      "mark_types": ["word_mark_phrase"],
+      "filing_date": "2022-01-10",
+      "priority_date": "2022-01-10",
+      "current_status": "registered",
+      "classes": [42],
+      "events": [
+        {
+          "event_type": "filed",
+          "event_category": "filing",
+          "effective_date": "2022-01-10",
+          "declared_date": "2022-01-10",
+          "is_standing": true
+        },
+        {
+          "event_type": "registered",
+          "event_category": "registered",
+          "effective_date": "2022-01-10",
+          "declared_date": "2022-10-14",
+          "is_standing": true
+        }
+      ]
+    },
+    {
+      "trademark_number": "9000002",
+      "applicant_id": "northstar-labs",
+      "mark_text": "NORTHSTAR NEBULA PAY",
+      "filing_date": "2026-06-09",
+      "priority_date": "2026-06-09",
+      "current_status": "published",
+      "classes": [36, 42],
+      "events": [
+        {
+          "event_type": "filed",
+          "event_category": "filing",
+          "effective_date": "2026-06-09",
+          "declared_date": "2026-06-09",
+          "is_standing": true
+        }
+      ]
+    },
+    {
+      "trademark_number": "9000003",
+      "applicant_id": "northstar-labs",
+      "mark_text": "NORTHSTAR NEBULA WALLET",
+      "filing_date": "2026-06-12",
+      "priority_date": "2026-06-12",
+      "current_status": "filed",
+      "classes": [9, 36, 42],
+      "events": [
+        {
+          "event_type": "filed",
+          "event_category": "filing",
+          "effective_date": "2026-06-12",
+          "declared_date": "2026-06-12",
+          "is_standing": true
+        }
+      ]
+    },
+    {
+      "trademark_number": "9000004",
+      "applicant_id": "northstar-labs",
+      "mark_text": "NORTHSTAR NEBULA BUSINESS",
+      "filing_date": "2026-06-15",
+      "priority_date": "2026-06-15",
+      "current_status": "filed",
+      "classes": [35, 36, 42],
+      "events": [
+        {
+          "event_type": "filed",
+          "event_category": "filing",
+          "effective_date": "2026-06-15",
+          "declared_date": "2026-06-15",
+          "is_standing": true
+        }
+      ]
+    },
+    {
+      "trademark_number": "9000010",
+      "applicant_id": "civic-horizon",
+      "mark_text": "EMBER HOME",
+      "filing_date": "2023-02-03",
+      "priority_date": "2023-02-03",
+      "current_status": "registered",
+      "classes": [35],
+      "events": []
+    },
+    {
+      "trademark_number": "9000011",
+      "applicant_id": "civic-horizon",
+      "mark_text": "EMBER GRID",
+      "filing_date": "2026-07-02",
+      "priority_date": "2026-07-02",
+      "current_status": "accepted",
+      "classes": [9, 39, 42],
+      "events": [
+        {
+          "event_type": "accepted",
+          "event_category": "accepted",
+          "effective_date": "2026-07-02",
+          "declared_date": "2026-07-17",
+          "is_standing": true
+        }
+      ]
+    },
+    {
+      "trademark_number": "9000020",
+      "applicant_id": "paper-kite-group",
+      "mark_text": "PAPER KITE STORE",
+      "filing_date": "2025-01-14",
+      "priority_date": "2025-01-14",
+      "current_status": "registered",
+      "classes": [35],
+      "events": []
+    },
+    {
+      "trademark_number": "9000021",
+      "applicant_id": "paper-kite-group",
+      "mark_text": "PAPER KITE PLAY",
+      "filing_date": "2026-05-29",
+      "priority_date": "2026-05-29",
+      "current_status": "published",
+      "classes": [9, 41],
+      "events": [
+        {
+          "event_type": "publish_application",
+          "event_category": "published",
+          "effective_date": "2026-05-29",
+          "declared_date": "2026-05-29",
+          "is_standing": true
+        }
+      ]
+    }
+  ]
+}
+

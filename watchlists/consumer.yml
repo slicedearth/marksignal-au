@@ -1,0 +1,24 @@
+schema_version: 1
+category: consumer
+organisations:
+  - id: qantas
+    display_name: Qantas Airways Limited
+    aliases:
+      - Qantas Airways Limited
+      - Qantas Airways Ltd
+  - id: woolworths-group
+    display_name: Woolworths Group Limited
+    aliases:
+      - Woolworths Group Limited
+      - Woolworths Group Ltd
+  - id: coles-group
+    display_name: Coles Group Limited
+    aliases:
+      - Coles Group Limited
+      - Coles Group Ltd
+  - id: wesfarmers
+    display_name: Wesfarmers Limited
+    aliases:
+      - Wesfarmers Limited
+      - Wesfarmers Ltd
+

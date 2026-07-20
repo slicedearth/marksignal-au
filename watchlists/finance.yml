@@ -1,0 +1,22 @@
+schema_version: 1
+category: finance
+organisations:
+  - id: commonwealth-bank
+    display_name: Commonwealth Bank of Australia
+    aliases:
+      - Commonwealth Bank of Australia
+  - id: westpac
+    display_name: Westpac Banking Corporation
+    aliases:
+      - Westpac Banking Corporation
+  - id: anz
+    display_name: Australia and New Zealand Banking Group Limited
+    aliases:
+      - Australia and New Zealand Banking Group Limited
+      - ANZ Banking Group Limited
+  - id: nab
+    display_name: National Australia Bank Limited
+    aliases:
+      - National Australia Bank Limited
+      - National Australia Bank Ltd
+

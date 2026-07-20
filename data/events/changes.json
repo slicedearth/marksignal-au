@@ -1,0 +1,82 @@
+[
+  {
+    "after_source_hash": "9d77624e69e07b729dda5e4757ee5d8446953047008b2c0826750a9a7ef8d555",
+    "before_source_hash": null,
+    "change_id": "05b3faef0a97eb34a2119318226174e1f526b481446482d5c8ba34d641ad4965",
+    "change_type": "first_observed",
+    "detected_at": "2026-07-20T00:00:00Z",
+    "new_value": "filed",
+    "old_value": null,
+    "trademark_number": "9000004"
+  },
+  {
+    "after_source_hash": "4b2d561bc5af3b9beba5cc2fe16452173f6e3fc278b4dd8108b413a78d47b30b",
+    "before_source_hash": null,
+    "change_id": "25580566ae640806602f7bc556f2abc31b4ccb816c97f9d35b6a93fc1abbb8ce",
+    "change_type": "first_observed",
+    "detected_at": "2026-07-20T00:00:00Z",
+    "new_value": "filed",
+    "old_value": null,
+    "trademark_number": "9000003"
+  },
+  {
+    "after_source_hash": "87abadb09fa39f70edf3055f4587b8c682336bd54c5dddf778321ecfc0737a70",
+    "before_source_hash": null,
+    "change_id": "6abecc85f2331c1defb59dd6beda42f832fabcc85318ad42a56b8597922ea671",
+    "change_type": "first_observed",
+    "detected_at": "2026-07-20T00:00:00Z",
+    "new_value": "registered",
+    "old_value": null,
+    "trademark_number": "9000020"
+  },
+  {
+    "after_source_hash": "435b8d7a70b4b5651942ab49676648be2bed8734b2717d9ee12f4b5a19f3d425",
+    "before_source_hash": null,
+    "change_id": "9d7910fd4319de2dd5bf05123e0cf7b78e09a2ce48b26f9f85d1ce17ecdb1d68",
+    "change_type": "first_observed",
+    "detected_at": "2026-07-20T00:00:00Z",
+    "new_value": "published",
+    "old_value": null,
+    "trademark_number": "9000002"
+  },
+  {
+    "after_source_hash": "c055e9f0bb8a6924b95810f03074ed06c5a1ef2e70379c5bb3c7d9946d533f72",
+    "before_source_hash": null,
+    "change_id": "b84b5f0e4ce5281f41beac0cd247e69bceda5140ec4a4a720d4b316976473939",
+    "change_type": "first_observed",
+    "detected_at": "2026-07-20T00:00:00Z",
+    "new_value": "registered",
+    "old_value": null,
+    "trademark_number": "9000001"
+  },
+  {
+    "after_source_hash": "a06df3c49c1639145de4409e579d531e6db9db2e51cd51a65ad85082b5d862d0",
+    "before_source_hash": null,
+    "change_id": "c8bbeefd4963e1887af3310a2f575b257594503ac181811bea5391fa0ab8e5c7",
+    "change_type": "first_observed",
+    "detected_at": "2026-07-20T00:00:00Z",
+    "new_value": "published",
+    "old_value": null,
+    "trademark_number": "9000021"
+  },
+  {
+    "after_source_hash": "fce5c87b1402fb06c78982bbb06838a16aff3e48834f967fb50af0723a94a648",
+    "before_source_hash": null,
+    "change_id": "d898f16f6c36f213ad0c509b8691c774689b6582c73e8b435672fec120a087cc",
+    "change_type": "first_observed",
+    "detected_at": "2026-07-20T00:00:00Z",
+    "new_value": "registered",
+    "old_value": null,
+    "trademark_number": "9000010"
+  },
+  {
+    "after_source_hash": "acf674a83d1f0f861fcabbad446084a81353b4ccd9a463f3d59a0dd0060f8e34",
+    "before_source_hash": null,
+    "change_id": "d9a6ca30841984418b0c1735be065b59cc9a64d76c9a21c071339c0dec310ff7",
+    "change_type": "first_observed",
+    "detected_at": "2026-07-20T00:00:00Z",
+    "new_value": "accepted",
+    "old_value": null,
+    "trademark_number": "9000011"
+  }
+]

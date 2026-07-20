@@ -1,0 +1,24 @@
+{
+  "changes_added": 8,
+  "changes_sha256": "d0484cabc47a6b9049e70c1ad7f2d99916f39613af24d3e4124dd8f3f17f1bdc",
+  "emitted_signals": 5,
+  "is_demo": true,
+  "matched_trade_marks": 8,
+  "parser_version": "0.1.0",
+  "privacy_marker_counts": {},
+  "privacy_quarantined": 0,
+  "retrieved_at": "2026-07-20T00:00:00Z",
+  "schema_fingerprint": "47336c6b166ab1bdb5fb0500a363d2c16dad7c0626c14d61000e29a860ab99a2",
+  "signal_algorithm_version": "1.0.0",
+  "signals_sha256": "ee8ae97eb5777a660cec3979dc1a0d839a56fc0ac9ae83ac0d2cf698b95eac6f",
+  "source_license": "https://creativecommons.org/licenses/by/4.0/",
+  "source_publisher": "IP Australia",
+  "source_rows_read": {
+    "synthetic_fixture": 8
+  },
+  "source_sha256": "b91e36c51381c51226ae515c8141271be9cb4ab59083569bda38aa6b02083c09",
+  "source_url": "https://data.gov.au/data/dataset/iprapid",
+  "state_sha256": "27ce49757243a00ee5fdf34e12a213033d3d305765f7cf8a8caf9abecb804507",
+  "validation_failures": [],
+  "watchlist_organisations": 15
+}
