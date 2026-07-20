@@ -1,0 +1,817 @@
+{
+  "applicants": [
+    {
+      "applicant_id": "northstar-labs",
+      "categories": [
+        "demonstration"
+      ],
+      "classes": [
+        {
+          "class_number": 9,
+          "filings": 1
+        },
+        {
+          "class_number": 35,
+          "filings": 1
+        },
+        {
+          "class_number": 36,
+          "filings": 3
+        },
+        {
+          "class_number": 42,
+          "filings": 4
+        }
+      ],
+      "display_name": "Northstar Labs Pty Ltd",
+      "filings": 4,
+      "latest_filing_date": "2026-06-15",
+      "signals": 3,
+      "trademark_numbers": [
+        "9000004",
+        "9000003",
+        "9000002",
+        "9000001"
+      ]
+    },
+    {
+      "applicant_id": "civic-horizon",
+      "categories": [
+        "demonstration"
+      ],
+      "classes": [
+        {
+          "class_number": 9,
+          "filings": 1
+        },
+        {
+          "class_number": 35,
+          "filings": 1
+        },
+        {
+          "class_number": 39,
+          "filings": 1
+        },
+        {
+          "class_number": 42,
+          "filings": 1
+        }
+      ],
+      "display_name": "Civic Horizon Limited",
+      "filings": 2,
+      "latest_filing_date": "2026-07-02",
+      "signals": 1,
+      "trademark_numbers": [
+        "9000011",
+        "9000010"
+      ]
+    },
+    {
+      "applicant_id": "paper-kite-group",
+      "categories": [
+        "demonstration"
+      ],
+      "classes": [
+        {
+          "class_number": 9,
+          "filings": 1
+        },
+        {
+          "class_number": 35,
+          "filings": 1
+        },
+        {
+          "class_number": 41,
+          "filings": 1
+        }
+      ],
+      "display_name": "Paper Kite Group Pty Ltd",
+      "filings": 2,
+      "latest_filing_date": "2026-05-29",
+      "signals": 1,
+      "trademark_numbers": [
+        "9000021",
+        "9000020"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "after_source_hash": "acf674a83d1f0f861fcabbad446084a81353b4ccd9a463f3d59a0dd0060f8e34",
+      "before_source_hash": null,
+      "change_id": "d9a6ca30841984418b0c1735be065b59cc9a64d76c9a21c071339c0dec310ff7",
+      "change_type": "first_observed",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "new_value": "accepted",
+      "old_value": null,
+      "summary": "First observed in the selected public dataset.",
+      "trademark_number": "9000011"
+    },
+    {
+      "after_source_hash": "fce5c87b1402fb06c78982bbb06838a16aff3e48834f967fb50af0723a94a648",
+      "before_source_hash": null,
+      "change_id": "d898f16f6c36f213ad0c509b8691c774689b6582c73e8b435672fec120a087cc",
+      "change_type": "first_observed",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "new_value": "registered",
+      "old_value": null,
+      "summary": "First observed in the selected public dataset.",
+      "trademark_number": "9000010"
+    },
+    {
+      "after_source_hash": "a06df3c49c1639145de4409e579d531e6db9db2e51cd51a65ad85082b5d862d0",
+      "before_source_hash": null,
+      "change_id": "c8bbeefd4963e1887af3310a2f575b257594503ac181811bea5391fa0ab8e5c7",
+      "change_type": "first_observed",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "new_value": "published",
+      "old_value": null,
+      "summary": "First observed in the selected public dataset.",
+      "trademark_number": "9000021"
+    },
+    {
+      "after_source_hash": "c055e9f0bb8a6924b95810f03074ed06c5a1ef2e70379c5bb3c7d9946d533f72",
+      "before_source_hash": null,
+      "change_id": "b84b5f0e4ce5281f41beac0cd247e69bceda5140ec4a4a720d4b316976473939",
+      "change_type": "first_observed",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "new_value": "registered",
+      "old_value": null,
+      "summary": "First observed in the selected public dataset.",
+      "trademark_number": "9000001"
+    },
+    {
+      "after_source_hash": "435b8d7a70b4b5651942ab49676648be2bed8734b2717d9ee12f4b5a19f3d425",
+      "before_source_hash": null,
+      "change_id": "9d7910fd4319de2dd5bf05123e0cf7b78e09a2ce48b26f9f85d1ce17ecdb1d68",
+      "change_type": "first_observed",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "new_value": "published",
+      "old_value": null,
+      "summary": "First observed in the selected public dataset.",
+      "trademark_number": "9000002"
+    },
+    {
+      "after_source_hash": "87abadb09fa39f70edf3055f4587b8c682336bd54c5dddf778321ecfc0737a70",
+      "before_source_hash": null,
+      "change_id": "6abecc85f2331c1defb59dd6beda42f832fabcc85318ad42a56b8597922ea671",
+      "change_type": "first_observed",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "new_value": "registered",
+      "old_value": null,
+      "summary": "First observed in the selected public dataset.",
+      "trademark_number": "9000020"
+    },
+    {
+      "after_source_hash": "4b2d561bc5af3b9beba5cc2fe16452173f6e3fc278b4dd8108b413a78d47b30b",
+      "before_source_hash": null,
+      "change_id": "25580566ae640806602f7bc556f2abc31b4ccb816c97f9d35b6a93fc1abbb8ce",
+      "change_type": "first_observed",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "new_value": "filed",
+      "old_value": null,
+      "summary": "First observed in the selected public dataset.",
+      "trademark_number": "9000003"
+    },
+    {
+      "after_source_hash": "9d77624e69e07b729dda5e4757ee5d8446953047008b2c0826750a9a7ef8d555",
+      "before_source_hash": null,
+      "change_id": "05b3faef0a97eb34a2119318226174e1f526b481446482d5c8ba34d641ad4965",
+      "change_type": "first_observed",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "new_value": "filed",
+      "old_value": null,
+      "summary": "First observed in the selected public dataset.",
+      "trademark_number": "9000004"
+    }
+  ],
+  "class_counts": [
+    {
+      "class_number": 42,
+      "filings": 5
+    },
+    {
+      "class_number": 9,
+      "filings": 3
+    },
+    {
+      "class_number": 35,
+      "filings": 3
+    },
+    {
+      "class_number": 36,
+      "filings": 3
+    },
+    {
+      "class_number": 39,
+      "filings": 1
+    },
+    {
+      "class_number": 41,
+      "filings": 1
+    }
+  ],
+  "disclaimer": "A trade mark filing is not confirmation that a product or service will launch. Applications may be defensive, speculative, abandoned, refused, or unrelated to current commercial plans. Signals are reproducible research leads, not legal or commercial conclusions.",
+  "generated_at": "2026-07-20T00:00:00Z",
+  "is_demo": true,
+  "project": "MarkSignal AU",
+  "reason_counts": {
+    "filing_cluster": 3,
+    "long_filing_gap": 3,
+    "new_class": 5,
+    "novel_tokens": 5
+  },
+  "signals": [
+    {
+      "algorithm_version": "1.0.0",
+      "applicant_id": "civic-horizon",
+      "applicant_name": "Civic Horizon Limited",
+      "classes": [
+        9,
+        39,
+        42
+      ],
+      "detected_at": "2026-07-20T00:00:00Z",
+      "evidence_path": "evidence/9000011.json",
+      "filing_date": "2026-07-02",
+      "mark_text": "EMBER GRID",
+      "maximum_score": 90,
+      "official_record_url": null,
+      "reasons": [
+        {
+          "evidence": {
+            "new_classes": [
+              9,
+              39,
+              42
+            ]
+          },
+          "explanation": "First observed filing by this applicant in Nice classes 9, 39, 42.",
+          "points": 25,
+          "type": "new_class"
+        },
+        {
+          "evidence": {
+            "gap_days": 1245
+          },
+          "explanation": "First observed filing in 1,245 days.",
+          "points": 20,
+          "type": "long_filing_gap"
+        },
+        {
+          "evidence": {
+            "novel_tokens": [
+              "GRID"
+            ]
+          },
+          "explanation": "Mark wording contains previously unobserved token: GRID.",
+          "points": 20,
+          "type": "novel_tokens"
+        }
+      ],
+      "score": 65,
+      "signal_id": "a4a136dc3656d35d4e40b11192f946c2097477ecf02215f2247858b73c3e15c9",
+      "status": "accepted",
+      "trademark_number": "9000011"
+    },
+    {
+      "algorithm_version": "1.0.0",
+      "applicant_id": "northstar-labs",
+      "applicant_name": "Northstar Labs Pty Ltd",
+      "classes": [
+        35,
+        36,
+        42
+      ],
+      "detected_at": "2026-07-20T00:00:00Z",
+      "evidence_path": "evidence/9000004.json",
+      "filing_date": "2026-06-15",
+      "mark_text": "NORTHSTAR NEBULA BUSINESS",
+      "maximum_score": 90,
+      "official_record_url": null,
+      "reasons": [
+        {
+          "evidence": {
+            "new_classes": [
+              35
+            ]
+          },
+          "explanation": "First observed filing by this applicant in Nice class 35.",
+          "points": 25,
+          "type": "new_class"
+        },
+        {
+          "evidence": {
+            "member_trademark_numbers": [
+              "9000002",
+              "9000003",
+              "9000004"
+            ]
+          },
+          "explanation": "Part of a 3-mark related filing cluster within 7 days.",
+          "points": 25,
+          "type": "filing_cluster"
+        },
+        {
+          "evidence": {
+            "novel_tokens": [
+              "BUSINESS"
+            ]
+          },
+          "explanation": "Mark wording contains previously unobserved token: BUSINESS.",
+          "points": 20,
+          "type": "novel_tokens"
+        }
+      ],
+      "score": 70,
+      "signal_id": "7410059c34355bb2fa51cbda8fb70477c8caa7a494a240fed584e84d7d5932d1",
+      "status": "filed",
+      "trademark_number": "9000004"
+    },
+    {
+      "algorithm_version": "1.0.0",
+      "applicant_id": "northstar-labs",
+      "applicant_name": "Northstar Labs Pty Ltd",
+      "classes": [
+        9,
+        36,
+        42
+      ],
+      "detected_at": "2026-07-20T00:00:00Z",
+      "evidence_path": "evidence/9000003.json",
+      "filing_date": "2026-06-12",
+      "mark_text": "NORTHSTAR NEBULA WALLET",
+      "maximum_score": 90,
+      "official_record_url": null,
+      "reasons": [
+        {
+          "evidence": {
+            "new_classes": [
+              9
+            ]
+          },
+          "explanation": "First observed filing by this applicant in Nice class 9.",
+          "points": 25,
+          "type": "new_class"
+        },
+        {
+          "evidence": {
+            "member_trademark_numbers": [
+              "9000002",
+              "9000003",
+              "9000004"
+            ]
+          },
+          "explanation": "Part of a 3-mark related filing cluster within 7 days.",
+          "points": 25,
+          "type": "filing_cluster"
+        },
+        {
+          "evidence": {
+            "novel_tokens": [
+              "WALLET"
+            ]
+          },
+          "explanation": "Mark wording contains previously unobserved token: WALLET.",
+          "points": 20,
+          "type": "novel_tokens"
+        }
+      ],
+      "score": 70,
+      "signal_id": "08af92c4a3c967a82d6a9d924c0111df04f005b7f8d9a2d46d81406e64653b84",
+      "status": "filed",
+      "trademark_number": "9000003"
+    },
+    {
+      "algorithm_version": "1.0.0",
+      "applicant_id": "northstar-labs",
+      "applicant_name": "Northstar Labs Pty Ltd",
+      "classes": [
+        36,
+        42
+      ],
+      "detected_at": "2026-07-20T00:00:00Z",
+      "evidence_path": "evidence/9000002.json",
+      "filing_date": "2026-06-09",
+      "mark_text": "NORTHSTAR NEBULA PAY",
+      "maximum_score": 90,
+      "official_record_url": null,
+      "reasons": [
+        {
+          "evidence": {
+            "new_classes": [
+              36
+            ]
+          },
+          "explanation": "First observed filing by this applicant in Nice class 36.",
+          "points": 25,
+          "type": "new_class"
+        },
+        {
+          "evidence": {
+            "member_trademark_numbers": [
+              "9000002",
+              "9000003",
+              "9000004"
+            ]
+          },
+          "explanation": "Part of a 3-mark related filing cluster within 7 days.",
+          "points": 25,
+          "type": "filing_cluster"
+        },
+        {
+          "evidence": {
+            "gap_days": 1611
+          },
+          "explanation": "First observed filing in 1,611 days.",
+          "points": 20,
+          "type": "long_filing_gap"
+        },
+        {
+          "evidence": {
+            "novel_tokens": [
+              "PAY"
+            ]
+          },
+          "explanation": "Mark wording contains previously unobserved token: PAY.",
+          "points": 20,
+          "type": "novel_tokens"
+        }
+      ],
+      "score": 90,
+      "signal_id": "850070499f414f9de618b8ea510851875b143b2556b19d6ac9001ce7ce4e8cb0",
+      "status": "published",
+      "trademark_number": "9000002"
+    },
+    {
+      "algorithm_version": "1.0.0",
+      "applicant_id": "paper-kite-group",
+      "applicant_name": "Paper Kite Group Pty Ltd",
+      "classes": [
+        9,
+        41
+      ],
+      "detected_at": "2026-07-20T00:00:00Z",
+      "evidence_path": "evidence/9000021.json",
+      "filing_date": "2026-05-29",
+      "mark_text": "PAPER KITE PLAY",
+      "maximum_score": 90,
+      "official_record_url": null,
+      "reasons": [
+        {
+          "evidence": {
+            "new_classes": [
+              9,
+              41
+            ]
+          },
+          "explanation": "First observed filing by this applicant in Nice classes 9, 41.",
+          "points": 25,
+          "type": "new_class"
+        },
+        {
+          "evidence": {
+            "gap_days": 500
+          },
+          "explanation": "First observed filing in 500 days.",
+          "points": 20,
+          "type": "long_filing_gap"
+        },
+        {
+          "evidence": {
+            "novel_tokens": [
+              "PLAY"
+            ]
+          },
+          "explanation": "Mark wording contains previously unobserved token: PLAY.",
+          "points": 20,
+          "type": "novel_tokens"
+        }
+      ],
+      "score": 65,
+      "signal_id": "900f324c501b908582057308fa007f93690ab9724764a711cf7ab9c7cb3eebc4",
+      "status": "published",
+      "trademark_number": "9000021"
+    }
+  ],
+  "source": {
+    "adaptation_notice": "Selected, minimised, normalised, and analysed by MarkSignal AU from IP RAPID data.",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "name": "IP RAPID",
+    "publisher": "IP Australia",
+    "url": "https://data.gov.au/data/dataset/iprapid"
+  },
+  "stats": {
+    "classes": 6,
+    "matched_organisations": 3,
+    "observed_changes": 8,
+    "privacy_quarantined": 0,
+    "signals": 5,
+    "trade_marks": 8,
+    "watched_organisations": 15
+  },
+  "trademarks": [
+    {
+      "applicant_id": "northstar-labs",
+      "applicant_name": "Northstar Labs Pty Ltd",
+      "classes": [
+        {
+          "class_number": 42,
+          "goods_services_text": null
+        }
+      ],
+      "current_status": "registered",
+      "events": [
+        {
+          "declared_date": "2022-01-10",
+          "effective_date": "2022-01-10",
+          "event_category": "filing",
+          "event_id": "6c8d516445654c89a7179ceb48d4349c35ebfea80498c3a19a14871989523695",
+          "event_type": "filed",
+          "is_standing": true
+        },
+        {
+          "declared_date": "2022-10-14",
+          "effective_date": "2022-01-10",
+          "event_category": "registered",
+          "event_id": "8d4de316ab17114ee86ade1d78e4b6a7fb2463325d3b81c609a872af271943bf",
+          "event_type": "registered",
+          "is_standing": true
+        }
+      ],
+      "filing_date": "2022-01-10",
+      "first_seen_at": "2026-07-20T00:00:00Z",
+      "is_demo": true,
+      "last_seen_at": "2026-07-20T00:00:00Z",
+      "mark_text": "NORTHSTAR NEBULA",
+      "mark_types": [
+        "word_mark_phrase"
+      ],
+      "observed_applicant_name": "Northstar Labs Pty. Limited",
+      "official_record_url": null,
+      "priority_date": "2022-01-10",
+      "source_dataset_url": "https://data.gov.au/data/dataset/iprapid",
+      "source_hash": "c055e9f0bb8a6924b95810f03074ed06c5a1ef2e70379c5bb3c7d9946d533f72",
+      "trademark_number": "9000001"
+    },
+    {
+      "applicant_id": "northstar-labs",
+      "applicant_name": "Northstar Labs Pty Ltd",
+      "classes": [
+        {
+          "class_number": 36,
+          "goods_services_text": null
+        },
+        {
+          "class_number": 42,
+          "goods_services_text": null
+        }
+      ],
+      "current_status": "published",
+      "events": [
+        {
+          "declared_date": "2026-06-09",
+          "effective_date": "2026-06-09",
+          "event_category": "filing",
+          "event_id": "fa2601943a4efa2ea2756e45164eeaf1da90e81283413418f56e9b4406bd2452",
+          "event_type": "filed",
+          "is_standing": true
+        }
+      ],
+      "filing_date": "2026-06-09",
+      "first_seen_at": "2026-07-20T00:00:00Z",
+      "is_demo": true,
+      "last_seen_at": "2026-07-20T00:00:00Z",
+      "mark_text": "NORTHSTAR NEBULA PAY",
+      "mark_types": [
+        "word_mark_phrase"
+      ],
+      "observed_applicant_name": "Northstar Labs Pty Ltd",
+      "official_record_url": null,
+      "priority_date": "2026-06-09",
+      "source_dataset_url": "https://data.gov.au/data/dataset/iprapid",
+      "source_hash": "435b8d7a70b4b5651942ab49676648be2bed8734b2717d9ee12f4b5a19f3d425",
+      "trademark_number": "9000002"
+    },
+    {
+      "applicant_id": "northstar-labs",
+      "applicant_name": "Northstar Labs Pty Ltd",
+      "classes": [
+        {
+          "class_number": 9,
+          "goods_services_text": null
+        },
+        {
+          "class_number": 36,
+          "goods_services_text": null
+        },
+        {
+          "class_number": 42,
+          "goods_services_text": null
+        }
+      ],
+      "current_status": "filed",
+      "events": [
+        {
+          "declared_date": "2026-06-12",
+          "effective_date": "2026-06-12",
+          "event_category": "filing",
+          "event_id": "e9213a4725263ccca0642dcedd4746ac710b0ebddcacc8f5ad665f064a965139",
+          "event_type": "filed",
+          "is_standing": true
+        }
+      ],
+      "filing_date": "2026-06-12",
+      "first_seen_at": "2026-07-20T00:00:00Z",
+      "is_demo": true,
+      "last_seen_at": "2026-07-20T00:00:00Z",
+      "mark_text": "NORTHSTAR NEBULA WALLET",
+      "mark_types": [
+        "word_mark_phrase"
+      ],
+      "observed_applicant_name": "Northstar Labs Pty Ltd",
+      "official_record_url": null,
+      "priority_date": "2026-06-12",
+      "source_dataset_url": "https://data.gov.au/data/dataset/iprapid",
+      "source_hash": "4b2d561bc5af3b9beba5cc2fe16452173f6e3fc278b4dd8108b413a78d47b30b",
+      "trademark_number": "9000003"
+    },
+    {
+      "applicant_id": "northstar-labs",
+      "applicant_name": "Northstar Labs Pty Ltd",
+      "classes": [
+        {
+          "class_number": 35,
+          "goods_services_text": null
+        },
+        {
+          "class_number": 36,
+          "goods_services_text": null
+        },
+        {
+          "class_number": 42,
+          "goods_services_text": null
+        }
+      ],
+      "current_status": "filed",
+      "events": [
+        {
+          "declared_date": "2026-06-15",
+          "effective_date": "2026-06-15",
+          "event_category": "filing",
+          "event_id": "e450e05f86eb20109d893db91c0cd890f8c41f483ca539c0a8dc0e03d9965210",
+          "event_type": "filed",
+          "is_standing": true
+        }
+      ],
+      "filing_date": "2026-06-15",
+      "first_seen_at": "2026-07-20T00:00:00Z",
+      "is_demo": true,
+      "last_seen_at": "2026-07-20T00:00:00Z",
+      "mark_text": "NORTHSTAR NEBULA BUSINESS",
+      "mark_types": [
+        "word_mark_phrase"
+      ],
+      "observed_applicant_name": "Northstar Labs Pty Ltd",
+      "official_record_url": null,
+      "priority_date": "2026-06-15",
+      "source_dataset_url": "https://data.gov.au/data/dataset/iprapid",
+      "source_hash": "9d77624e69e07b729dda5e4757ee5d8446953047008b2c0826750a9a7ef8d555",
+      "trademark_number": "9000004"
+    },
+    {
+      "applicant_id": "civic-horizon",
+      "applicant_name": "Civic Horizon Limited",
+      "classes": [
+        {
+          "class_number": 35,
+          "goods_services_text": null
+        }
+      ],
+      "current_status": "registered",
+      "events": [],
+      "filing_date": "2023-02-03",
+      "first_seen_at": "2026-07-20T00:00:00Z",
+      "is_demo": true,
+      "last_seen_at": "2026-07-20T00:00:00Z",
+      "mark_text": "EMBER HOME",
+      "mark_types": [
+        "word_mark_phrase"
+      ],
+      "observed_applicant_name": "Civic Horizon Limited",
+      "official_record_url": null,
+      "priority_date": "2023-02-03",
+      "source_dataset_url": "https://data.gov.au/data/dataset/iprapid",
+      "source_hash": "fce5c87b1402fb06c78982bbb06838a16aff3e48834f967fb50af0723a94a648",
+      "trademark_number": "9000010"
+    },
+    {
+      "applicant_id": "civic-horizon",
+      "applicant_name": "Civic Horizon Limited",
+      "classes": [
+        {
+          "class_number": 9,
+          "goods_services_text": null
+        },
+        {
+          "class_number": 39,
+          "goods_services_text": null
+        },
+        {
+          "class_number": 42,
+          "goods_services_text": null
+        }
+      ],
+      "current_status": "accepted",
+      "events": [
+        {
+          "declared_date": "2026-07-17",
+          "effective_date": "2026-07-02",
+          "event_category": "accepted",
+          "event_id": "b8b2e2ba6be2b070fe58bf7057e779b8050181136a4440b03347b9f63edc6cb6",
+          "event_type": "accepted",
+          "is_standing": true
+        }
+      ],
+      "filing_date": "2026-07-02",
+      "first_seen_at": "2026-07-20T00:00:00Z",
+      "is_demo": true,
+      "last_seen_at": "2026-07-20T00:00:00Z",
+      "mark_text": "EMBER GRID",
+      "mark_types": [
+        "word_mark_phrase"
+      ],
+      "observed_applicant_name": "Civic Horizon Limited",
+      "official_record_url": null,
+      "priority_date": "2026-07-02",
+      "source_dataset_url": "https://data.gov.au/data/dataset/iprapid",
+      "source_hash": "acf674a83d1f0f861fcabbad446084a81353b4ccd9a463f3d59a0dd0060f8e34",
+      "trademark_number": "9000011"
+    },
+    {
+      "applicant_id": "paper-kite-group",
+      "applicant_name": "Paper Kite Group Pty Ltd",
+      "classes": [
+        {
+          "class_number": 35,
+          "goods_services_text": null
+        }
+      ],
+      "current_status": "registered",
+      "events": [],
+      "filing_date": "2025-01-14",
+      "first_seen_at": "2026-07-20T00:00:00Z",
+      "is_demo": true,
+      "last_seen_at": "2026-07-20T00:00:00Z",
+      "mark_text": "PAPER KITE STORE",
+      "mark_types": [
+        "word_mark_phrase"
+      ],
+      "observed_applicant_name": "Paper Kite Group Pty Ltd",
+      "official_record_url": null,
+      "priority_date": "2025-01-14",
+      "source_dataset_url": "https://data.gov.au/data/dataset/iprapid",
+      "source_hash": "87abadb09fa39f70edf3055f4587b8c682336bd54c5dddf778321ecfc0737a70",
+      "trademark_number": "9000020"
+    },
+    {
+      "applicant_id": "paper-kite-group",
+      "applicant_name": "Paper Kite Group Pty Ltd",
+      "classes": [
+        {
+          "class_number": 9,
+          "goods_services_text": null
+        },
+        {
+          "class_number": 41,
+          "goods_services_text": null
+        }
+      ],
+      "current_status": "published",
+      "events": [
+        {
+          "declared_date": "2026-05-29",
+          "effective_date": "2026-05-29",
+          "event_category": "published",
+          "event_id": "acb32114f689ff328920dca8b2b8d593a5e9cead1472614e2e150599c75f07f1",
+          "event_type": "publish_application",
+          "is_standing": true
+        }
+      ],
+      "filing_date": "2026-05-29",
+      "first_seen_at": "2026-07-20T00:00:00Z",
+      "is_demo": true,
+      "last_seen_at": "2026-07-20T00:00:00Z",
+      "mark_text": "PAPER KITE PLAY",
+      "mark_types": [
+        "word_mark_phrase"
+      ],
+      "observed_applicant_name": "Paper Kite Group Pty Ltd",
+      "official_record_url": null,
+      "priority_date": "2026-05-29",
+      "source_dataset_url": "https://data.gov.au/data/dataset/iprapid",
+      "source_hash": "a06df3c49c1639145de4409e579d531e6db9db2e51cd51a65ad85082b5d862d0",
+      "trademark_number": "9000021"
+    }
+  ]
+}

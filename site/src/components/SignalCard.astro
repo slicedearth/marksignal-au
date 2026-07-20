@@ -1,0 +1,55 @@
+---
+import type { FilingSignal } from "../types";
+import { formatDate, label } from "../lib/format";
+
+interface Props {
+  signal: FilingSignal;
+}
+
+const { signal } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const searchText = [
+  signal.mark_text,
+  signal.applicant_name,
+  signal.trademark_number,
+  ...signal.reasons.map((reason) => reason.explanation)
+].join(" ").toLocaleLowerCase("en-AU");
+---
+
+<article
+  class="signal-card"
+  data-signal
+  data-search={searchText}
+  data-applicant={signal.applicant_id}
+  data-reasons={signal.reasons.map((reason) => reason.type).join(",")}
+  data-score={signal.score}
+>
+  <div class="signal-card__topline">
+    <span class="signal-score" aria-label={`Signal score ${signal.score} out of ${signal.maximum_score}`}>
+      <b>{signal.score}</b><small>/{signal.maximum_score}</small>
+    </span>
+    <div>
+      <p class="signal-kicker">Filing signal · {formatDate(signal.filing_date)}</p>
+      <h3><a href={`${base}trademarks/${signal.trademark_number}/`}>{signal.mark_text}</a></h3>
+      <a class="applicant-link" href={`${base}applicants/${signal.applicant_id}/`}>{signal.applicant_name}</a>
+    </div>
+  </div>
+  <div class="class-row" aria-label="Nice classes">
+    {signal.classes.map((classNumber) => <span>Class {classNumber}</span>)}
+    <span class="status-pill">{label(signal.status)}</span>
+  </div>
+  <ul class="reason-list">
+    {signal.reasons.map((reason) => (
+      <li>
+        <span class={`reason-icon reason-icon--${reason.type}`} aria-hidden="true"></span>
+        <div><strong>{label(reason.type)}</strong><p>{reason.explanation}</p></div>
+        <b>+{reason.points}</b>
+      </li>
+    ))}
+  </ul>
+  <div class="signal-card__footer">
+    <span>TM {signal.trademark_number}</span>
+    <a href={`${base}${signal.evidence_path}`}>Evidence JSON ↓</a>
+  </div>
+</article>
+

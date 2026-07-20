@@ -1,0 +1,114 @@
+{
+  "changes": [
+    {
+      "after_source_hash": "435b8d7a70b4b5651942ab49676648be2bed8734b2717d9ee12f4b5a19f3d425",
+      "before_source_hash": null,
+      "change_id": "9d7910fd4319de2dd5bf05123e0cf7b78e09a2ce48b26f9f85d1ce17ecdb1d68",
+      "change_type": "first_observed",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "new_value": "published",
+      "old_value": null,
+      "trademark_number": "9000002"
+    }
+  ],
+  "disclaimer": "A trade mark filing is not confirmation that a product or service will launch. Applications may be defensive, speculative, abandoned, refused, or unrelated to current commercial plans. Signals are reproducible research leads, not legal or commercial conclusions.",
+  "signals": [
+    {
+      "algorithm_version": "1.0.0",
+      "applicant_id": "northstar-labs",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "maximum_score": 90,
+      "reasons": [
+        {
+          "evidence": {
+            "new_classes": [
+              36
+            ]
+          },
+          "explanation": "First observed filing by this applicant in Nice class 36.",
+          "points": 25,
+          "type": "new_class"
+        },
+        {
+          "evidence": {
+            "member_trademark_numbers": [
+              "9000002",
+              "9000003",
+              "9000004"
+            ]
+          },
+          "explanation": "Part of a 3-mark related filing cluster within 7 days.",
+          "points": 25,
+          "type": "filing_cluster"
+        },
+        {
+          "evidence": {
+            "gap_days": 1611
+          },
+          "explanation": "First observed filing in 1,611 days.",
+          "points": 20,
+          "type": "long_filing_gap"
+        },
+        {
+          "evidence": {
+            "novel_tokens": [
+              "PAY"
+            ]
+          },
+          "explanation": "Mark wording contains previously unobserved token: PAY.",
+          "points": 20,
+          "type": "novel_tokens"
+        }
+      ],
+      "score": 90,
+      "signal_id": "850070499f414f9de618b8ea510851875b143b2556b19d6ac9001ce7ce4e8cb0",
+      "trademark_number": "9000002"
+    }
+  ],
+  "source": {
+    "adaptation_notice": "Selected, minimised, normalised, and analysed by MarkSignal AU from IP RAPID data.",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "name": "IP RAPID",
+    "publisher": "IP Australia",
+    "url": "https://data.gov.au/data/dataset/iprapid"
+  },
+  "trademark": {
+    "applicant_id": "northstar-labs",
+    "applicant_name": "Northstar Labs Pty Ltd",
+    "classes": [
+      {
+        "class_number": 36,
+        "goods_services_text": null
+      },
+      {
+        "class_number": 42,
+        "goods_services_text": null
+      }
+    ],
+    "current_status": "published",
+    "events": [
+      {
+        "declared_date": "2026-06-09",
+        "effective_date": "2026-06-09",
+        "event_category": "filing",
+        "event_id": "fa2601943a4efa2ea2756e45164eeaf1da90e81283413418f56e9b4406bd2452",
+        "event_type": "filed",
+        "is_standing": true
+      }
+    ],
+    "filing_date": "2026-06-09",
+    "first_seen_at": "2026-07-20T00:00:00Z",
+    "is_demo": true,
+    "last_seen_at": "2026-07-20T00:00:00Z",
+    "mark_text": "NORTHSTAR NEBULA PAY",
+    "mark_types": [
+      "word_mark_phrase"
+    ],
+    "observed_applicant_name": "Northstar Labs Pty Ltd",
+    "official_record_url": null,
+    "priority_date": "2026-06-09",
+    "source_dataset_url": "https://data.gov.au/data/dataset/iprapid",
+    "source_hash": "435b8d7a70b4b5651942ab49676648be2bed8734b2717d9ee12f4b5a19f3d425",
+    "trademark_number": "9000002"
+  }
+}

@@ -1,0 +1,227 @@
+---
+import SignalCard from "../components/SignalCard.astro";
+import rawDashboard from "../data/dashboard.json";
+import { formatDate, label } from "../lib/format";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import type { Dashboard } from "../types";
+
+const dashboard = rawDashboard as unknown as Dashboard;
+const base = import.meta.env.BASE_URL;
+const topSignal = dashboard.signals[0];
+const reasonTypes = [...new Set(dashboard.signals.flatMap((signal) => signal.reasons.map((reason) => reason.type)))].sort();
+const maxClassCount = Math.max(...dashboard.class_counts.map((item) => item.filings), 1);
+---
+
+<BaseLayout>
+  {dashboard.is_demo && (
+    <aside class="demo-banner">
+      <strong>Synthetic demonstration</strong>
+      <span>All names and filings shown in this build are fictional. Production source mappings are ready for IP RAPID.</span>
+      <a href={`${base}methodology/#demonstration-data`}>Why this matters</a>
+    </aside>
+  )}
+
+  <section class="hero">
+    <div class="hero__copy">
+      <p class="eyebrow"><span></span> Public filings, interpreted carefully</p>
+      <h1>Catch the filing.<br /><em>Follow the signal.</em></h1>
+      <p class="hero__lede">
+        MarkSignal tracks selected Australian trade mark applicants and surfaces explainable
+        filing patterns without turning a public record into a prediction.
+      </p>
+      <div class="hero__actions">
+        <a class="button button--primary" href="#signals">Explore filing signals ↓</a>
+        <a class="button button--outline" href={`${base}methodology/`}>Read the method</a>
+      </div>
+      <div class="hero__proof">
+        <span><b>{dashboard.stats.trade_marks}</b> selected filings</span>
+        <span><b>{dashboard.stats.signals}</b> explained signals</span>
+        <span><b>v1.0.0</b> score model</span>
+      </div>
+    </div>
+
+    <div class="signal-console" aria-label="Example surfaced filing">
+      <div class="console-grid" aria-hidden="true"></div>
+      <div class="console-header">
+        <span><i></i> SIGNAL TRACE</span>
+        <span>{dashboard.is_demo ? "DEMO" : "PUBLIC DATA"}</span>
+      </div>
+      <svg class="pulse-chart" viewBox="0 0 620 170" role="img" aria-label="Decorative signal trace">
+        <path class="pulse-shadow" d="M0 115L62 115L87 105L115 123L145 112L180 112L205 36L228 143L255 91L290 113L335 113L360 74L384 120L420 108L458 108L480 56L503 134L530 105L620 105"></path>
+        <path d="M0 115L62 115L87 105L115 123L145 112L180 112L205 36L228 143L255 91L290 113L335 113L360 74L384 120L420 108L458 108L480 56L503 134L530 105L620 105"></path>
+      </svg>
+      {topSignal ? (
+        <div class="console-finding">
+          <div>
+            <p>Latest surfaced mark</p>
+            <strong>{topSignal.mark_text}</strong>
+            <span>{topSignal.applicant_name}</span>
+          </div>
+          <div class="console-score"><b>{topSignal.score}</b><span>signal<br />points</span></div>
+        </div>
+      ) : (
+        <div class="console-finding"><strong>No current signals</strong></div>
+      )}
+      <div class="console-reasons">
+        {topSignal?.reasons.slice(0, 3).map((reason) => (
+          <span><i></i>{label(reason.type)} <b>+{reason.points}</b></span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="metric-strip" aria-label="Dataset metrics">
+    <div><small>01</small><strong>{dashboard.stats.watched_organisations}</strong><span>Watched organisations</span></div>
+    <div><small>02</small><strong>{dashboard.stats.classes}</strong><span>Nice classes observed</span></div>
+    <div><small>03</small><strong>{dashboard.stats.observed_changes}</strong><span>Immutable observations</span></div>
+    <div class="metric-source"><span class="live-dot"></span><span>Updated {formatDate(dashboard.generated_at)}</span></div>
+  </section>
+
+  <section class="content-section signals-section" id="signals">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow"><span></span> Signal feed</p>
+        <h2>Why was this surfaced?</h2>
+        <p>Each point is tied to a visible calculation and a downloadable evidence record.</p>
+      </div>
+      <a class="download-link" href={`${base}data/signals.csv`} download>Download all CSV ↓</a>
+    </div>
+
+    <form class="filters" data-filters aria-label="Filter filing signals">
+      <label class="search-field">
+        <span>Search</span>
+        <div><span aria-hidden="true">⌕</span><input type="search" name="query" placeholder="Mark, applicant, number" autocomplete="off" /></div>
+      </label>
+      <label>
+        <span>Applicant</span>
+        <select name="applicant">
+          <option value="">All applicants</option>
+          {dashboard.applicants.map((applicant) => <option value={applicant.applicant_id}>{applicant.display_name}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>Reason</span>
+        <select name="reason">
+          <option value="">All reasons</option>
+          {reasonTypes.map((reason) => <option value={reason}>{label(reason)}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>Minimum score</span>
+        <select name="score">
+          <option value="0">Any score</option>
+          <option value="40">40+</option>
+          <option value="60">60+</option>
+          <option value="80">80+</option>
+        </select>
+      </label>
+      <button class="reset-button" type="reset">Clear</button>
+    </form>
+
+    <div class="result-line">
+      <p aria-live="polite"><strong data-result-count>{dashboard.signals.length}</strong> explained filing signals</p>
+      <button class="text-button" type="button" data-download-filtered>Download filtered CSV</button>
+    </div>
+    <div class="signal-list" data-signal-list>
+      {dashboard.signals.map((signal) => <SignalCard signal={signal} />)}
+    </div>
+    <div class="empty-state" data-empty hidden>
+      <span aria-hidden="true">○</span><h3>No signals match those filters</h3><p>Try a broader search or clear the filters.</p>
+    </div>
+  </section>
+
+  <section class="pattern-section" id="applicants">
+    <div class="section-heading section-heading--dark">
+      <div>
+        <p class="eyebrow eyebrow--dark"><span></span> Applicant patterns</p>
+        <h2>A filing is one point.<br />A pattern needs history.</h2>
+      </div>
+      <p>
+        Profiles keep observed classes, timing, and surfaced filings together. Counts describe
+        selected public records, not market activity or intent.
+      </p>
+    </div>
+    <div class="applicant-grid">
+      {dashboard.applicants.map((applicant, index) => (
+        <a class="applicant-card" href={`${base}applicants/${applicant.applicant_id}/`}>
+          <span class="card-index">{String(index + 1).padStart(2, "0")}</span>
+          <div><p>{applicant.categories.join(" · ")}</p><h3>{applicant.display_name}</h3></div>
+          <dl>
+            <div><dt>Filings</dt><dd>{applicant.filings}</dd></div>
+            <div><dt>Signals</dt><dd>{applicant.signals}</dd></div>
+            <div><dt>Classes</dt><dd>{applicant.classes.length}</dd></div>
+          </dl>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </div>
+
+    <div class="class-distribution">
+      <div><p class="eyebrow eyebrow--dark"><span></span> Observed class mix</p><h3>Where selected filings cluster</h3></div>
+      <ol>
+        {dashboard.class_counts.slice(0, 8).map((item) => (
+          <li>
+            <span>Class {item.class_number}</span>
+            <i><b style={`width:${(item.filings / maxClassCount) * 100}%`}></b></i>
+            <strong>{item.filings}</strong>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="responsibility-callout">
+    <div class="callout-number">!</div>
+    <div><p class="eyebrow"><span></span> Read filings responsibly</p><h2>A signal is a lead.<br />It is not a launch.</h2></div>
+    <div><p>{dashboard.disclaimer}</p><a href={`${base}methodology/`}>Read the methodology and limitations →</a></div>
+  </section>
+
+  <script>
+    const form = document.querySelector<HTMLFormElement>("[data-filters]");
+    const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-signal]"));
+    const count = document.querySelector<HTMLElement>("[data-result-count]");
+    const empty = document.querySelector<HTMLElement>("[data-empty]");
+    const download = document.querySelector<HTMLButtonElement>("[data-download-filtered]");
+
+    const applyFilters = () => {
+      if (!form) return;
+      const values = new FormData(form);
+      const query = String(values.get("query") ?? "").trim().toLocaleLowerCase("en-AU");
+      const applicant = String(values.get("applicant") ?? "");
+      const reason = String(values.get("reason") ?? "");
+      const score = Number(values.get("score") ?? 0);
+      let visible = 0;
+      cards.forEach((card) => {
+        const matches =
+          (!query || (card.dataset.search ?? "").includes(query)) &&
+          (!applicant || card.dataset.applicant === applicant) &&
+          (!reason || (card.dataset.reasons ?? "").split(",").includes(reason)) &&
+          Number(card.dataset.score ?? 0) >= score;
+        card.hidden = !matches;
+        if (matches) visible += 1;
+      });
+      if (count) count.textContent = String(visible);
+      if (empty) empty.hidden = visible !== 0;
+      if (download) download.disabled = visible === 0;
+    };
+
+    form?.addEventListener("input", applyFilters);
+    form?.addEventListener("reset", () => window.setTimeout(applyFilters));
+    download?.addEventListener("click", () => {
+      const neutralise = (value: string) => /^[=+\-@\t\r\n]/.test(value) ? `'${value}` : value;
+      const escape = (value: string) => `"${neutralise(value).replaceAll('"', '""')}"`;
+      const rows = cards.filter((card) => !card.hidden).map((card) => {
+        const title = card.querySelector("h3")?.textContent?.trim() ?? "";
+        const applicant = card.querySelector(".applicant-link")?.textContent?.trim() ?? "";
+        return [title, applicant, card.dataset.score ?? "", card.dataset.reasons ?? ""];
+      });
+      const csv = ["mark,applicant,score,reasons", ...rows.map((row) => row.map(escape).join(","))].join("\n");
+      const url = URL.createObjectURL(new Blob([`${csv}\n`], { type: "text/csv;charset=utf-8" }));
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "marksignal-filtered-signals.csv";
+      anchor.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</BaseLayout>

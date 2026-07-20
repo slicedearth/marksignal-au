@@ -1,0 +1,117 @@
+---
+import rawDashboard from "../../data/dashboard.json";
+import { formatDate, label } from "../../lib/format";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import type { Dashboard, FilingSignal, ObservedChange, Trademark } from "../../types";
+
+export function getStaticPaths() {
+  const data = rawDashboard as unknown as Dashboard;
+  return data.trademarks.map((trademark) => ({
+    params: { number: trademark.trademark_number },
+    props: {
+      trademark,
+      signals: data.signals.filter((item) => item.trademark_number === trademark.trademark_number),
+      changes: data.changes.filter((item) => item.trademark_number === trademark.trademark_number),
+      isDemo: data.is_demo,
+      disclaimer: data.disclaimer
+    }
+  }));
+}
+
+interface Props {
+  trademark: Trademark;
+  signals: FilingSignal[];
+  changes: ObservedChange[];
+  isDemo: boolean;
+  disclaimer: string;
+}
+
+const { trademark, signals, changes, isDemo, disclaimer } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const signal = signals[0];
+const sortedEvents = [...trademark.events].sort((left, right) =>
+  String(right.declared_date ?? right.effective_date).localeCompare(String(left.declared_date ?? left.effective_date))
+);
+---
+
+<BaseLayout
+  title={`${trademark.mark_text ?? `Trade mark ${trademark.trademark_number}`} | MarkSignal AU`}
+  description={`Evidence record for Australian trade mark ${trademark.trademark_number}.`}
+>
+  {isDemo && <aside class="demo-banner compact"><strong>Synthetic demonstration</strong><span>This filing is fictional and has no official individual record.</span></aside>}
+  <section class="page-hero trademark-hero">
+    <div>
+      <a class="back-link" href={`${base}applicants/${trademark.applicant_id}/`}>← {trademark.applicant_name}</a>
+      <p class="eyebrow"><span></span> Trade mark {trademark.trademark_number}</p>
+      <h1>{trademark.mark_text ?? "No word element published"}</h1>
+      <div class="class-row large">{trademark.classes.map((item) => <span>Class {item.class_number}</span>)}<span class="status-pill">{label(trademark.current_status)}</span></div>
+    </div>
+    {signal ? (
+      <div class="score-panel">
+        <p>Explainable signal score</p>
+        <div><strong>{signal.score}</strong><span>out of<br />{signal.maximum_score}</span></div>
+        <small>Model {signal.algorithm_version}</small>
+      </div>
+    ) : <div class="score-panel no-score"><p>No signal reasons emitted</p><strong>0</strong></div>}
+  </section>
+
+  <section class="record-grid">
+    <article class="record-main">
+      <section class="fact-section">
+        <div class="section-heading compact-heading"><div><p class="eyebrow"><span></span> Source facts</p><h2>Published filing record</h2></div></div>
+        <dl class="fact-grid">
+          <div><dt>Applicant</dt><dd><a href={`${base}applicants/${trademark.applicant_id}/`}>{trademark.applicant_name}</a></dd></div>
+          <div><dt>Observed source name</dt><dd>{trademark.observed_applicant_name}</dd></div>
+          <div><dt>Application date</dt><dd>{formatDate(trademark.filing_date)}</dd></div>
+          <div><dt>Priority date</dt><dd>{formatDate(trademark.priority_date)}</dd></div>
+          <div><dt>Current status</dt><dd>{label(trademark.current_status)}</dd></div>
+          <div><dt>Mark properties</dt><dd>{trademark.mark_types.map(label).join(", ") || "Not published"}</dd></div>
+        </dl>
+      </section>
+
+      {signal && (
+        <section class="reason-breakdown">
+          <div class="section-heading compact-heading"><div><p class="eyebrow"><span></span> Calculated facts</p><h2>Why it was surfaced</h2></div></div>
+          <ol>
+            {signal.reasons.map((reason, index) => (
+              <li><span>{String(index + 1).padStart(2, "0")}</span><div><h3>{label(reason.type)}</h3><p>{reason.explanation}</p></div><strong>+{reason.points}</strong></li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      <section class="event-section">
+        <div class="section-heading compact-heading"><div><p class="eyebrow"><span></span> Public history</p><h2>Selected source events</h2></div></div>
+        {sortedEvents.length ? (
+          <ol class="event-list">
+            {sortedEvents.map((event) => (
+              <li class:list={[!event.is_standing && "non-standing"]}>
+                <time datetime={event.declared_date ?? event.effective_date ?? undefined}>{formatDate(event.declared_date ?? event.effective_date)}</time>
+                <div><strong>{label(event.event_category)}</strong><span>{label(event.event_type)}</span></div>
+                <small>{event.is_standing ? "Standing" : "Non-standing history"}</small>
+              </li>
+            ))}
+          </ol>
+        ) : <p class="plain-empty">No selected application events are present in this record.</p>}
+      </section>
+    </article>
+
+    <aside class="evidence-sidebar">
+      <section>
+        <p class="eyebrow"><span></span> Evidence record</p>
+        <h2>Verify the observation</h2>
+        <dl>
+          <div><dt>First observed</dt><dd>{formatDate(trademark.first_seen_at, true)}</dd></div>
+          <div><dt>Last material update</dt><dd>{formatDate(trademark.last_seen_at, true)}</dd></div>
+          <div><dt>Source checksum</dt><dd><code>{trademark.source_hash.slice(0, 16)}…</code></dd></div>
+          <div><dt>Observation events</dt><dd>{changes.length}</dd></div>
+        </dl>
+        <div class="evidence-actions">
+          <a class="button button--primary" href={`${base}evidence/${trademark.trademark_number}.json`}>Download JSON ↓</a>
+          {trademark.official_record_url ? <a class="button button--outline" href={trademark.official_record_url} rel="noreferrer">Official record ↗</a> : <a class="button button--outline" href={trademark.source_dataset_url} rel="noreferrer">Source dataset ↗</a>}
+        </div>
+      </section>
+      <section class="boundary-card"><h3>Interpretation boundary</h3><p>{disclaimer}</p><a href={`${base}methodology/`}>Read the full method →</a></section>
+    </aside>
+  </section>
+</BaseLayout>

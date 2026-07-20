@@ -1,0 +1,108 @@
+{
+  "changes": [
+    {
+      "after_source_hash": "acf674a83d1f0f861fcabbad446084a81353b4ccd9a463f3d59a0dd0060f8e34",
+      "before_source_hash": null,
+      "change_id": "d9a6ca30841984418b0c1735be065b59cc9a64d76c9a21c071339c0dec310ff7",
+      "change_type": "first_observed",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "new_value": "accepted",
+      "old_value": null,
+      "trademark_number": "9000011"
+    }
+  ],
+  "disclaimer": "A trade mark filing is not confirmation that a product or service will launch. Applications may be defensive, speculative, abandoned, refused, or unrelated to current commercial plans. Signals are reproducible research leads, not legal or commercial conclusions.",
+  "signals": [
+    {
+      "algorithm_version": "1.0.0",
+      "applicant_id": "civic-horizon",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "maximum_score": 90,
+      "reasons": [
+        {
+          "evidence": {
+            "new_classes": [
+              9,
+              39,
+              42
+            ]
+          },
+          "explanation": "First observed filing by this applicant in Nice classes 9, 39, 42.",
+          "points": 25,
+          "type": "new_class"
+        },
+        {
+          "evidence": {
+            "gap_days": 1245
+          },
+          "explanation": "First observed filing in 1,245 days.",
+          "points": 20,
+          "type": "long_filing_gap"
+        },
+        {
+          "evidence": {
+            "novel_tokens": [
+              "GRID"
+            ]
+          },
+          "explanation": "Mark wording contains previously unobserved token: GRID.",
+          "points": 20,
+          "type": "novel_tokens"
+        }
+      ],
+      "score": 65,
+      "signal_id": "a4a136dc3656d35d4e40b11192f946c2097477ecf02215f2247858b73c3e15c9",
+      "trademark_number": "9000011"
+    }
+  ],
+  "source": {
+    "adaptation_notice": "Selected, minimised, normalised, and analysed by MarkSignal AU from IP RAPID data.",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "name": "IP RAPID",
+    "publisher": "IP Australia",
+    "url": "https://data.gov.au/data/dataset/iprapid"
+  },
+  "trademark": {
+    "applicant_id": "civic-horizon",
+    "applicant_name": "Civic Horizon Limited",
+    "classes": [
+      {
+        "class_number": 9,
+        "goods_services_text": null
+      },
+      {
+        "class_number": 39,
+        "goods_services_text": null
+      },
+      {
+        "class_number": 42,
+        "goods_services_text": null
+      }
+    ],
+    "current_status": "accepted",
+    "events": [
+      {
+        "declared_date": "2026-07-17",
+        "effective_date": "2026-07-02",
+        "event_category": "accepted",
+        "event_id": "b8b2e2ba6be2b070fe58bf7057e779b8050181136a4440b03347b9f63edc6cb6",
+        "event_type": "accepted",
+        "is_standing": true
+      }
+    ],
+    "filing_date": "2026-07-02",
+    "first_seen_at": "2026-07-20T00:00:00Z",
+    "is_demo": true,
+    "last_seen_at": "2026-07-20T00:00:00Z",
+    "mark_text": "EMBER GRID",
+    "mark_types": [
+      "word_mark_phrase"
+    ],
+    "observed_applicant_name": "Civic Horizon Limited",
+    "official_record_url": null,
+    "priority_date": "2026-07-02",
+    "source_dataset_url": "https://data.gov.au/data/dataset/iprapid",
+    "source_hash": "acf674a83d1f0f861fcabbad446084a81353b4ccd9a463f3d59a0dd0060f8e34",
+    "trademark_number": "9000011"
+  }
+}

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f2eee5"/>
+  <path d="M0 0h1200v28H0z" fill="#55e6d0"/>
+  <g opacity=".16" fill="#071a24">
+    <circle cx="40" cy="78" r="2"/><circle cx="80" cy="78" r="2"/><circle cx="120" cy="78" r="2"/><circle cx="160" cy="78" r="2"/><circle cx="200" cy="78" r="2"/><circle cx="240" cy="78" r="2"/><circle cx="280" cy="78" r="2"/><circle cx="320" cy="78" r="2"/><circle cx="360" cy="78" r="2"/><circle cx="400" cy="78" r="2"/><circle cx="440" cy="78" r="2"/><circle cx="480" cy="78" r="2"/>
+  </g>
+  <g transform="translate(86 82)">
+    <circle cx="28" cy="28" r="7" fill="#55e6d0"/>
+    <path d="M10 28a18 18 0 0 1 36 0M2 28a26 26 0 0 1 52 0" fill="none" stroke="#071a24" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <text x="155" y="120" fill="#071a24" font-family="Arial, sans-serif" font-size="32" font-weight="700">MarkSignal <tspan font-family="monospace" font-size="18" fill="#5e6a6d">AU</tspan></text>
+  <text x="86" y="282" fill="#071a24" font-family="Georgia, serif" font-size="88" letter-spacing="-5">Catch the filing.</text>
+  <text x="86" y="374" fill="#102f3a" font-family="Georgia, serif" font-size="88" font-style="italic" letter-spacing="-5">Follow the signal.</text>
+  <text x="90" y="452" fill="#5e6a6d" font-family="Arial, sans-serif" font-size="26">Explainable patterns in public Australian trade mark records.</text>
+  <g transform="translate(780 485)">
+    <rect width="330" height="74" fill="#071a24"/>
+    <path d="M0 40h40l16-9 18 15 22-7h36l14-25 16 48 18-29 24 8h32l18-18 16 26 18-10h42" fill="none" stroke="#55e6d0" stroke-width="4"/>
+  </g>
+  <rect x="1068" y="545" width="42" height="42" fill="#ff825b"/>
+</svg>
+

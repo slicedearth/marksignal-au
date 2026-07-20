@@ -1,0 +1,103 @@
+{
+  "changes": [
+    {
+      "after_source_hash": "a06df3c49c1639145de4409e579d531e6db9db2e51cd51a65ad85082b5d862d0",
+      "before_source_hash": null,
+      "change_id": "c8bbeefd4963e1887af3310a2f575b257594503ac181811bea5391fa0ab8e5c7",
+      "change_type": "first_observed",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "new_value": "published",
+      "old_value": null,
+      "trademark_number": "9000021"
+    }
+  ],
+  "disclaimer": "A trade mark filing is not confirmation that a product or service will launch. Applications may be defensive, speculative, abandoned, refused, or unrelated to current commercial plans. Signals are reproducible research leads, not legal or commercial conclusions.",
+  "signals": [
+    {
+      "algorithm_version": "1.0.0",
+      "applicant_id": "paper-kite-group",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "maximum_score": 90,
+      "reasons": [
+        {
+          "evidence": {
+            "new_classes": [
+              9,
+              41
+            ]
+          },
+          "explanation": "First observed filing by this applicant in Nice classes 9, 41.",
+          "points": 25,
+          "type": "new_class"
+        },
+        {
+          "evidence": {
+            "gap_days": 500
+          },
+          "explanation": "First observed filing in 500 days.",
+          "points": 20,
+          "type": "long_filing_gap"
+        },
+        {
+          "evidence": {
+            "novel_tokens": [
+              "PLAY"
+            ]
+          },
+          "explanation": "Mark wording contains previously unobserved token: PLAY.",
+          "points": 20,
+          "type": "novel_tokens"
+        }
+      ],
+      "score": 65,
+      "signal_id": "900f324c501b908582057308fa007f93690ab9724764a711cf7ab9c7cb3eebc4",
+      "trademark_number": "9000021"
+    }
+  ],
+  "source": {
+    "adaptation_notice": "Selected, minimised, normalised, and analysed by MarkSignal AU from IP RAPID data.",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "name": "IP RAPID",
+    "publisher": "IP Australia",
+    "url": "https://data.gov.au/data/dataset/iprapid"
+  },
+  "trademark": {
+    "applicant_id": "paper-kite-group",
+    "applicant_name": "Paper Kite Group Pty Ltd",
+    "classes": [
+      {
+        "class_number": 9,
+        "goods_services_text": null
+      },
+      {
+        "class_number": 41,
+        "goods_services_text": null
+      }
+    ],
+    "current_status": "published",
+    "events": [
+      {
+        "declared_date": "2026-05-29",
+        "effective_date": "2026-05-29",
+        "event_category": "published",
+        "event_id": "acb32114f689ff328920dca8b2b8d593a5e9cead1472614e2e150599c75f07f1",
+        "event_type": "publish_application",
+        "is_standing": true
+      }
+    ],
+    "filing_date": "2026-05-29",
+    "first_seen_at": "2026-07-20T00:00:00Z",
+    "is_demo": true,
+    "last_seen_at": "2026-07-20T00:00:00Z",
+    "mark_text": "PAPER KITE PLAY",
+    "mark_types": [
+      "word_mark_phrase"
+    ],
+    "observed_applicant_name": "Paper Kite Group Pty Ltd",
+    "official_record_url": null,
+    "priority_date": "2026-05-29",
+    "source_dataset_url": "https://data.gov.au/data/dataset/iprapid",
+    "source_hash": "a06df3c49c1639145de4409e579d531e6db9db2e51cd51a65ad85082b5d862d0",
+    "trademark_number": "9000021"
+  }
+}

@@ -1,0 +1,273 @@
+[
+  {
+    "algorithm_version": "1.0.0",
+    "applicant_id": "civic-horizon",
+    "applicant_name": "Civic Horizon Limited",
+    "classes": [
+      9,
+      39,
+      42
+    ],
+    "detected_at": "2026-07-20T00:00:00Z",
+    "evidence_path": "evidence/9000011.json",
+    "filing_date": "2026-07-02",
+    "mark_text": "EMBER GRID",
+    "maximum_score": 90,
+    "official_record_url": null,
+    "reasons": [
+      {
+        "evidence": {
+          "new_classes": [
+            9,
+            39,
+            42
+          ]
+        },
+        "explanation": "First observed filing by this applicant in Nice classes 9, 39, 42.",
+        "points": 25,
+        "type": "new_class"
+      },
+      {
+        "evidence": {
+          "gap_days": 1245
+        },
+        "explanation": "First observed filing in 1,245 days.",
+        "points": 20,
+        "type": "long_filing_gap"
+      },
+      {
+        "evidence": {
+          "novel_tokens": [
+            "GRID"
+          ]
+        },
+        "explanation": "Mark wording contains previously unobserved token: GRID.",
+        "points": 20,
+        "type": "novel_tokens"
+      }
+    ],
+    "score": 65,
+    "signal_id": "a4a136dc3656d35d4e40b11192f946c2097477ecf02215f2247858b73c3e15c9",
+    "status": "accepted",
+    "trademark_number": "9000011"
+  },
+  {
+    "algorithm_version": "1.0.0",
+    "applicant_id": "northstar-labs",
+    "applicant_name": "Northstar Labs Pty Ltd",
+    "classes": [
+      35,
+      36,
+      42
+    ],
+    "detected_at": "2026-07-20T00:00:00Z",
+    "evidence_path": "evidence/9000004.json",
+    "filing_date": "2026-06-15",
+    "mark_text": "NORTHSTAR NEBULA BUSINESS",
+    "maximum_score": 90,
+    "official_record_url": null,
+    "reasons": [
+      {
+        "evidence": {
+          "new_classes": [
+            35
+          ]
+        },
+        "explanation": "First observed filing by this applicant in Nice class 35.",
+        "points": 25,
+        "type": "new_class"
+      },
+      {
+        "evidence": {
+          "member_trademark_numbers": [
+            "9000002",
+            "9000003",
+            "9000004"
+          ]
+        },
+        "explanation": "Part of a 3-mark related filing cluster within 7 days.",
+        "points": 25,
+        "type": "filing_cluster"
+      },
+      {
+        "evidence": {
+          "novel_tokens": [
+            "BUSINESS"
+          ]
+        },
+        "explanation": "Mark wording contains previously unobserved token: BUSINESS.",
+        "points": 20,
+        "type": "novel_tokens"
+      }
+    ],
+    "score": 70,
+    "signal_id": "7410059c34355bb2fa51cbda8fb70477c8caa7a494a240fed584e84d7d5932d1",
+    "status": "filed",
+    "trademark_number": "9000004"
+  },
+  {
+    "algorithm_version": "1.0.0",
+    "applicant_id": "northstar-labs",
+    "applicant_name": "Northstar Labs Pty Ltd",
+    "classes": [
+      9,
+      36,
+      42
+    ],
+    "detected_at": "2026-07-20T00:00:00Z",
+    "evidence_path": "evidence/9000003.json",
+    "filing_date": "2026-06-12",
+    "mark_text": "NORTHSTAR NEBULA WALLET",
+    "maximum_score": 90,
+    "official_record_url": null,
+    "reasons": [
+      {
+        "evidence": {
+          "new_classes": [
+            9
+          ]
+        },
+        "explanation": "First observed filing by this applicant in Nice class 9.",
+        "points": 25,
+        "type": "new_class"
+      },
+      {
+        "evidence": {
+          "member_trademark_numbers": [
+            "9000002",
+            "9000003",
+            "9000004"
+          ]
+        },
+        "explanation": "Part of a 3-mark related filing cluster within 7 days.",
+        "points": 25,
+        "type": "filing_cluster"
+      },
+      {
+        "evidence": {
+          "novel_tokens": [
+            "WALLET"
+          ]
+        },
+        "explanation": "Mark wording contains previously unobserved token: WALLET.",
+        "points": 20,
+        "type": "novel_tokens"
+      }
+    ],
+    "score": 70,
+    "signal_id": "08af92c4a3c967a82d6a9d924c0111df04f005b7f8d9a2d46d81406e64653b84",
+    "status": "filed",
+    "trademark_number": "9000003"
+  },
+  {
+    "algorithm_version": "1.0.0",
+    "applicant_id": "northstar-labs",
+    "applicant_name": "Northstar Labs Pty Ltd",
+    "classes": [
+      36,
+      42
+    ],
+    "detected_at": "2026-07-20T00:00:00Z",
+    "evidence_path": "evidence/9000002.json",
+    "filing_date": "2026-06-09",
+    "mark_text": "NORTHSTAR NEBULA PAY",
+    "maximum_score": 90,
+    "official_record_url": null,
+    "reasons": [
+      {
+        "evidence": {
+          "new_classes": [
+            36
+          ]
+        },
+        "explanation": "First observed filing by this applicant in Nice class 36.",
+        "points": 25,
+        "type": "new_class"
+      },
+      {
+        "evidence": {
+          "member_trademark_numbers": [
+            "9000002",
+            "9000003",
+            "9000004"
+          ]
+        },
+        "explanation": "Part of a 3-mark related filing cluster within 7 days.",
+        "points": 25,
+        "type": "filing_cluster"
+      },
+      {
+        "evidence": {
+          "gap_days": 1611
+        },
+        "explanation": "First observed filing in 1,611 days.",
+        "points": 20,
+        "type": "long_filing_gap"
+      },
+      {
+        "evidence": {
+          "novel_tokens": [
+            "PAY"
+          ]
+        },
+        "explanation": "Mark wording contains previously unobserved token: PAY.",
+        "points": 20,
+        "type": "novel_tokens"
+      }
+    ],
+    "score": 90,
+    "signal_id": "850070499f414f9de618b8ea510851875b143b2556b19d6ac9001ce7ce4e8cb0",
+    "status": "published",
+    "trademark_number": "9000002"
+  },
+  {
+    "algorithm_version": "1.0.0",
+    "applicant_id": "paper-kite-group",
+    "applicant_name": "Paper Kite Group Pty Ltd",
+    "classes": [
+      9,
+      41
+    ],
+    "detected_at": "2026-07-20T00:00:00Z",
+    "evidence_path": "evidence/9000021.json",
+    "filing_date": "2026-05-29",
+    "mark_text": "PAPER KITE PLAY",
+    "maximum_score": 90,
+    "official_record_url": null,
+    "reasons": [
+      {
+        "evidence": {
+          "new_classes": [
+            9,
+            41
+          ]
+        },
+        "explanation": "First observed filing by this applicant in Nice classes 9, 41.",
+        "points": 25,
+        "type": "new_class"
+      },
+      {
+        "evidence": {
+          "gap_days": 500
+        },
+        "explanation": "First observed filing in 500 days.",
+        "points": 20,
+        "type": "long_filing_gap"
+      },
+      {
+        "evidence": {
+          "novel_tokens": [
+            "PLAY"
+          ]
+        },
+        "explanation": "Mark wording contains previously unobserved token: PLAY.",
+        "points": 20,
+        "type": "novel_tokens"
+      }
+    ],
+    "score": 65,
+    "signal_id": "900f324c501b908582057308fa007f93690ab9724764a711cf7ab9c7cb3eebc4",
+    "status": "published",
+    "trademark_number": "9000021"
+  }
+]

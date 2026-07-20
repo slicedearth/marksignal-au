@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://slicedearth.github.io/marksignal-au/sitemap-index.xml
+

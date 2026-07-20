@@ -1,0 +1,104 @@
+---
+import rawDashboard from "../../data/dashboard.json";
+import { formatDate } from "../../lib/format";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import type { ApplicantSummary, Dashboard, FilingSignal, Trademark } from "../../types";
+
+const dashboard = rawDashboard as unknown as Dashboard;
+
+export function getStaticPaths() {
+  const data = rawDashboard as unknown as Dashboard;
+  return data.applicants.map((applicant) => ({
+    params: { id: applicant.applicant_id },
+    props: {
+      applicant,
+      trademarks: data.trademarks.filter((item) => item.applicant_id === applicant.applicant_id),
+      signals: data.signals.filter((item) => item.applicant_id === applicant.applicant_id)
+    }
+  }));
+}
+
+interface Props {
+  applicant: ApplicantSummary;
+  trademarks: Trademark[];
+  signals: FilingSignal[];
+}
+
+const { applicant, signals } = Astro.props;
+const trademarks = [...Astro.props.trademarks].sort((left, right) =>
+  String(right.filing_date).localeCompare(String(left.filing_date))
+);
+const base = import.meta.env.BASE_URL;
+const signalByNumber = new Map(signals.map((signal) => [signal.trademark_number, signal]));
+const maxClassCount = Math.max(...applicant.classes.map((item) => item.filings), 1);
+---
+
+<BaseLayout
+  title={`${applicant.display_name} | MarkSignal AU`}
+  description={`Selected Australian trade mark filing history for ${applicant.display_name}.`}
+>
+  {dashboard.is_demo && <aside class="demo-banner compact"><strong>Synthetic demonstration</strong><span>This applicant and every filing on this page are fictional.</span></aside>}
+  <section class="page-hero applicant-hero">
+    <div>
+      <a class="back-link" href={`${base}#applicants`}>← All applicants</a>
+      <p class="eyebrow"><span></span>{applicant.categories.join(" · ")}</p>
+      <h1>{applicant.display_name}</h1>
+      <p>
+        Selected filing history resolved through exact curated aliases. Similar names are not
+        merged automatically.
+      </p>
+    </div>
+    <dl class="profile-metrics">
+      <div><dt>Selected filings</dt><dd>{applicant.filings}</dd></div>
+      <div><dt>Surfaced signals</dt><dd>{applicant.signals}</dd></div>
+      <div><dt>Observed classes</dt><dd>{applicant.classes.length}</dd></div>
+      <div><dt>Latest filing</dt><dd>{formatDate(applicant.latest_filing_date)}</dd></div>
+    </dl>
+  </section>
+
+  <section class="detail-layout">
+    <div class="timeline-panel">
+      <div class="section-heading compact-heading"><div><p class="eyebrow"><span></span> Filing history</p><h2>Applicant timeline</h2></div></div>
+      <ol class="filing-timeline">
+        {trademarks.map((trademark) => {
+          const signal = signalByNumber.get(trademark.trademark_number);
+          return (
+            <li>
+              <time datetime={trademark.filing_date ?? undefined}>{formatDate(trademark.filing_date)}</time>
+              <span class="timeline-node"></span>
+              <article>
+                <div class="timeline-title">
+                  <h3><a href={`${base}trademarks/${trademark.trademark_number}/`}>{trademark.mark_text ?? "No word element published"}</a></h3>
+                  {signal && <span class="mini-score">{signal.score} pts</span>}
+                </div>
+                <p>TM {trademark.trademark_number} · {trademark.current_status}</p>
+                <div class="class-row">{trademark.classes.map((item) => <span>Class {item.class_number}</span>)}</div>
+                {signal && <ul>{signal.reasons.map((reason) => <li>{reason.explanation}</li>)}</ul>}
+              </article>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+
+    <aside class="profile-sidebar">
+      <section>
+        <p class="eyebrow"><span></span> Class profile</p>
+        <h2>Observed Nice classes</h2>
+        <ol class="mini-bars">
+          {applicant.classes.map((item) => (
+            <li><span>Class {item.class_number}</span><i><b style={`width:${item.filings / maxClassCount * 100}%`}></b></i><strong>{item.filings}</strong></li>
+          ))}
+        </ol>
+      </section>
+      <section class="boundary-card">
+        <h3>Resolution boundary</h3>
+        <p>
+          This profile includes only names matched to explicit watchlist aliases after conservative
+          normalisation. It may omit subsidiaries, former names, or records filed by related entities.
+        </p>
+        <a href={`${base}methodology/#entity-resolution`}>How matching works →</a>
+      </section>
+    </aside>
+  </section>
+</BaseLayout>

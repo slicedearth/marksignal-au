@@ -1,0 +1,66 @@
+{
+  "changes": [
+    {
+      "after_source_hash": "c055e9f0bb8a6924b95810f03074ed06c5a1ef2e70379c5bb3c7d9946d533f72",
+      "before_source_hash": null,
+      "change_id": "b84b5f0e4ce5281f41beac0cd247e69bceda5140ec4a4a720d4b316976473939",
+      "change_type": "first_observed",
+      "detected_at": "2026-07-20T00:00:00Z",
+      "new_value": "registered",
+      "old_value": null,
+      "trademark_number": "9000001"
+    }
+  ],
+  "disclaimer": "A trade mark filing is not confirmation that a product or service will launch. Applications may be defensive, speculative, abandoned, refused, or unrelated to current commercial plans. Signals are reproducible research leads, not legal or commercial conclusions.",
+  "signals": [],
+  "source": {
+    "adaptation_notice": "Selected, minimised, normalised, and analysed by MarkSignal AU from IP RAPID data.",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "name": "IP RAPID",
+    "publisher": "IP Australia",
+    "url": "https://data.gov.au/data/dataset/iprapid"
+  },
+  "trademark": {
+    "applicant_id": "northstar-labs",
+    "applicant_name": "Northstar Labs Pty Ltd",
+    "classes": [
+      {
+        "class_number": 42,
+        "goods_services_text": null
+      }
+    ],
+    "current_status": "registered",
+    "events": [
+      {
+        "declared_date": "2022-01-10",
+        "effective_date": "2022-01-10",
+        "event_category": "filing",
+        "event_id": "6c8d516445654c89a7179ceb48d4349c35ebfea80498c3a19a14871989523695",
+        "event_type": "filed",
+        "is_standing": true
+      },
+      {
+        "declared_date": "2022-10-14",
+        "effective_date": "2022-01-10",
+        "event_category": "registered",
+        "event_id": "8d4de316ab17114ee86ade1d78e4b6a7fb2463325d3b81c609a872af271943bf",
+        "event_type": "registered",
+        "is_standing": true
+      }
+    ],
+    "filing_date": "2022-01-10",
+    "first_seen_at": "2026-07-20T00:00:00Z",
+    "is_demo": true,
+    "last_seen_at": "2026-07-20T00:00:00Z",
+    "mark_text": "NORTHSTAR NEBULA",
+    "mark_types": [
+      "word_mark_phrase"
+    ],
+    "observed_applicant_name": "Northstar Labs Pty. Limited",
+    "official_record_url": null,
+    "priority_date": "2022-01-10",
+    "source_dataset_url": "https://data.gov.au/data/dataset/iprapid",
+    "source_hash": "c055e9f0bb8a6924b95810f03074ed06c5a1ef2e70379c5bb3c7d9946d533f72",
+    "trademark_number": "9000001"
+  }
+}

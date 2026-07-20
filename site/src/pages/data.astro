@@ -1,0 +1,30 @@
+---
+import rawDashboard from "../data/dashboard.json";
+import { formatDate, label } from "../lib/format";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import type { Dashboard } from "../types";
+
+const dashboard = rawDashboard as unknown as Dashboard;
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Data downloads and attribution | MarkSignal AU" description="Download compact MarkSignal AU data and inspect source attribution.">
+  <section class="page-hero data-hero"><div><p class="eyebrow"><span></span> Open evidence</p><h1>Take the data.<br /><em>Keep the context.</em></h1><p>Compact exports preserve the reason model, source linkage, and interpretation boundary.</p></div><div class="data-stamp"><span>DATASET MODE</span><strong>{dashboard.is_demo ? "SYNTHETIC" : "PUBLIC"}</strong><small>Generated {formatDate(dashboard.generated_at, true)}</small></div></section>
+  <section class="download-section">
+    <div class="section-heading"><div><p class="eyebrow"><span></span> Downloads</p><h2>Generated outputs</h2><p>The full IP RAPID archive is never committed or mirrored here. Production files are generated in the deployment runner and do not enter public Git history.</p></div></div>
+    <div class="download-grid">
+      <a href={`${base}data/signals.json`} download><span>JSON</span><h3>Filing signals</h3><p>Complete point reasons and evidence keys for application use.</p><b>Download ↓</b></a>
+      <a href={`${base}data/signals.csv`} download><span>CSV</span><h3>Tabular signals</h3><p>Spreadsheet-safe summary with a serialised reason breakdown.</p><b>Download ↓</b></a>
+      <a href={`${base}data/signals.parquet`} download><span>PARQUET</span><h3>Analytical signals</h3><p>Compressed typed output for Polars, DuckDB, and notebooks.</p><b>Download ↓</b></a>
+      <a href={`${base}data/trademarks.json`} download><span>JSON</span><h3>Selected filings</h3><p>Current minimised trade mark records with source checksums.</p><b>Download ↓</b></a>
+      <a href={`${base}data/changes.json`} download><span>JSON</span><h3>Observation events</h3><p>Append-only first-observed and material field changes.</p><b>Download ↓</b></a>
+      <a href={`${base}feed.xml`}><span>RSS 2.0</span><h3>Signal feed</h3><p>The latest 50 filing signals for readers and integrations.</p><b>Open feed ↗</b></a>
+    </div>
+  </section>
+  <section class="data-summary">
+    <div><p class="eyebrow eyebrow--dark"><span></span> Dataset summary</p><h2>{dashboard.stats.trade_marks} filings.<br />{dashboard.stats.signals} explained signals.</h2><p>{dashboard.stats.privacy_quarantined} selected {dashboard.stats.privacy_quarantined === 1 ? "record was" : "records were"} withheld by the privacy boundary during this build.</p></div>
+    <dl>{Object.entries(dashboard.reason_counts).map(([reason, count]) => <div><dt>{label(reason)}</dt><dd>{count}</dd></div>)}</dl>
+  </section>
+  <section class="attribution-section"><div><p class="eyebrow"><span></span> Attribution</p><h2>Source licence boundary</h2></div><div><p>{dashboard.source.adaptation_notice}</p><p>IP RAPID material is attributed to <strong>{dashboard.source.publisher}</strong> under <a href={dashboard.source.license} rel="noreferrer">Creative Commons Attribution 4.0 International</a>. Source-derived records remain under that licence. Original software and project documentation use the MIT Licence.</p><a class="button button--outline" href={dashboard.source.url} rel="noreferrer">Open IP RAPID source ↗</a></div></section>
+  <section class="attribution-section"><div><p class="eyebrow"><span></span> Data boundary</p><h2>Public evidence, minimised history</h2></div><div><p>The public code repository contains fictional records only. Durable production state remains in restricted deployment storage. The deployed site is public, so every visible filing and download should still be treated as published information.</p><p>Private-person applicants, contact details, addresses, agents, and unmatched source rows are excluded. A small number of high-confidence privacy matches can be quarantined for review. An unusual volume stops the entire update.</p></div></section>
+</BaseLayout>

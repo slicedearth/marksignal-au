@@ -1,0 +1,8 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const base = import.meta.env.BASE_URL;
+---
+<BaseLayout title="Page not found | MarkSignal AU">
+  <section class="not-found"><span>404</span><h1>Signal lost.</h1><p>The requested evidence path does not exist in this build.</p><a class="button button--primary" href={base}>Return to the signal feed</a></section>
+</BaseLayout>
+
