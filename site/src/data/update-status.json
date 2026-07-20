@@ -1,0 +1,12 @@
+{
+  "data_revision": "d6ec358b1bb8a7b92096da4690663e912f076b2a",
+  "emitted_signals": 3717,
+  "matched_trade_marks": 5466,
+  "privacy_quarantined": 1,
+  "retrieved_at": "2026-07-20T07:36:25.102133Z",
+  "schema_version": 1,
+  "source_publisher": "IP Australia",
+  "source_rows_read": 87555233,
+  "validation_failure_count": 1,
+  "watchlist_organisations": 15
+}
