@@ -30,7 +30,13 @@ from marksignal.models import (
     Trademark,
 )
 from marksignal.normalise import stable_hash
-from marksignal.privacy import PrivacyAudit, PrivacyMode, audit_trademarks, privacy_findings
+from marksignal.privacy import (
+    PrivacyAudit,
+    PrivacyMode,
+    audit_trademarks,
+    change_privacy_findings,
+    privacy_findings,
+)
 from marksignal.resolver import ApplicantResolver
 from marksignal.signals import ALGORITHM_VERSION, detect_signals
 
@@ -53,6 +59,17 @@ class DataQualityError(RuntimeError):
 def _audit_privacy(trademarks: list[Trademark]) -> None:
     for trademark in trademarks:
         findings = privacy_findings(trademark)
+        if findings:
+            fields = ", ".join(sorted({finding.field_name for finding in findings}))
+            raise DataQualityError(
+                f"privacy scan found contact, identifier, or address markers in {fields}; "
+                "publication stopped"
+            )
+
+
+def _audit_change_privacy(changes: list[ObservedChange]) -> None:
+    for change in changes:
+        findings = change_privacy_findings(change)
         if findings:
             fields = ", ".join(sorted({finding.field_name for finding in findings}))
             raise DataQualityError(
@@ -241,19 +258,27 @@ def build_site_data(
     _audit_privacy(trademarks)
 
     trademark_lookup = {item.trademark_number: item for item in trademarks}
+    public_signals = [
+        signal for signal in signals if signal.trademark_number in trademark_lookup
+    ]
+    public_changes = [
+        change for change in changes if change.trademark_number in trademark_lookup
+    ]
+    _audit_change_privacy(public_changes)
     site_signals = [
         _signal_for_site(signal, trademark_lookup[signal.trademark_number])
-        for signal in signals
-        if signal.trademark_number in trademark_lookup
+        for signal in public_signals
     ]
     changes_by_number: dict[str, list[ObservedChange]] = defaultdict(list)
-    for change in changes:
+    for change in public_changes:
         changes_by_number[change.trademark_number].append(change)
 
     applicant_summaries: list[dict[str, Any]] = []
     for applicant_id, applicant in resolver.applicants.items():
         applicant_marks = [item for item in trademarks if item.applicant_id == applicant_id]
-        applicant_signals = [item for item in signals if item.applicant_id == applicant_id]
+        applicant_signals = [
+            item for item in public_signals if item.applicant_id == applicant_id
+        ]
         if not applicant_marks:
             continue
         class_counts = Counter(
@@ -291,7 +316,9 @@ def build_site_data(
     applicant_summaries.sort(key=lambda item: (-item["signals"], item["display_name"]))
 
     class_counts = Counter(item.class_number for mark in trademarks for item in mark.classes)
-    reason_counts = Counter(reason.type for signal in signals for reason in signal.reasons)
+    reason_counts = Counter(
+        reason.type for signal in public_signals for reason in signal.reasons
+    )
     dashboard = {
         "project": "MarkSignal AU",
         "generated_at": generated_at.isoformat().replace("+00:00", "Z"),
@@ -308,8 +335,8 @@ def build_site_data(
             "watched_organisations": resolver.organisation_count,
             "matched_organisations": len(applicant_summaries),
             "trade_marks": len(trademarks),
-            "signals": len(signals),
-            "observed_changes": len(changes),
+            "signals": len(public_signals),
+            "observed_changes": len(public_changes),
             "classes": len(class_counts),
             "privacy_quarantined": privacy_quarantined,
         },
@@ -326,7 +353,9 @@ def build_site_data(
         "changes": [
             {**item.model_dump(mode="json"), "summary": _change_summary(item)}
             for item in sorted(
-                changes, key=lambda change: (change.detected_at, change.change_id), reverse=True
+                public_changes,
+                key=lambda change: (change.detected_at, change.change_id),
+                reverse=True,
             )
         ],
     }
@@ -338,14 +367,17 @@ def build_site_data(
     )
     _write_json(
         root / "site/public/data/changes.json",
-        [item.model_dump(mode="json") for item in changes],
+        [item.model_dump(mode="json") for item in public_changes],
     )
 
     evidence_root = root / "site/public/evidence"
+    evidence_root.mkdir(parents=True, exist_ok=True)
+    for stale_evidence in evidence_root.glob("*.json"):
+        stale_evidence.unlink()
     for trademark in trademarks:
         evidence_signals = [
             item.model_dump(mode="json")
-            for item in signals
+            for item in public_signals
             if item.trademark_number == trademark.trademark_number
         ]
         _write_json(
@@ -376,7 +408,7 @@ def build_site_data(
                 separators=(",", ":"),
             ),
         }
-        for item in signals
+        for item in public_signals
     ]
     signal_fields = [
         "signal_id",
@@ -461,10 +493,19 @@ def process_snapshot(
     ]
     _audit_privacy(previous)
     previous_manifest = _load_json(manifest_path, {})
+    existing_changes = _load_changes(changes_path)
+    previous_numbers = {item.trademark_number for item in previous}
+    filtered_existing_changes = [
+        change
+        for change in existing_changes
+        if change.trademark_number in previous_numbers
+    ]
+    history_was_filtered = len(filtered_existing_changes) != len(existing_changes)
     incoming_fingerprint = _material_fingerprint(incoming)
     previous_fingerprint = _material_fingerprint(previous)
     if (
         incoming_fingerprint == previous_fingerprint
+        and not history_was_filtered
         and previous_manifest.get("signal_algorithm_version") == ALGORITHM_VERSION
         and previous_manifest.get("privacy_quarantined", 0)
         == privacy_audit.quarantined_count
@@ -473,7 +514,6 @@ def process_snapshot(
             FilingSignal.model_validate(item)
             for item in _load_json(durable_root / "data/events/signals.json", [])
         ]
-        existing_changes = _load_changes(changes_path)
         existing_manifest = SourceManifest.model_validate(previous_manifest)
         build_site_data(
             previous,
@@ -496,13 +536,22 @@ def process_snapshot(
         )
 
     trademarks, added_changes = _merge_snapshot(previous, incoming)
-    existing_changes = _load_changes(changes_path)
+    accepted_numbers = {item.trademark_number for item in trademarks}
+    existing_changes = [
+        change
+        for change in filtered_existing_changes
+        if change.trademark_number in accepted_numbers
+    ]
     seen_change_ids = {item.change_id for item in existing_changes}
     new_changes = [item for item in added_changes if item.change_id not in seen_change_ids]
     changes = sorted(
-        [*existing_changes, *new_changes],
+        [
+            *existing_changes,
+            *(item for item in new_changes if item.trademark_number in accepted_numbers),
+        ],
         key=lambda item: (item.detected_at, item.change_id),
     )
+    _audit_change_privacy(changes)
     signals = detect_signals(trademarks)
 
     state_payload = [item.model_dump(mode="json") for item in trademarks]

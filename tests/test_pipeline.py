@@ -170,13 +170,24 @@ def test_bounded_privacy_quarantine_withholds_one_record(tmp_path: Path) -> None
     state = json.loads((tmp_path / "data/state/trademarks.json").read_text())
     report = json.loads((tmp_path / "data/manifests/privacy-report.json").read_text())
     dashboard = json.loads((tmp_path / "site/src/data/dashboard.json").read_text())
+    public_changes = json.loads((tmp_path / "site/public/data/changes.json").read_text())
+    durable_changes = json.loads((tmp_path / "data/events/changes.json").read_text())
+    evidence_path = tmp_path / "site/public/evidence" / f"{unsafe.trademark_number}.json"
     assert len(state) == 7
     assert unsafe.trademark_number not in {item["trademark_number"] for item in state}
+    assert unsafe.trademark_number not in {
+        item["trademark_number"] for item in public_changes
+    }
+    assert unsafe.trademark_number not in {
+        item["trademark_number"] for item in durable_changes
+    }
+    assert not evidence_path.exists()
     assert result.privacy_quarantined == 1
     assert report["quarantined_count"] == 1
     assert report["records"][0]["trademark_number"] == unsafe.trademark_number
     assert "02 1234 5678" not in json.dumps(report)
     assert dashboard["stats"]["privacy_quarantined"] == 1
+    assert dashboard["stats"]["observed_changes"] == 7
 
 
 def test_privacy_quarantine_spike_stops_publication(tmp_path: Path) -> None:
@@ -212,3 +223,28 @@ def test_privacy_quarantine_spike_stops_publication(tmp_path: Path) -> None:
             privacy_mode="quarantine",
         )
     assert not (tmp_path / "data/state/trademarks.json").exists()
+
+
+def test_rebuild_stops_when_retained_change_history_contains_contact_data(
+    tmp_path: Path,
+) -> None:
+    resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
+    snapshot, retrieved_at = read_fixture(
+        Path("tests/fixtures/synthetic-trademarks.json"),
+        resolver=resolver,
+    )
+    process_snapshot(
+        snapshot,
+        resolver=resolver,
+        root=tmp_path,
+        retrieved_at=retrieved_at,
+        source_url=IP_RAPID_DATASET_URL,
+        is_demo=True,
+    )
+    changes_path = tmp_path / "data/events/changes.json"
+    changes = json.loads(changes_path.read_text())
+    changes[0]["new_value"] = "Contact owner@example.com"
+    changes_path.write_text(json.dumps(changes), encoding="utf-8")
+
+    with pytest.raises(DataQualityError, match="change_new_value"):
+        rebuild_site(tmp_path, resolver=resolver)

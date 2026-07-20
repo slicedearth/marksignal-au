@@ -24,9 +24,9 @@ particularly useful.
 - Site templates escape source text. CSV output prefixes formula-triggering values.
 - Scheduled workflows use only the permissions required by their jobs.
 - The project deliberately excludes private-person applicants and unnecessary contact data.
-- A high-confidence privacy scan detects selected text containing email, business-identifier,
-  Australian phone-number, or street-address markers. Strict runs block any match. Scheduled
-  runs quarantine a bounded set and block an unusual volume.
+- A high-confidence privacy scan checks every retained source text field and change value for
+  email, business-identifier, Australian phone-number, or street-address markers. Strict runs
+  block any match. Scheduled runs quarantine a bounded set and block an unusual volume.
 - Validation records use bounded error codes and do not retain rejected source values.
 - Restricted privacy reports retain only record identifiers, source hashes, affected field names,
   and marker types. They do not copy the matched source text.

@@ -61,8 +61,9 @@ GitHub Actions and GitHub Pages
 The archive adapter rejects unexpected members, unsafe paths, missing documented columns,
 oversized cells, and excessive validation failures. It reads rows as streams and retains only
 matched organisation records. Addresses, personal contact details, agent records, and
-private-person applicants are not published. A high-confidence privacy scan detects contact,
-business-identifier, phone-number, and street-address markers in selected text. Manual runs
+private-person applicants are not published. A high-confidence privacy scan checks every
+retained source text field and change value for contact, business-identifier, phone-number, and
+street-address markers. Manual runs
 can audit without writing state or fail on any match. Scheduled runs quarantine a bounded set
 and stop when matches exceed both three records and one percent of selected records. Validation
 and privacy reports contain error codes and marker types rather than rejected source values.

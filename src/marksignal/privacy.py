@@ -7,7 +7,7 @@ from collections import Counter
 from dataclasses import dataclass
 from typing import Literal
 
-from marksignal.models import Trademark
+from marksignal.models import ObservedChange, Trademark
 
 PrivacyMode = Literal["strict", "quarantine"]
 QUARANTINE_ABSOLUTE_TOLERANCE = 3
@@ -92,18 +92,7 @@ class PrivacyAudit:
         }
 
 
-def privacy_findings(trademark: Trademark) -> tuple[PrivacyFinding, ...]:
-    """Find contact or address markers in fields retained for publication."""
-
-    fields: dict[str, str | None] = {
-        "applicant_name": trademark.applicant_name,
-        "observed_applicant_name": trademark.observed_applicant_name,
-        "mark_text": trademark.mark_text,
-        **{
-            f"class_{item.class_number}_goods_services": item.goods_services_text
-            for item in trademark.classes
-        },
-    }
+def _find_markers(fields: dict[str, str | None]) -> tuple[PrivacyFinding, ...]:
     findings: list[PrivacyFinding] = []
     for field_name, value in fields.items():
         if not value:
@@ -112,6 +101,45 @@ def privacy_findings(trademark: Trademark) -> tuple[PrivacyFinding, ...]:
             if pattern.search(value):
                 findings.append(PrivacyFinding(field_name=field_name, marker=marker))
     return tuple(findings)
+
+
+def privacy_findings(trademark: Trademark) -> tuple[PrivacyFinding, ...]:
+    """Find contact or address markers in every retained source text field."""
+
+    fields: dict[str, str | None] = {
+        "applicant_name": trademark.applicant_name,
+        "observed_applicant_name": trademark.observed_applicant_name,
+        "mark_text": trademark.mark_text,
+        "current_status": trademark.current_status,
+        **{
+            f"class_{item.class_number}_goods_services": item.goods_services_text
+            for item in trademark.classes
+        },
+        **{
+            f"mark_type_{index}": value
+            for index, value in enumerate(trademark.mark_types)
+        },
+        **{
+            f"event_{index}_type": event.event_type
+            for index, event in enumerate(trademark.events)
+        },
+        **{
+            f"event_{index}_category": event.event_category
+            for index, event in enumerate(trademark.events)
+        },
+    }
+    return _find_markers(fields)
+
+
+def change_privacy_findings(change: ObservedChange) -> tuple[PrivacyFinding, ...]:
+    """Find markers in retained before-and-after change values."""
+
+    return _find_markers(
+        {
+            "change_old_value": change.old_value,
+            "change_new_value": change.new_value,
+        }
+    )
 
 
 def audit_trademarks(trademarks: list[Trademark]) -> PrivacyAudit:

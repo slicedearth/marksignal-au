@@ -36,7 +36,7 @@ downloads are intentionally readable without authentication.
 | Script or markup injection | Astro text escaping, no raw HTML rendering, restrictive static content policy |
 | Output path traversal | Bounded application-number pattern without path separators, stable generated directories |
 | Spreadsheet formula execution | Formula-triggering CSV cells receive a leading apostrophe |
-| Unnecessary personal-data publication | Organisation-only exact aliases, field minimisation, contact and address privacy scan, fictional public fixtures |
+| Unnecessary personal-data publication | Organisation-only exact aliases, field minimisation, complete retained-text and change-value privacy scans, fictional public fixtures |
 | Rejected values leaking through diagnostics | Bounded table, row, and error codes without rejected source text |
 | Incorrect applicant merge | Exact normalised aliases only, alias collision failure, ambiguous source match skipped, similarity used only for review |
 | Forged or unexplained signal | Deterministic versioned rules, complete reason records, source and output hashes, regression tests |

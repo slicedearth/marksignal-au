@@ -12,8 +12,10 @@ display name, category, and explicit aliases. The pipeline considers current app
 whose party type is `Organisation`. It excludes individuals, agents, addresses, and contact
 details.
 
-Selected publication fields pass a high-confidence scan for email addresses, labelled ABNs
-or ACNs, Australian phone numbers, and street addresses. Audit mode reports aggregate matches
+Every retained source text field, including status, mark type, and event wording, passes a
+high-confidence scan for email addresses, labelled ABNs or ACNs, Australian phone numbers, and
+street addresses. Retained before-and-after change values are checked again before publication.
+Audit mode reports aggregate matches
 without writing state. Strict mode stops on any match. Scheduled quarantine mode withholds
 matching records and stops the complete update when matches exceed both three records and one
 percent of selected records. Error and privacy records retain bounded codes, identifiers, field
@@ -72,9 +74,10 @@ site files are generated inside a deployment runner and are not committed to pub
 history. This limits unnecessary historical persistence but does not make a filing displayed
 by the public site private.
 
-Quarantined records are removed from incoming and previously retained state for that build.
-The public dataset reports only the aggregate quarantine count, so a privacy match cannot leave
-an older public copy visible after it is detected.
+Quarantined records and their existing change observations are removed from incoming and
+previously retained state for that build. Generated evidence directories are rebuilt from the
+accepted record set. The public dataset reports only the aggregate quarantine count, so a
+privacy match cannot leave an older public copy visible after it is detected.
 
 ## Limitations
 

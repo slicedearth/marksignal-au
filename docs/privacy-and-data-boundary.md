@@ -17,8 +17,9 @@ automatic publication approval.
 2. The adapter retains only current organisation applicants that exactly match a curated
    alias.
 3. Addresses, contacts, agents, opponents, and private-person applicants are never selected.
-4. A privacy scan detects high-confidence contact, identifier, phone-number, or street-address
-   markers in retained text. Audit mode writes nothing. Strict mode stops on any match.
+4. A privacy scan checks every retained source text field and before-and-after change value for
+   high-confidence contact, identifier, phone-number, or street-address markers. Audit mode
+   writes nothing. Strict mode stops on any match.
    Scheduled quarantine mode withholds matching records and stops the complete update when
    matches exceed both three records and one percent of selected records.
 5. A restricted privacy report records aggregate counts plus affected application numbers, source
@@ -49,7 +50,7 @@ production deployment artifact and the restricted state store.
 - private-person applicants
 - addresses, postcodes, phone numbers, email addresses, and agent details
 - source rows for unmatched organisations
-- selected records quarantined by the high-confidence privacy scan
+- selected records quarantined by the high-confidence privacy scan, including their observations
 - the full IP RAPID archive
 - workflow credentials and deploy keys
 - analyst notes, accounts, user searches, and behavioural tracking
