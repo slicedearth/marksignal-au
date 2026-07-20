@@ -145,7 +145,7 @@ generated inside the deployment runner and are not committed publicly.
 Applicant matching is conservative by design:
 
 1. Normalise Unicode, punctuation, whitespace, and limited legal-form variants.
-2. Match only exact aliases declared in `watchlists/*.yml`.
+2. Match only exact aliases declared in `watchlists/production/*.yml`.
 3. Keep legal suffixes such as `PTY LTD` and `LTD` rather than stripping them.
 4. Expose fuzzy candidates for review only.
 5. Fail closed when one alias maps to multiple organisations.
@@ -157,7 +157,7 @@ No applicant is merged solely because two names look similar.
 ```text
 src/marksignal/          source models, resolver, signals, changes, and publication
 tests/                   behavioural tests and fictional fixtures
-watchlists/              versioned organisation aliases and categories
+watchlists/              separated production and demonstration aliases
 data/state/              current selected trade mark state
 data/events/             immutable changes and generated filing signals
 data/manifests/          source, quality, schema, and checksum evidence

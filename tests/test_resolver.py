@@ -18,6 +18,13 @@ def test_watchlists_load_and_exact_alias_resolves() -> None:
     assert resolver.resolve("Northstar Laboratory Pty Ltd") is None
 
 
+def test_production_watchlists_exclude_demonstration_organisations() -> None:
+    resolver = ApplicantResolver(load_watchlists(Path("watchlists/production")))
+
+    assert resolver.organisation_count == 12
+    assert resolver.resolve("Northstar Labs Pty Ltd") is None
+
+
 def test_similarity_candidates_do_not_resolve() -> None:
     resolver = ApplicantResolver(load_watchlists(Path("watchlists")))
     assert resolver.resolve("Northstar Lab Pty Ltd") is None

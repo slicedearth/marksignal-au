@@ -7,7 +7,7 @@ review. It does not infer why the filing was made or whether a product will laun
 
 ## Selection
 
-Organisations are deliberately curated in public `watchlists/*.yml`. Each entry has a stable ID,
+Organisations are deliberately curated in public `watchlists/production/*.yml`. Each entry has a stable ID,
 display name, category, and explicit aliases. The pipeline considers current applicant rows
 whose party type is `Organisation`. It excludes individuals, agents, addresses, and contact
 details.

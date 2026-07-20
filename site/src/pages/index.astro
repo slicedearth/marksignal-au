@@ -73,7 +73,7 @@ const maxClassCount = Math.max(...dashboard.class_counts.map((item) => item.fili
   </section>
 
   <section class="metric-strip" aria-label="Dataset metrics">
-    <div><small>01</small><strong>{dashboard.stats.watched_organisations}</strong><span>Watched organisations</span></div>
+    <div><small>01</small><strong>{dashboard.stats.matched_organisations}</strong><span>Matched applicants</span></div>
     <div><small>02</small><strong>{dashboard.stats.classes}</strong><span>Nice classes observed</span></div>
     <div><small>03</small><strong>{dashboard.stats.observed_changes}</strong><span>Immutable observations</span></div>
     <div class="metric-source"><span class="live-dot"></span><span>Updated {formatDate(dashboard.generated_at)}</span></div>
@@ -93,8 +93,9 @@ const maxClassCount = Math.max(...dashboard.class_counts.map((item) => item.fili
         <h2>A filing is one point.<br />A pattern needs history.</h2>
       </div>
       <p>
-        Profiles keep observed classes, timing, and surfaced filings together. Counts describe
-        selected public records, not market activity or intent.
+        {dashboard.stats.matched_organisations} applicant profiles keep observed classes, timing,
+        and surfaced filings together. Counts describe selected public records, not market activity
+        or intent.
       </p>
     </div>
     <div class="applicant-grid">

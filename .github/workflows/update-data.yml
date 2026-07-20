@@ -144,7 +144,7 @@ jobs:
         run: >-
           marksignal
           --root "$BUILD_ROOT"
-          --watchlists "$GITHUB_WORKSPACE/watchlists"
+          --watchlists "$GITHUB_WORKSPACE/watchlists/production"
           --data-root "$GITHUB_WORKSPACE/.restricted-state"
           ingest-iprapid "$ARCHIVE_PATH"
           --privacy-mode "$PRIVACY_MODE"
@@ -174,7 +174,7 @@ jobs:
         run: >-
           marksignal
           --root "$BUILD_ROOT"
-          --watchlists "$GITHUB_WORKSPACE/watchlists"
+          --watchlists "$GITHUB_WORKSPACE/watchlists/production"
           check-source-links
 
       - name: Prepare verified restricted-state patch

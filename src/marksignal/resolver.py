@@ -88,7 +88,7 @@ def load_watchlists(path: Path) -> list[Watchlist]:
 
     if not path.is_dir():
         raise WatchlistError(f"watchlist directory does not exist: {path}")
-    files = sorted([*path.glob("*.yml"), *path.glob("*.yaml")])
+    files = sorted([*path.rglob("*.yml"), *path.rglob("*.yaml")])
     if not files:
         raise WatchlistError(f"no YAML watchlists found in {path}")
     watchlists: list[Watchlist] = []
