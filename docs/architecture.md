@@ -51,13 +51,17 @@ version.
 
 `src/marksignal/pipeline.py` writes durable state to a separately configured data root and
 generates evidence files, downloads, and site data atomically in the build root. Astro renders
-the result to static HTML. The signal feed uses 50-item static pages with sticky navigation,
-page-local filters, and page-specific CSV export. A same-origin browser enhancement fetches one
-bounded static page, validates its route and page metadata, and atomically replaces the main
-region. Numbered-page requests bypass stored browser documents, while a four-page in-memory cache
-supports repeat navigation within the current session. The enhancement preserves the selected
-pagination control's viewport position and browser history.
-Complete generated downloads remain available for dataset-wide work. The pipeline verifies
+the result to static HTML. The signal feed uses 50-item static pages, while applicant filing
+histories and longer source-event histories use bounded record pages. A same-origin browser
+enhancement fetches one bounded static page, validates its route, record key, and page metadata,
+then atomically replaces the main region. Numbered-page requests bypass stored browser documents,
+while a four-page in-memory cache supports repeat navigation within the current session. The
+enhancement preserves the selected pagination control's viewport position and browser history.
+
+Signal filters fetch the complete published signal JSON from an exact same-origin path only after
+a filter is applied. The response is byte-bounded, record-bounded, and validated before any card
+is created with DOM text nodes and allowlisted local routes. Matching results are then divided
+into 50-item client pages. Complete generated downloads remain available for dataset-wide work. The pipeline verifies
 manifest hashes before it trusts durable state for a rebuild, update, or public status record.
 
 ## Data boundaries

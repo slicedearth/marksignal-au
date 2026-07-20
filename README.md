@@ -58,13 +58,13 @@ generate temporary JSON, CSV, Parquet, RSS, applicant, and filing pages
 GitHub Actions and GitHub Pages
 ```
 
-The signal feed is divided into 50-item static pages with controls above and below the results.
-Pagination replaces the generated main region in place, keeps the selected control visually
-anchored, and updates browser history without a document reload. The static links remain usable
-when scripting or a same-origin page request is unavailable. Filters and filtered CSV downloads
-operate on the current page, while complete generated downloads remain available for
-dataset-wide analysis. This keeps every signal browsable without allowing one HTML page or
-browser document to grow with the full history.
+The signal feed is divided into 50-item static pages. Applicant filing histories and longer
+source-event histories use their own bounded static pages. Pagination replaces the generated
+main region in place, keeps the selected control visually anchored, and updates browser history
+without a document reload. The static links remain usable when scripting or a same-origin page
+request is unavailable. Signal filters load a bounded, validated same-origin JSON dataset and
+paginate matching results in the browser, so search, applicant, reason, score, and filtered CSV
+exports cover every published signal rather than only the visible static page.
 
 The archive adapter rejects unexpected members, unsafe paths, missing documented columns,
 oversized downloads, expanded archives, tables, cells, selected sets, per-record descriptions,
@@ -127,6 +127,7 @@ Process a downloaded official archive:
 .venv/bin/marksignal audit-iprapid /path/to/iprapid.zip
 
 .venv/bin/marksignal \
+  --watchlists watchlists/production \
   --data-root /path/to/restricted-state \
   ingest-iprapid /path/to/iprapid.zip --privacy-mode strict
 ```

@@ -1,0 +1,47 @@
+---
+import TrademarkRecord from "../../../../components/TrademarkRecord.astro";
+import rawDashboard from "../../../../data/dashboard.json";
+import { EVENT_PAGE_SIZE, getPageCount } from "../../../../lib/pagination";
+import type { Dashboard, FilingSignal, ObservedChange, Trademark } from "../../../../types";
+
+export function getStaticPaths() {
+  const data = rawDashboard as unknown as Dashboard;
+  return data.trademarks.flatMap((trademark) => {
+    const totalPages = getPageCount(trademark.events.length, EVENT_PAGE_SIZE);
+    return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => {
+      const page = index + 2;
+      return {
+        params: { number: trademark.trademark_number, page: String(page) },
+        props: {
+          trademark,
+          signals: data.signals.filter((item) => item.trademark_number === trademark.trademark_number),
+          changes: data.changes.filter((item) => item.trademark_number === trademark.trademark_number),
+          isDemo: data.is_demo,
+          disclaimer: data.disclaimer,
+          page
+        }
+      };
+    });
+  });
+}
+
+interface Props {
+  trademark: Trademark;
+  signals: FilingSignal[];
+  changes: ObservedChange[];
+  isDemo: boolean;
+  disclaimer: string;
+  page: number;
+}
+
+const { trademark, signals, changes, isDemo, disclaimer, page } = Astro.props;
+---
+
+<TrademarkRecord
+  trademark={trademark}
+  signals={signals}
+  changes={changes}
+  isDemo={isDemo}
+  disclaimer={disclaimer}
+  currentPage={page}
+/>

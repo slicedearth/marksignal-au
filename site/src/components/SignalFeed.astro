@@ -1,6 +1,7 @@
 ---
 import { label } from "../lib/format";
-import type { FilingSignal } from "../types";
+import { SIGNAL_PAGE_SIZE } from "../lib/pagination";
+import type { ApplicantSummary, FilingSignal } from "../types";
 import SignalCard from "./SignalCard.astro";
 import SignalPagination from "./SignalPagination.astro";
 
@@ -9,23 +10,29 @@ interface Props {
   totalSignals: number;
   currentPage: number;
   totalPages: number;
+  applicants: ApplicantSummary[];
+  reasonTypes: string[];
 }
 
-const { signals, totalSignals, currentPage, totalPages } = Astro.props;
+const { signals, totalSignals, currentPage, totalPages, applicants, reasonTypes } = Astro.props;
 const base = import.meta.env.BASE_URL;
-const applicants = [...new Map(
-  signals.map((signal) => [signal.applicant_id, signal.applicant_name] as const)
-).entries()].sort((left, right) => left[1].localeCompare(right[1], "en-AU"));
-const reasonTypes = [...new Set(
-  signals.flatMap((signal) => signal.reasons.map((reason) => reason.type))
-)].sort();
+const sortedApplicants = [...applicants].sort((left, right) =>
+  left.display_name.localeCompare(right.display_name, "en-AU")
+);
+const sortedReasonTypes = [...reasonTypes].sort();
 ---
 
 <section
   class="content-section signals-section"
   id="signals"
   data-signal-feed
+  data-pagination-view="signals"
+  data-pagination-key=""
   data-current-page={currentPage}
+  data-total-pages={totalPages}
+  data-total-signals={totalSignals}
+  data-page-size={SIGNAL_PAGE_SIZE}
+  data-dataset-url={`${base}data/signals.json`}
 >
   <div class="section-heading">
     <div>
@@ -36,17 +43,17 @@ const reasonTypes = [...new Set(
     <a class="download-link" href={`${base}data/signals.csv`} download>Download all CSV ↓</a>
   </div>
 
-  <form class="filters" data-filters aria-label="Filter filing signals on this page">
+  <form class="filters" data-filters aria-label="Filter all published filing signals">
     <label class="search-field">
       <span>Search</span>
       <div><span aria-hidden="true">⌕</span><input type="search" name="query" placeholder="Mark, applicant, number" autocomplete="off" /></div>
     </label>
     <label>
-      <span>Applicant on this page</span>
+      <span>Applicant</span>
       <select name="applicant">
         <option value="">All applicants</option>
-        {applicants.map(([applicantId, applicantName]) => (
-          <option value={applicantId}>{applicantName}</option>
+        {sortedApplicants.map((applicant) => (
+          <option value={applicant.applicant_id}>{applicant.display_name}</option>
         ))}
       </select>
     </label>
@@ -54,7 +61,7 @@ const reasonTypes = [...new Set(
       <span>Reason</span>
       <select name="reason">
         <option value="">All reasons</option>
-        {reasonTypes.map((reason) => <option value={reason}>{label(reason)}</option>)}
+        {sortedReasonTypes.map((reason) => <option value={reason}>{label(reason)}</option>)}
       </select>
     </label>
     <label>
@@ -71,12 +78,13 @@ const reasonTypes = [...new Set(
 
   <div class="result-line">
     <p aria-live="polite">
-      <strong data-result-count>{signals.length}</strong> matching signals on page {currentPage} of
-      {` ${totalPages}`}. {totalSignals} published signals in total
+      <strong data-result-count>{totalSignals}</strong> matching signals. <span data-result-page>
+        Showing {signals.length} on page {currentPage} of {totalPages}
+      </span>
     </p>
-    <button class="text-button" type="button" data-download-filtered>Download filtered page CSV</button>
+    <button class="text-button" type="button" data-download-filtered>Download filtered results CSV</button>
   </div>
-  <p class="page-filter-note">Filters and the filtered CSV apply to this page.</p>
+  <p class="page-filter-note" data-filter-status>Filters and the filtered CSV cover the full published signal dataset.</p>
 
   <SignalPagination currentPage={currentPage} totalPages={totalPages} position="top" />
 

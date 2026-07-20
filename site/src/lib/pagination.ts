@@ -1,14 +1,22 @@
 export const SIGNAL_PAGE_SIZE = 50;
+export const FILING_PAGE_SIZE = 25;
+export const EVENT_PAGE_SIZE = 25;
 
-export const getSignalPageCount = (signalCount: number): number =>
-  Math.max(1, Math.ceil(signalCount / SIGNAL_PAGE_SIZE));
+export const getPageCount = (itemCount: number, pageSize: number): number =>
+  Math.max(1, Math.ceil(itemCount / pageSize));
 
-export const getSignalPage = <T>(items: T[], page: number): T[] => {
-  const start = (page - 1) * SIGNAL_PAGE_SIZE;
-  return items.slice(start, start + SIGNAL_PAGE_SIZE);
+export const getPage = <T>(items: T[], page: number, pageSize: number): T[] => {
+  const start = (page - 1) * pageSize;
+  return items.slice(start, start + pageSize);
 };
 
-export const getSignalPaginationItems = (
+export const getSignalPageCount = (signalCount: number): number =>
+  getPageCount(signalCount, SIGNAL_PAGE_SIZE);
+
+export const getSignalPage = <T>(items: T[], page: number): T[] =>
+  getPage(items, page, SIGNAL_PAGE_SIZE);
+
+export const getPaginationItems = (
   currentPage: number,
   totalPages: number
 ): Array<number | null> => {
@@ -32,3 +40,5 @@ export const getSignalPaginationItems = (
 
   return items;
 };
+
+export const getSignalPaginationItems = getPaginationItems;

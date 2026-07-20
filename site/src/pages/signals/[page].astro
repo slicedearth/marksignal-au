@@ -34,8 +34,8 @@ const pageSignals = getSignalPage(dashboard.signals, page);
       <p class="eyebrow"><span></span> Signal feed</p>
       <h1>Published signals,<br /><em>page {page}.</em></h1>
       <p>
-        Browse every published signal across {totalPages} static pages. Filters operate on the
-        current page, while the complete CSV remains available for dataset-wide analysis.
+        Browse every published signal across {totalPages} static pages. Filters and filtered CSV
+        exports cover the complete published signal dataset.
       </p>
     </div>
     <dl class="profile-metrics">
@@ -51,5 +51,7 @@ const pageSignals = getSignalPage(dashboard.signals, page);
     totalSignals={dashboard.signals.length}
     currentPage={page}
     totalPages={totalPages}
+    applicants={dashboard.applicants}
+    reasonTypes={Object.keys(dashboard.reason_counts)}
   />
 </BaseLayout>

@@ -704,11 +704,18 @@ select {
   padding: 0.45rem 0.65rem;
 }
 
-.signal-pagination a {
+.signal-pagination a,
+.signal-pagination button {
+  color: inherit;
   font-weight: 850;
   text-decoration: underline;
   text-decoration-color: var(--mint);
   text-decoration-thickness: 2px;
+}
+
+.signal-pagination button {
+  border: 0;
+  background: transparent;
 }
 
 .signal-pagination__step[aria-disabled="true"] {
@@ -728,6 +735,7 @@ select {
 }
 
 .signal-pagination__pages a,
+.signal-pagination__pages button,
 .signal-pagination__pages li > span {
   display: grid;
   min-width: 2.5rem;
@@ -747,7 +755,11 @@ select {
   outline-offset: 3px;
 }
 
-[data-signal-feed][aria-busy="true"] .signal-pagination a {
+[data-pagination-view][aria-busy="true"] .signal-pagination a {
+  cursor: progress;
+}
+
+[data-pagination-view][aria-busy="true"] .signal-pagination button {
   cursor: progress;
 }
 
@@ -1258,6 +1270,13 @@ select {
 
 .compact-heading h2 {
   font-size: clamp(2rem, 4vw, 3.5rem);
+}
+
+.history-summary {
+  margin: -0.8rem 0 1rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.65rem;
 }
 
 .filing-timeline {
@@ -2019,6 +2038,7 @@ select {
   }
 
   .signal-pagination__pages a,
+  .signal-pagination__pages button,
   .signal-pagination__pages li > span {
     min-width: 2.25rem;
     min-height: 2.25rem;

@@ -26,16 +26,19 @@ particularly useful.
 - Site templates escape source text. CSV output prefixes formula-triggering values. Browser code
   and styles are same-origin files, and the build rejects inline script, inline style, or an
   `unsafe-inline` content-policy exception.
-- Enhanced pagination accepts only the site root and numeric signal-page paths on the current
-  origin. It rejects redirects, non-HTML responses, mismatched page metadata, and responses over
-  two megabytes. Scripts are removed from the parsed replacement before the main region is
-  imported. Requests bypass stored browser responses so pages from different deployments cannot
-  be combined. The previous page remains visible until a complete replacement has been validated.
+- Enhanced pagination accepts only exact signal, applicant filing-history, and trade mark
+  event-history paths on the current origin. It rejects redirects, non-HTML responses, mismatched
+  route keys or page metadata, and responses over two megabytes. Scripts are removed from the
+  parsed replacement before the main region is imported. Requests bypass stored browser responses
+  so pages from different deployments cannot be combined. The previous page remains visible until
+  a complete replacement has been validated.
 - The content policy permits browser connections only to the same origin for enhanced pagination.
   There are no third-party browser requests, analytics requests, credentials, or request-time
   data APIs.
-- Static signal pages contain at most 50 result cards. Page-local filtering and export avoid an
-  unbounded browser document while complete downloads remain separately available.
+- Static signal pages contain at most 50 result cards. Applicant filings and source events also use
+  bounded static pages. Full-dataset signal filtering accepts only a same-origin JSON resource,
+  limits response bytes and records, validates every record, and builds at most 50 cards at once
+  with text nodes and allowlisted local links. Filtered CSV output covers all matching signals.
 - Every generated official-record URL is validated against one exact HTTPS host and path pattern.
   A weekly availability sample is capped at three sequential `HEAD` requests, does not follow
   redirects, and never reads response bodies. Only confirmed missing responses block publication.

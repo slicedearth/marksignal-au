@@ -1,0 +1,134 @@
+---
+import { formatDate } from "../lib/format";
+import { FILING_PAGE_SIZE, getPage, getPageCount } from "../lib/pagination";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import type { ApplicantSummary, FilingSignal, Trademark } from "../types";
+import Pagination from "./Pagination.astro";
+
+interface Props {
+  applicant: ApplicantSummary;
+  trademarks: Trademark[];
+  signals: FilingSignal[];
+  isDemo: boolean;
+  currentPage: number;
+}
+
+const { applicant, signals, isDemo, currentPage } = Astro.props;
+const trademarks = [...Astro.props.trademarks].sort((left, right) =>
+  String(right.filing_date).localeCompare(String(left.filing_date))
+);
+const totalPages = getPageCount(trademarks.length, FILING_PAGE_SIZE);
+const pageTrademarks = getPage(trademarks, currentPage, FILING_PAGE_SIZE);
+const firstRecord = (currentPage - 1) * FILING_PAGE_SIZE + 1;
+const lastRecord = firstRecord + pageTrademarks.length - 1;
+const base = import.meta.env.BASE_URL;
+const signalByNumber = new Map(signals.map((signal) => [signal.trademark_number, signal]));
+const maxClassCount = Math.max(...applicant.classes.map((item) => item.filings), 1);
+const pageHref = (page: number) => page === 1
+  ? `${base}applicants/${applicant.applicant_id}/#filing-history`
+  : `${base}applicants/${applicant.applicant_id}/filings/${page}/#filing-history`;
+const title = currentPage === 1
+  ? `${applicant.display_name} | MarkSignal AU`
+  : `${applicant.display_name} filing history, page ${currentPage} | MarkSignal AU`;
+---
+
+<BaseLayout
+  title={title}
+  description={`Selected Australian trade mark filing history for ${applicant.display_name}, page ${currentPage} of ${totalPages}.`}
+>
+  {isDemo && <aside class="demo-banner compact"><strong>Synthetic demonstration</strong><span>This applicant and every filing on this page are fictional.</span></aside>}
+  <section class="page-hero applicant-hero">
+    <div>
+      <a class="back-link" href={`${base}#applicants`}>← All applicants</a>
+      <p class="eyebrow"><span></span>{applicant.categories.join(" · ")}</p>
+      <h1>{applicant.display_name}</h1>
+      <p>
+        Selected filing history resolved through exact curated aliases. Similar names are not
+        merged automatically.
+      </p>
+    </div>
+    <dl class="profile-metrics">
+      <div><dt>Selected filings</dt><dd>{applicant.filings}</dd></div>
+      <div><dt>Surfaced signals</dt><dd>{applicant.signals}</dd></div>
+      <div><dt>Observed classes</dt><dd>{applicant.classes.length}</dd></div>
+      <div><dt>Latest filing</dt><dd>{formatDate(applicant.latest_filing_date)}</dd></div>
+    </dl>
+  </section>
+
+  <section class="detail-layout">
+    <div
+      class="timeline-panel"
+      data-pagination-view="applicant-filings"
+      data-pagination-key={applicant.applicant_id}
+      data-current-page={currentPage}
+    >
+      <div class="section-heading compact-heading"><div><p class="eyebrow"><span></span> Filing history</p><h2>Applicant timeline</h2></div></div>
+      <p class="history-summary">Showing filings {firstRecord} to {lastRecord} of {trademarks.length}.</p>
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          position="top"
+          kind="applicant-filings"
+          entityKey={applicant.applicant_id}
+          anchorId="filing-history"
+          label="Filing history"
+          pageHref={pageHref}
+        />
+      )}
+      <ol class="filing-timeline">
+        {pageTrademarks.map((trademark) => {
+          const signal = signalByNumber.get(trademark.trademark_number);
+          return (
+            <li>
+              <time datetime={trademark.filing_date ?? undefined}>{formatDate(trademark.filing_date)}</time>
+              <span class="timeline-node"></span>
+              <article>
+                <div class="timeline-title">
+                  <h3><a href={`${base}trademarks/${trademark.trademark_number}/`}>{trademark.mark_text ?? "No word element published"}</a></h3>
+                  {signal && <span class="mini-score">{signal.score} pts</span>}
+                </div>
+                <p>TM {trademark.trademark_number} · {trademark.current_status}</p>
+                <div class="class-row">{trademark.classes.map((item) => <span>Class {item.class_number}</span>)}</div>
+                {signal && <ul>{signal.reasons.map((reason) => <li>{reason.explanation}</li>)}</ul>}
+              </article>
+            </li>
+          );
+        })}
+      </ol>
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          position="bottom"
+          kind="applicant-filings"
+          entityKey={applicant.applicant_id}
+          anchorId="filing-history"
+          label="Filing history"
+          pageHref={pageHref}
+        />
+      )}
+      <p class="visually-hidden" data-pagination-status aria-live="polite" aria-atomic="true"></p>
+    </div>
+
+    <aside class="profile-sidebar">
+      <section>
+        <p class="eyebrow"><span></span> Class profile</p>
+        <h2>Observed Nice classes</h2>
+        <ol class="mini-bars">
+          {applicant.classes.map((item) => (
+            <li><span>Class {item.class_number}</span><progress value={item.filings} max={maxClassCount} aria-label={`${item.filings} filings`}></progress><strong>{item.filings}</strong></li>
+          ))}
+        </ol>
+      </section>
+      <section class="boundary-card">
+        <h3>Resolution boundary</h3>
+        <p>
+          This profile includes only names matched to explicit watchlist aliases after conservative
+          normalisation. It may omit subsidiaries, former names, or records filed by related entities.
+        </p>
+        <a href={`${base}methodology/#entity-resolution`}>How matching works →</a>
+      </section>
+    </aside>
+  </section>
+</BaseLayout>

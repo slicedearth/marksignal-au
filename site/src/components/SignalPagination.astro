@@ -1,5 +1,5 @@
 ---
-import { getSignalPaginationItems } from "../lib/pagination";
+import Pagination from "./Pagination.astro";
 
 interface Props {
   currentPage: number;
@@ -9,72 +9,17 @@ interface Props {
 
 const { currentPage, totalPages, position } = Astro.props;
 const base = import.meta.env.BASE_URL;
-const pages = getSignalPaginationItems(currentPage, totalPages);
 const pageHref = (page: number) => page === 1
   ? `${base}#signal-results`
   : `${base}signals/${page}/#signal-results`;
-const label = position === "top"
-  ? "Signal feed pages above results"
-  : "Signal feed pages below results";
 ---
 
-<nav
-  id={position === "top" ? "signal-results" : undefined}
-  class:list={["signal-pagination", `signal-pagination--${position}`]}
-  data-pagination-position={position}
-  aria-label={label}
->
-  {currentPage > 1
-    ? (
-      <a
-        class="signal-pagination__step"
-        href={pageHref(currentPage - 1)}
-        data-signal-page={currentPage - 1}
-        rel="prev"
-      >
-        <span aria-hidden="true">←</span>
-        <span class="signal-pagination__step-label">Previous</span>
-      </a>
-    )
-    : (
-      <span class="signal-pagination__step" aria-disabled="true">
-        <span aria-hidden="true">←</span>
-        <span class="signal-pagination__step-label">Previous</span>
-      </span>
-    )}
-
-  <ol class="signal-pagination__pages">
-    {pages.map((page) => page === null
-      ? <li class="signal-pagination__ellipsis" aria-hidden="true">…</li>
-      : (
-        <li class:list={{ "is-current": page === currentPage }}>
-          {page === currentPage
-            ? <span aria-current="page"><span class="visually-hidden">Page </span>{page}</span>
-            : (
-              <a href={pageHref(page)} data-signal-page={page} aria-label={`Go to page ${page}`}>
-                {page}
-              </a>
-            )}
-        </li>
-      ))}
-  </ol>
-
-  {currentPage < totalPages
-    ? (
-      <a
-        class="signal-pagination__step"
-        href={pageHref(currentPage + 1)}
-        data-signal-page={currentPage + 1}
-        rel="next"
-      >
-        <span class="signal-pagination__step-label">Next</span>
-        <span aria-hidden="true">→</span>
-      </a>
-    )
-    : (
-      <span class="signal-pagination__step" aria-disabled="true">
-        <span class="signal-pagination__step-label">Next</span>
-        <span aria-hidden="true">→</span>
-      </span>
-    )}
-</nav>
+<Pagination
+  currentPage={currentPage}
+  totalPages={totalPages}
+  position={position}
+  kind="signals"
+  anchorId="signal-results"
+  label="Signal feed"
+  pageHref={pageHref}
+/>

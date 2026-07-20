@@ -1,0 +1,40 @@
+---
+import ApplicantProfile from "../../../../components/ApplicantProfile.astro";
+import rawDashboard from "../../../../data/dashboard.json";
+import { FILING_PAGE_SIZE, getPageCount } from "../../../../lib/pagination";
+import type { ApplicantSummary, Dashboard, FilingSignal, Trademark } from "../../../../types";
+
+export function getStaticPaths() {
+  const data = rawDashboard as unknown as Dashboard;
+  return data.applicants.flatMap((applicant) => {
+    const trademarks = data.trademarks.filter((item) => item.applicant_id === applicant.applicant_id);
+    const signals = data.signals.filter((item) => item.applicant_id === applicant.applicant_id);
+    const totalPages = getPageCount(trademarks.length, FILING_PAGE_SIZE);
+    return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => {
+      const page = index + 2;
+      return {
+        params: { id: applicant.applicant_id, page: String(page) },
+        props: { applicant, trademarks, signals, isDemo: data.is_demo, page }
+      };
+    });
+  });
+}
+
+interface Props {
+  applicant: ApplicantSummary;
+  trademarks: Trademark[];
+  signals: FilingSignal[];
+  isDemo: boolean;
+  page: number;
+}
+
+const { applicant, trademarks, signals, isDemo, page } = Astro.props;
+---
+
+<ApplicantProfile
+  applicant={applicant}
+  trademarks={trademarks}
+  signals={signals}
+  isDemo={isDemo}
+  currentPage={page}
+/>

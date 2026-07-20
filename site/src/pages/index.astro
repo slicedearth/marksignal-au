@@ -84,6 +84,8 @@ const maxClassCount = Math.max(...dashboard.class_counts.map((item) => item.fili
     totalSignals={dashboard.signals.length}
     currentPage={1}
     totalPages={totalSignalPages}
+    applicants={dashboard.applicants}
+    reasonTypes={Object.keys(dashboard.reason_counts)}
   />
 
   <section class="pattern-section" id="applicants">
