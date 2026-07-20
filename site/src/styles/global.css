@@ -658,6 +658,7 @@ select {
 .signal-card {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   padding: 1.4rem;
   border: 1px solid var(--ink);
   background: var(--paper-bright);
@@ -673,6 +674,11 @@ select {
   display: flex;
   gap: 1rem;
   align-items: flex-start;
+}
+
+.signal-card__topline > div,
+.reason-list li > div {
+  min-width: 0;
 }
 
 .signal-score {
@@ -727,6 +733,12 @@ select {
 
 .signal-card h3 a:hover {
   text-decoration: underline;
+}
+
+.signal-card h3,
+.applicant-link,
+.reason-list p {
+  overflow-wrap: anywhere;
 }
 
 .applicant-link {
