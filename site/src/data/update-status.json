@@ -1,12 +1,12 @@
 {
-  "data_revision": "d6ec358b1bb8a7b92096da4690663e912f076b2a",
-  "emitted_signals": 3717,
-  "matched_trade_marks": 5466,
+  "data_revision": "de5789671ea776018714a1f56216be85c5e168fd",
+  "emitted_signals": 3719,
+  "matched_trade_marks": 5471,
   "privacy_quarantined": 1,
-  "retrieved_at": "2026-07-20T07:36:25.102133Z",
+  "retrieved_at": "2026-07-27T12:41:17.798018Z",
   "schema_version": 1,
   "source_publisher": "IP Australia",
-  "source_rows_read": 87555233,
+  "source_rows_read": 88041950,
   "validation_failure_count": 1,
-  "watchlist_organisations": 15
+  "watchlist_organisations": 12
 }
