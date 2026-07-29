@@ -35,7 +35,7 @@ jobs:
       contents: read
     steps:
       - name: Check out public repository without credentials
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
@@ -81,7 +81,7 @@ jobs:
       data_revision: ${{ steps.commit_state.outputs.data_revision }}
     steps:
       - name: Check out public repository without credentials
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
@@ -130,7 +130,7 @@ jobs:
           https://data.gov.au/data/dataset/423000b8-5735-4447-bcb9-792644bcd7ea/resource/c79b3af6-3720-44ac-9e39-6a68f5635924/download/iprapid.zip
 
       - name: Check out restricted state with read-only access
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: ${{ secrets.RESTRICTED_STATE_REPOSITORY }}
           path: .restricted-state
@@ -192,7 +192,7 @@ jobs:
 
       - name: Check out restricted state with write access
         if: steps.state_patch.outputs.changed == 'true'
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: ${{ secrets.RESTRICTED_STATE_REPOSITORY }}
           path: .restricted-publisher
@@ -249,7 +249,7 @@ jobs:
           path: ${{ runner.temp }}/public-update-status
 
       - name: Check out clean public publisher
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: .public-publisher
 
